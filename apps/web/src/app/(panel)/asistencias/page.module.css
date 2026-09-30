@@ -1,0 +1,234 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  box-shadow: var(--sh);
+  white-space: nowrap;
+}
+
+.btnPrimary:hover {
+  background: var(--accent-700);
+  border-color: var(--accent-700);
+}
+
+.btnPrimary svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toolbar {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: 14px 16px;
+}
+
+.search {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-4);
+  pointer-events: none;
+}
+
+.search input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px 0 36px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  font-size: 14px;
+}
+
+.search input::placeholder {
+  color: var(--text-4);
+}
+
+.search input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14, 124, 66, 0.14);
+}
+
+.toolbar select {
+  height: 40px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.dateInput {
+  height: 40px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  color: var(--text-2);
+  font-family: inherit;
+}
+
+.empty {
+  padding: 34px 20px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-3);
+  background: var(--surface);
+  border: 1px dashed var(--border-2);
+  border-radius: var(--r);
+}
+
+.toolbar select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14, 124, 66, 0.14);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.rowIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.rowIcon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.rowText strong {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.rowText small {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  color: var(--text);
+  box-shadow: var(--sh);
+  white-space: nowrap;
+}
+
+.btnSecondary:hover {
+  background: var(--surface-2);
+  border-color: var(--border-3);
+}
+
+.count {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+@media (max-width: 900px) {
+  .content {
+    padding: 18px 16px 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .row .btnSecondary {
+    flex: 1 1 100%;
+  }
+
+  .head .btnPrimary {
+    flex: 1;
+  }
+}

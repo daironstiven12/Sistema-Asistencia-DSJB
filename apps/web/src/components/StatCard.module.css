@@ -1,0 +1,66 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: var(--sp-md) 18px;
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+}
+
+.label {
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--text-3);
+}
+
+.iconBox {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.iconBox svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toneAccent {
+  background: var(--accent-50);
+  color: var(--accent);
+}
+
+.toneWarn {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.toneBlue {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-top: 7px;
+  font-variant-numeric: tabular-nums;
+}
+
+.foot {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 5px;
+}

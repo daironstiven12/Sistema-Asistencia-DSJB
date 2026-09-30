@@ -1,0 +1,102 @@
+/* Tokens visuales globales. Referencia: diseño/styles.css */
+
+:root {
+  /* Superficies */
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --surface-3: #f3f4f6;
+
+  /* Bordes */
+  --border: #e5e7eb;
+  --border-2: #d1d5db;
+  --border-3: #9ca3af;
+
+  /* Texto */
+  --text: #111827;
+  --text-2: #374151;
+  --text-3: #6b7280;
+  --text-4: #9ca3af;
+
+  /* Acento: verde institucional, uso estratégico */
+  --accent: #0e7c42;
+  --accent-700: #0b6837;
+  --accent-800: #095530;
+  --accent-50: #ecf7f1;
+  --accent-200: #b5e0c7;
+
+  /* Radios */
+  --r-sm: 8px;
+  --r: 10px;
+  --r-lg: 14px;
+
+  /* Sombras sutiles */
+  --sh: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --sh-2: 0 4px 14px -4px rgba(16, 24, 40, 0.1);
+
+  /* Espaciado */
+  --sp-xs: 8px;
+  --sp-sm: 12px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+  --sp-2xl: 44px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), Inter, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+}

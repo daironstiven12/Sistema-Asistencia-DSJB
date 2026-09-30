@@ -1,0 +1,89 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 23px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+.pulse {
+  animation: pulse 1.7s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.28;
+  }
+}
+
+.open {
+  background: var(--accent-50);
+  color: var(--accent-700);
+  border-color: var(--accent-200);
+}
+
+.scheduled {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.closed {
+  background: #fef2f2;
+  color: #b42318;
+  border-color: #fecaca;
+}
+
+.draft {
+  background: var(--surface-3);
+  color: var(--text-2);
+  border-color: var(--border-2);
+}
+
+.validated {
+  background: #f0fdfa;
+  color: #0f766e;
+  border-color: #99f6e4;
+}
+
+.signed {
+  background: var(--accent-800);
+  color: #fff;
+  border-color: var(--accent-800);
+}
+
+.pending {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.neutral {
+  background: var(--surface-3);
+  color: var(--text-2);
+  border-color: var(--border-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
+}

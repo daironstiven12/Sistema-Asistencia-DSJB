@@ -1,0 +1,187 @@
+/* Login claro tipo SaaS: fondo amplio, tarjeta a la derecha. */
+
+.login {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #f7f9fa;
+}
+
+/* Decoración abstracta sutil, solo CSS */
+.decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arc {
+  position: absolute;
+  top: 6%;
+  right: 6%;
+  width: min(880px, 90vw);
+  aspect-ratio: 1;
+  border: 1.5px solid rgba(14, 124, 66, 0.28);
+  border-radius: 50%;
+}
+
+.blob {
+  position: absolute;
+  right: -12%;
+  bottom: -24%;
+  width: min(760px, 80vw);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    rgba(14, 124, 66, 0.16) 0%,
+    rgba(14, 124, 66, 0.05) 55%,
+    transparent 70%
+  );
+  filter: blur(10px);
+}
+
+.dotsLeft,
+.dotsRight {
+  position: absolute;
+  width: 130px;
+  height: 110px;
+  background-image: radial-gradient(circle, #c9d8cf 1.3px, transparent 1.4px);
+  background-size: 20px 20px;
+}
+
+.dotsLeft {
+  left: 4%;
+  bottom: 12%;
+  opacity: 0.7;
+}
+
+.dotsRight {
+  right: 3%;
+  top: 34%;
+  opacity: 0.8;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 30px 48px 60px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.product strong {
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: #0f1b2d;
+}
+
+.product small {
+  font-size: 14px;
+  color: var(--text-3);
+}
+
+.trust {
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  font-size: 13.5px;
+  color: var(--text-3);
+}
+
+.trustItem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+.sep {
+  width: 1px;
+  height: 14px;
+  background: var(--border-2);
+  margin-right: 22px;
+}
+
+.underline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 48px;
+  align-items: center;
+  padding: 40px 0 20px;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    padding: 22px 20px 44px;
+  }
+
+  .trust {
+    display: none;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    padding-top: 28px;
+  }
+
+  .arc {
+    top: -8%;
+    right: -40%;
+    opacity: 0.6;
+  }
+
+  .dotsLeft {
+    display: none;
+  }
+
+  .dotsRight {
+    top: 22%;
+  }
+}

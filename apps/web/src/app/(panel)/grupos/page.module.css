@@ -1,0 +1,241 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 24px;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--sp-sm);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: 20px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+}
+
+.groupMark {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: var(--accent-50);
+  border: 1px solid var(--accent-200);
+  color: var(--accent-800);
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.students {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.students svg {
+  width: 15px;
+  height: 15px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs) 28px;
+  margin: 14px 0 0;
+}
+
+.metaItem dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.metaItem dd {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  font-weight: 650;
+}
+
+.label {
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.subjects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.subjects li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.subjects svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--text-4);
+}
+
+.next {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.next svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 40px;
+  margin-top: 16px;
+  padding: 0 16px;
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  box-shadow: var(--sh);
+  align-self: flex-start;
+}
+
+.btnPrimary:hover {
+  background: var(--accent-700);
+  border-color: var(--accent-700);
+}
+
+.btnPrimary svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pastNote {
+  font-size: 13px;
+  color: var(--text-3);
+  max-width: 70ch;
+  margin-bottom: 12px;
+}
+
+.pastList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 720px;
+}
+
+.pastCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+
+.pastCard strong {
+  display: block;
+  font-size: 14px;
+}
+
+.pastCard small {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  color: var(--text);
+  box-shadow: var(--sh);
+  white-space: nowrap;
+}
+
+.btnSecondary:hover {
+  background: var(--surface-2);
+  border-color: var(--border-3);
+}
+
+.btnSecondary svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 900px) {
+  .content {
+    padding: 18px 16px 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .btnPrimary,
+  .pastCard .btnSecondary {
+    flex: 1;
+  }
+}

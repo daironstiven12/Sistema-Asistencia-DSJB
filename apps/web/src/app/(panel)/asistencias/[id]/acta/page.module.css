@@ -1,0 +1,352 @@
+.screen {
+  min-height: 100dvh;
+  background: var(--surface-2);
+  padding: 24px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto 18px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.backLink svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stateNote {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.stateNote svg {
+  width: 15px;
+  height: 15px;
+}
+
+.printBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  box-shadow: var(--sh);
+}
+
+.printBtn:hover {
+  background: var(--accent-700);
+  border-color: var(--accent-700);
+}
+
+.printBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pdfBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--r-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  color: var(--text);
+  box-shadow: var(--sh);
+}
+
+.pdfBtn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-3);
+}
+
+.pdfBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Documento oficial */
+.sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--border-2);
+  box-shadow: var(--sh-2);
+  padding: 48px 52px;
+  color: #111;
+}
+
+.docHead {
+  text-align: center;
+  border-bottom: 2px solid #111;
+  padding-bottom: 16px;
+}
+
+.uni {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.uniSub {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.process {
+  margin-top: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #333;
+}
+
+.docMeta {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #444;
+}
+
+.docTitle {
+  margin-top: 12px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+  margin: 22px 0 0;
+  border: 1px solid #555;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #555;
+  font-size: 12.5px;
+  min-width: 0;
+}
+
+.field:nth-child(odd) {
+  border-right: 1px solid #555;
+}
+
+.field dt {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #333;
+}
+
+.field dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 22px;
+  font-size: 12.5px;
+}
+
+.table thead th {
+  border: 1px solid #555;
+  background: #f0f0f0;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-align: left;
+}
+
+.table tbody td {
+  border: 1px solid #555;
+  padding: 7px 10px;
+  vertical-align: middle;
+}
+
+.studentSig {
+  font-family: "Segoe Script", "Brush Script MT", cursive;
+  font-size: 15px;
+}
+
+.manualMark {
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.absentMark {
+  color: #666;
+  font-size: 12px;
+}
+
+.footnote {
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: #333;
+}
+
+.signatures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  margin-top: 64px;
+}
+
+.signBox {
+  text-align: center;
+}
+
+.signSpace {
+  min-height: 90px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid #111;
+  padding-bottom: 8px;
+}
+
+.signLabel {
+  margin-top: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.signName {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #333;
+}
+
+.signPending {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #888;
+}
+
+.sigTyped {
+  font-family: "Segoe Script", "Brush Script MT", cursive;
+  font-size: 30px;
+  color: #111;
+}
+
+.sigImg {
+  max-width: 100%;
+  max-height: 84px;
+}
+
+@media (max-width: 640px) {
+  .screen {
+    padding: 16px 12px 26px;
+  }
+
+  .sheet {
+    padding: 28px 20px;
+  }
+
+  .fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .field:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .signatures {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .toolbarRight {
+    width: 100%;
+  }
+
+  .printBtn {
+    flex: 1;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  .screen {
+    background: #fff;
+    padding: 0;
+  }
+
+  .toolbar {
+    display: none;
+  }
+
+  .sheet {
+    max-width: none;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .table tbody tr {
+    break-inside: avoid;
+  }
+
+  .signatures {
+    break-inside: avoid;
+  }
+}
