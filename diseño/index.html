@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Prototipo visual de la plataforma de gestión de asistencia para clases virtuales. Interfaz estática en HTML + CSS.">
+<title>Prototipo · Plataforma de Gestión de Asistencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============================ SPRITE DE ICONOS ============================ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20z"/><path d="M9.5 21.5V14h5v7.5"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><path d="M9 4.5H7a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6.5a2 2 0 0 0-2-2h-2"/><rect x="9" y="2.5" width="6" height="4" rx="1.2"/><path d="m9.5 13.5 2 2 3.5-4"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2.5 4.5h5.5A3.5 3.5 0 0 1 11.5 8v12a2.5 2.5 0 0 0-2.5-2.5H2.5z"/><path d="M21.5 4.5H16a3.5 3.5 0 0 0-3.5 3.5v12a2.5 2.5 0 0 1 2.5-2.5h6.5z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V21"/><circle cx="9" cy="7.5" r="3.5"/><path d="M22 21v-1.5a4 4 0 0 0-3-3.87"/><path d="M16.5 4.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M6 20v-5"/><path d="M12 20V8"/><path d="M18 20v-9"/><path d="M3 20.5h18"/></symbol>
+  <symbol id="i-history" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3 4v4.5h4.5"/><path d="M12 7.5V12l3 1.8"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 21v-6"/><path d="M4 11V3"/><path d="M12 21v-9"/><path d="M12 8V3"/><path d="M20 21v-4"/><path d="M20 13V3"/><path d="M1.5 15h5"/><path d="M9.5 8h5"/><path d="M17.5 17h5"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5.5A1.5 1.5 0 0 1 4 19.5v-15A1.5 1.5 0 0 1 5.5 3H9"/><path d="m16 16 5-4-5-4"/><path d="M21 12H9"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14.5 18 8.5"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6.5h16"/><path d="M4 12h16"/><path d="M4 17.5h16"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20.5 20.5-4.2-4.2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3.5"/><path d="m7.5 8.5 4.5-4.5 4.5 4.5"/><path d="M12 4v12"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3.5"/><path d="m7.5 11.5 4.5 4.5 4.5-4.5"/><path d="M12 16V4"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.5 2.5L16 9.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 4.3 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4"/><path d="M16 3v4"/><path d="M3.5 10h17"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7.5" r="4"/></symbol>
+  <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M15 21v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V21"/><circle cx="8.5" cy="7.5" r="3.5"/><path d="M19 8v6"/><path d="M22 11h-6"/></symbol>
+  <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8.5V6a2 2 0 0 1 2-2h2.5"/><path d="M15.5 4H18a2 2 0 0 1 2 2v2.5"/><path d="M20 15.5V18a2 2 0 0 1-2 2h-2.5"/><path d="M8.5 20H6a2 2 0 0 1-2-2v-2.5"/><path d="M3.5 12h17"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h3v3h-3z"/><path d="M20.5 14v6.5H14"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12.5 20.5H21"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7.5 18.5l-4 1 1-4z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 21.5s7.5-3.7 7.5-9.5V5.4L12 2.5 4.5 5.4V12c0 5.8 7.5 9.5 7.5 9.5z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M21 4H3l7.2 8.5V19l3.6 1.8v-8.3z"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="m21 6-6.5 6.5-4-4L3 17"/><path d="M15 6h6v6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16.5V11.5"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></symbol>
+  <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M7 14h10"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></symbol>
+</svg>
+
+<!-- ============================ CABECERA DEL PROTOTIPO ============================ -->
+<header class="proto-head">
+  <span class="eyebrow">Prototipo visual · HTML + CSS</span>
+  <h1>Plataforma de gestión de asistencia</h1>
+  <p class="proto-sub">Once pantallas de la aplicación en un solo documento, sin JavaScript ni navegación real. Diseño propio para gestionar la asistencia en clases virtuales: la identidad UTCH se utiliza únicamente como referencia visual.</p>
+  <div class="legend">
+    <span class="badge b-green"><i class="dot dot-pulse"></i>Abierta / presente</span>
+    <span class="badge b-red"><i class="dot"></i>Cerrada / alerta</span>
+    <span class="badge b-yellow"><i class="dot"></i>Pendiente / advertencia</span>
+    <span class="badge b-blue"><i class="dot"></i>Informativo</span>
+    <span class="badge b-gray"><i class="dot"></i>Neutral</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================
+     PANTALLA 1 · LOGIN
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">01</span><h2>Inicio de sesión</h2><p>Composición dividida: branding a la izquierda, formulario a la derecha</p></div>
+  <div class="frame">
+    <div class="auth">
+
+      <div class="auth-brand">
+        <div class="auth-brand-top">
+          <span class="mark mark-lg">UTCH</span>
+          <span class="brand-txt light"><b>Asistencia</b><small>Plataforma académica</small></span>
+        </div>
+
+        <div class="auth-brand-body">
+          <p class="kicker">Gestión de asistencia</p>
+          <h2>Control de asistencia para clases virtuales</h2>
+          <p class="lead">Prepara las asistencias con anticipación, ábrelas con código QR o código manual, registra la firma de cada estudiante y cierra la sesión con un acta firmada.</p>
+          <ul class="checks">
+            <li><svg class="ico"><use href="#i-check-circle"/></svg>Apertura anticipada y cierre controlado</li>
+            <li><svg class="ico"><use href="#i-check-circle"/></svg>Registro por QR, código manual o firma</li>
+            <li><svg class="ico"><use href="#i-check-circle"/></svg>Acta, reportes y historial de auditoría</li>
+          </ul>
+        </div>
+
+        <p class="auth-note"><svg class="ico"><use href="#i-shield"/></svg>Proyecto propio de gestión académica. La identidad de la Universidad Tecnológica del Chocó se usa solo como referencia visual.</p>
+      </div>
+
+      <div class="auth-form">
+        <div class="auth-card">
+          <div class="auth-card-head">
+            <span class="mark">UTCH</span>
+            <span class="brand-txt"><b>Asistencia</b><small>Universidad Tecnológica del Chocó</small></span>
+          </div>
+
+          <h1 class="auth-title">Iniciar sesión</h1>
+          <p class="auth-sub">Ingresa con tu correo institucional para continuar.</p>
+
+          <div class="field">
+            <label class="f-label" for="correo">Correo institucional</label>
+            <div class="input-wrap">
+              <svg class="ico input-ico"><use href="#i-mail"/></svg>
+              <input class="input with-ico" id="correo" type="email" value="jpolanco@utch.edu.co" placeholder="nombre@utch.edu.co">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="f-label-row">
+              <label class="f-label" for="clave">Contraseña</label>
+              <button type="button" class="link-btn">¿Olvidaste tu contraseña?</button>
+            </div>
+            <div class="input-wrap">
+              <svg class="ico input-ico"><use href="#i-lock"/></svg>
+              <input class="input with-ico with-affix" id="clave" type="password" value="••••••••••">
+              <button type="button" class="input-affix" aria-label="Mostrar contraseña"><svg class="ico"><use href="#i-eye"/></svg></button>
+            </div>
+          </div>
+
+          <label class="check-row"><input type="checkbox" checked> Mantener la sesión iniciada</label>
+
+          <button type="button" class="btn btn-primary btn-lg btn-block" style="margin-top:20px">Iniciar sesión <svg class="ico"><use href="#i-arrow-right"/></svg></button>
+
+          <p class="security"><svg class="ico"><use href="#i-shield"/></svg><span><b style="color:var(--text-2)">Conexión segura.</b> Nunca compartas tus credenciales institucionales ni el código de una asistencia.</span></p>
+
+          <p class="auth-foot">¿Problemas para acceder? <button type="button" class="link-btn">Contacta a soporte</button></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 2 · DASHBOARD
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">02</span><h2>Dashboard</h2><p>Sidebar, header y contenido principal con estadísticas y próximas asistencias</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Inicio</b><span class="sep">/</span><span>Panel general</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg><i class="dot-alert"></i></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Buenos días, Jeanpier</h1>
+              <p class="page-sub">Gestiona las asistencias de tus clases desde un solo lugar.</p>
+            </div>
+            <div class="page-actions">
+              <button type="button" class="btn"><svg class="ico"><use href="#i-calendar"/></svg>Ver calendario</button>
+              <button type="button" class="btn btn-primary"><svg class="ico"><use href="#i-plus"/></svg>Nueva asistencia</button>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Asistencias programadas</span><span class="stat-ico blue"><svg class="ico"><use href="#i-calendar"/></svg></span></div>
+              <div class="stat-value">6</div>
+              <div class="stat-foot">Para los próximos 7 días</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Asistencias abiertas</span><span class="stat-ico accent"><svg class="ico"><use href="#i-qr"/></svg></span></div>
+              <div class="stat-value">1</div>
+              <div class="stat-foot up">En curso ahora</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Asistencias cerradas</span><span class="stat-ico"><svg class="ico"><use href="#i-lock"/></svg></span></div>
+              <div class="stat-value">14</div>
+              <div class="stat-foot">Periodo 2026-II</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Estudiantes registrados</span><span class="stat-ico"><svg class="ico"><use href="#i-users"/></svg></span></div>
+              <div class="stat-value">36</div>
+              <div class="stat-foot">Grupo A · VII semestre</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div><div class="card-title">Próximas asistencias</div><div class="card-sub">Ordenadas por fecha de sesión</div></div>
+              <button type="button" class="btn btn-sm">Ver todas <svg class="ico ico-sm"><use href="#i-arrow-right"/></svg></button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Asignatura</th><th>Fecha</th><th>Hora</th><th>Docente</th><th>Estado</th><th class="cell-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="cell-strong">Teoría y Técnicas de Ruteo y Switcheo</td>
+                    <td class="nowrap">Vie, 3 oct 2026</td>
+                    <td class="nowrap mono">10:00 – 12:00</td>
+                    <td>María F. Rentería</td>
+                    <td><span class="badge b-green"><i class="dot dot-pulse"></i>Abierta</span></td>
+                    <td class="cell-right"><div class="row-actions"><button type="button" class="btn btn-sm btn-primary">Gestionar</button><button type="button" class="icon-btn" aria-label="Más opciones"><svg class="ico"><use href="#i-more"/></svg></button></div></td>
+                  </tr>
+                  <tr>
+                    <td class="cell-strong">Redes Convergentes</td>
+                    <td class="nowrap">Lun, 6 oct 2026</td>
+                    <td class="nowrap mono">9:00 – 11:00</td>
+                    <td>Carlos A. Meza</td>
+                    <td><span class="badge b-blue">Programada</span></td>
+                    <td class="cell-right"><div class="row-actions"><button type="button" class="btn btn-sm">Preparar</button><button type="button" class="icon-btn" aria-label="Más opciones"><svg class="ico"><use href="#i-more"/></svg></button></div></td>
+                  </tr>
+                  <tr>
+                    <td class="cell-strong">Gestión de Redes</td>
+                    <td class="nowrap">Mar, 7 oct 2026</td>
+                    <td class="nowrap mono">2:00 – 4:00</td>
+                    <td>María F. Rentería</td>
+                    <td><span class="badge b-blue">Programada</span></td>
+                    <td class="cell-right"><div class="row-actions"><button type="button" class="btn btn-sm">Preparar</button><button type="button" class="icon-btn" aria-label="Más opciones"><svg class="ico"><use href="#i-more"/></svg></button></div></td>
+                  </tr>
+                  <tr>
+                    <td class="cell-strong">Seguridad Informática</td>
+                    <td class="nowrap">Jue, 9 oct 2026</td>
+                    <td class="nowrap mono">10:00 – 12:00</td>
+                    <td>Luis E. Palacios</td>
+                    <td><span class="badge b-blue">Programada</span></td>
+                    <td class="cell-right"><div class="row-actions"><button type="button" class="btn btn-sm">Preparar</button><button type="button" class="icon-btn" aria-label="Más opciones"><svg class="ico"><use href="#i-more"/></svg></button></div></td>
+                  </tr>
+                  <tr>
+                    <td class="cell-strong">Proyecto de Grado II</td>
+                    <td class="nowrap">Vie, 10 oct 2026</td>
+                    <td class="nowrap mono">11:00 – 1:00</td>
+                    <td>Ana M. Ortiz</td>
+                    <td><span class="badge b-gray">Borrador</span></td>
+                    <td class="cell-right"><div class="row-actions"><button type="button" class="btn btn-sm">Editar</button><button type="button" class="icon-btn" aria-label="Más opciones"><svg class="ico"><use href="#i-more"/></svg></button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Asistencia en curso</div><div class="card-sub">Registro en tiempo real</div></div>
+                <span class="badge b-green"><i class="dot dot-pulse"></i>Abierta</span>
+              </div>
+              <div class="card-pad">
+                <div class="cell-strong" style="font-size:15px">Teoría y Técnicas de Ruteo y Switcheo</div>
+                <div class="cell-muted" style="margin-top:4px">Hoy · 10:00 – 12:00 · Docente: María F. Rentería</div>
+                <div style="display:flex;align-items:center;gap:14px;margin-top:16px">
+                  <div class="meter" style="height:8px"><i style="width:78%"></i></div>
+                  <b class="mono" style="font-size:14px">28 / 36</b>
+                </div>
+                <div class="row-gap" style="margin-top:16px">
+                  <button type="button" class="btn btn-primary btn-sm">Abrir asistencia</button>
+                  <button type="button" class="btn btn-sm">Ver registro</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Tendencia de asistencia</div><div class="card-sub">Porcentaje por semana · periodo 2026-II</div></div>
+                <span class="pill-note"><svg class="ico"><use href="#i-trend"/></svg>+3% vs. periodo anterior</span>
+              </div>
+              <div class="chart-body">
+                <div class="bars">
+                  <div class="bar-col"><span class="v">96%</span><div class="bar-fill" style="height:78%"></div><span class="k">Semana 1</span></div>
+                  <div class="bar-col"><span class="v">93%</span><div class="bar-fill" style="height:70%"></div><span class="k">Semana 2</span></div>
+                  <div class="bar-col"><span class="v">88%</span><div class="bar-fill" style="height:56%"></div><span class="k">Semana 3</span></div>
+                  <div class="bar-col"><span class="v">94%</span><div class="bar-fill" style="height:73%"></div><span class="k">Semana 4</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 3 · CREAR ASISTENCIA
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">03</span><h2>Crear asistencia</h2><p>Formulario profesional en dos secciones, con programación anticipada</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Mis asignaturas</b><span class="sep">/</span><span>Nueva asistencia</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg><i class="dot-alert"></i></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <div class="row-gap" style="margin-bottom:8px">
+                <span class="badge b-gray">Borrador</span>
+                <span class="pill-note"><svg class="ico"><use href="#i-clock"/></svg>Última edición: hoy, 8:12 a. m.</span>
+              </div>
+              <h1 class="page-title">Crear asistencia</h1>
+              <p class="page-sub">Completa la información de la sesión antes de compartirla.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="form-section">
+              <div class="form-section-head">
+                <span class="stat-ico accent"><svg class="ico"><use href="#i-book"/></svg></span>
+                <div><h3>Información académica</h3><p>Referencia de la asignatura y del periodo</p></div>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label class="f-label" for="f-fac">Facultad</label>
+                  <select class="select" id="f-fac"><option>Facultad de Ingeniería</option></select>
+                </div>
+                <div class="field">
+                  <label class="f-label" for="f-prog">Programa</label>
+                  <select class="select" id="f-prog"><option>Ingeniería de Telecomunicaciones e Informática</option></select>
+                </div>
+                <div class="field">
+                  <label class="f-label" for="f-nivel">Nivel / semestre</label>
+                  <select class="select" id="f-nivel"><option>VII semestre</option></select>
+                </div>
+                <div class="field span-2">
+                  <label class="f-label" for="f-asig">Asignatura</label>
+                  <input class="input" id="f-asig" value="Teoría y Técnicas de Ruteo y Switcheo">
+                </div>
+                <div class="field">
+                  <label class="f-label" for="f-cod">Código de asignatura</label>
+                  <input class="input mono" id="f-cod" value="TTR-701">
+                </div>
+                <div class="field">
+                  <label class="f-label" for="f-per">Periodo académico</label>
+                  <select class="select" id="f-per"><option>2026-II</option></select>
+                </div>
+                <div class="field">
+                  <label class="f-label" for="f-cds">CDS</label>
+                  <select class="select" id="f-cds"><option>Grupo A</option></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-head">
+                <span class="stat-ico"><svg class="ico"><use href="#i-calendar"/></svg></span>
+                <div><h3>Información de la sesión</h3><p>Fecha, horario y contenido de la clase</p></div>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label class="f-label" for="f-fecha">Fecha</label>
+                  <input class="input" id="f-fecha" type="date" value="2026-10-03">
+                </div>
+                <div class="field">
+                  <label class="f-label" for="f-ini">Hora de inicio</label>
+                  <input class="input" id="f-ini" type="time" value="10:00">
+                </div>
+                <div class="field">
+                  <label class="f-label" for="f-fin">Hora de finalización</label>
+                  <input class="input" id="f-fin" type="time" value="12:00">
+                </div>
+                <div class="field span-full">
+                  <label class="f-label" for="f-doc">Docente</label>
+                  <input class="input" id="f-doc" value="Dra. María Fernanda Rentería">
+                </div>
+                <div class="field span-full">
+                  <label class="f-label" for="f-temas">Temas tratados</label>
+                  <textarea class="textarea" id="f-temas">Protocolos de enrutamiento dinámico: OSPF y EIGRP. Métricas, vecindad y configuración básica en el laboratorio virtual.</textarea>
+                  <p class="hint">Este texto aparecerá en el acta de asistencia.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section" style="padding-bottom:0;border-bottom:0">
+              <div class="banner banner-info">
+                <svg class="ico"><use href="#i-info"/></svg>
+                <div>
+                  <b>Puedes prepararla con días de anticipación</b>
+                  La asistencia quedará en estado <strong>programada</strong>: los estudiantes no podrán registrarse ni ver el código ni el QR hasta que la abras el día de la clase.
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <p class="note">Al programar, la asistencia aparecerá en el calendario del grupo y recibirás un recordatorio 15 minutos antes.</p>
+              <div class="row-gap">
+                <button type="button" class="btn"><svg class="ico"><use href="#i-file"/></svg>Guardar borrador</button>
+                <button type="button" class="btn btn-primary"><svg class="ico"><use href="#i-check"/></svg>Programar asistencia</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 4 · ASISTENCIA ABIERTA
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">04</span><h2>Asistencia abierta</h2><p>Estado en vivo, QR, código manual, temporizador y cierre controlado</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Asistencias</b><span class="sep">/</span><span>Teoría y Técnicas de Ruteo y Switcheo</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg><i class="dot-alert"></i></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <span class="status-open"><i class="dot dot-pulse"></i>Asistencia abierta</span>
+              <h1 class="page-title" style="margin-top:12px">Teoría y Técnicas de Ruteo y Switcheo</h1>
+              <div class="session-meta">
+                <span class="meta-item"><svg class="ico"><use href="#i-user"/></svg>Docente: <b>Dra. María F. Rentería</b></span>
+                <span class="meta-item"><svg class="ico"><use href="#i-calendar"/></svg>Viernes, 3 de octubre de 2026</span>
+                <span class="meta-item"><svg class="ico"><use href="#i-clock"/></svg>10:00 – 12:00 a. m.</span>
+                <span class="meta-item"><svg class="ico"><use href="#i-users"/></svg>Grupo A · VII semestre</span>
+              </div>
+            </div>
+            <div class="page-actions">
+              <button type="button" class="btn"><svg class="ico"><use href="#i-edit"/></svg>Editar sesión</button>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Presentes</span><span class="stat-ico accent"><svg class="ico"><use href="#i-check-circle"/></svg></span></div>
+              <div class="stat-value">28</div>
+              <div class="stat-foot up">Registrados hasta ahora</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Pendientes</span><span class="stat-ico yellow"><svg class="ico"><use href="#i-clock"/></svg></span></div>
+              <div class="stat-value">8</div>
+              <div class="stat-foot">Aún no se registran</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Estudiantes</span><span class="stat-ico"><svg class="ico"><use href="#i-users"/></svg></span></div>
+              <div class="stat-value">36</div>
+              <div class="stat-foot">Matriculados en el grupo</div>
+            </div>
+          </div>
+
+          <div class="split">
+
+            <div class="stack">
+
+              <div class="card">
+                <div class="card-head">
+                  <div><div class="card-title">Registro en vivo</div><div class="card-sub">Últimos estudiantes registrados</div></div>
+                  <button type="button" class="btn btn-sm"><svg class="ico ico-sm"><use href="#i-users"/></svg>Ver estudiantes</button>
+                </div>
+                <div class="live-list">
+                  <div class="live-item"><span class="t">10:34</span><b>Sebastián Mosquera Lemos</b><small>Por código QR · con firma</small></div>
+                  <div class="live-item"><span class="t">10:33</span><b>Camila Rentería Díaz</b><small>Por código QR · con firma</small></div>
+                  <div class="live-item"><span class="t">10:32</span><b>Juan David Mosquera</b><small>Por código manual</small></div>
+                  <div class="live-item"><span class="t">10:31</span><b>Laura Mena Palacios</b><small>Por código QR · con firma</small></div>
+                </div>
+              </div>
+
+              <div class="danger-zone">
+                <h3><svg class="ico"><use href="#i-lock"/></svg>Cierre de la asistencia</h3>
+                <p>Al cerrar la asistencia, el código y el QR dejarán de aceptar nuevos registros. Solo el representante podrá agregar estudiantes de forma manual, con justificación.</p>
+                <button type="button" class="btn btn-danger">Cerrar asistencia</button>
+                <p class="danger-note"><svg class="ico ico-sm"><use href="#i-alert"/></svg>Esta acción no se puede deshacer y queda registrada en el historial de auditoría.</p>
+              </div>
+
+            </div>
+
+            <div class="card qr-card">
+              <div class="qr-head">
+                <span class="section-title">Código QR</span>
+                <span class="badge b-green"><i class="dot dot-pulse"></i>Activo</span>
+              </div>
+
+              <svg class="qr" viewBox="0 0 25 25" shape-rendering="crispEdges" role="img" aria-label="Código QR de la asistencia"><path fill="#111827" d="M0 0h7v1h-7zM13 0h1v1h-1zM18 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM11 1h1v1h-1zM14 1h1v1h-1zM16 1h1v1h-1zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM18 2h1v1h-1zM20 2h3v1h-3zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM10 3h1v1h-1zM14 3h1v1h-1zM18 3h1v1h-1zM20 3h3v1h-3zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM10 4h1v1h-1zM12 4h2v1h-2zM18 4h1v1h-1zM20 4h3v1h-3zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h4v1h-4zM16 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h7v1h-7zM8 7h1v1h-1zM10 7h2v1h-2zM13 7h2v1h-2zM2 8h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM10 8h5v1h-5zM17 8h4v1h-4zM23 8h1v1h-1zM1 9h2v1h-2zM4 9h2v1h-2zM7 9h1v1h-1zM9 9h2v1h-2zM13 9h1v1h-1zM15 9h1v1h-1zM17 9h1v1h-1zM20 9h1v1h-1zM23 9h2v1h-2zM0 10h1v1h-1zM2 10h1v1h-1zM6 10h1v1h-1zM13 10h1v1h-1zM15 10h2v1h-2zM18 10h1v1h-1zM21 10h1v1h-1zM23 10h1v1h-1zM0 11h1v1h-1zM4 11h2v1h-2zM7 11h1v1h-1zM10 11h2v1h-2zM14 11h2v1h-2zM21 11h2v1h-2zM1 12h1v1h-1zM5 12h2v1h-2zM9 12h1v1h-1zM13 12h1v1h-1zM15 12h1v1h-1zM17 12h1v1h-1zM20 12h1v1h-1zM22 12h2v1h-2zM0 13h2v1h-2zM3 13h3v1h-3zM7 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM23 13h2v1h-2zM1 14h1v1h-1zM4 14h1v1h-1zM6 14h6v1h-6zM19 14h1v1h-1zM21 14h2v1h-2zM24 14h1v1h-1zM0 15h1v1h-1zM2 15h2v1h-2zM5 15h1v1h-1zM7 15h1v1h-1zM10 15h2v1h-2zM13 15h1v1h-1zM15 15h1v1h-1zM17 15h2v1h-2zM20 15h1v1h-1zM22 15h1v1h-1zM24 15h1v1h-1zM2 16h1v1h-1zM5 16h7v1h-7zM13 16h1v1h-1zM16 16h5v1h-5zM24 16h1v1h-1zM8 17h1v1h-1zM11 17h2v1h-2zM14 17h3v1h-3zM20 17h1v1h-1zM0 18h7v1h-7zM9 18h4v1h-4zM15 18h2v1h-2zM18 18h1v1h-1zM20 18h3v1h-3zM24 18h1v1h-1zM0 19h1v1h-1zM6 19h1v1h-1zM8 19h1v1h-1zM10 19h1v1h-1zM12 19h1v1h-1zM14 19h3v1h-3zM20 19h1v1h-1zM23 19h1v1h-1zM0 20h1v1h-1zM2 20h3v1h-3zM6 20h1v1h-1zM10 20h2v1h-2zM13 20h1v1h-1zM16 20h5v1h-5zM23 20h2v1h-2zM0 21h1v1h-1zM2 21h3v1h-3zM6 21h1v1h-1zM8 21h6v1h-6zM24 21h1v1h-1zM0 22h1v1h-1zM2 22h3v1h-3zM6 22h1v1h-1zM10 22h3v1h-3zM14 22h1v1h-1zM17 22h1v1h-1zM20 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM11 23h3v1h-3zM15 23h1v1h-1zM18 23h1v1h-1zM20 23h1v1h-1zM22 23h1v1h-1zM0 24h7v1h-7zM8 24h2v1h-2zM11 24h2v1h-2zM16 24h1v1h-1zM19 24h4v1h-4zM24 24h1v1h-1z"/></svg>
+
+              <p class="qr-caption">Código de asistencia</p>
+              <p class="qr-code">8F4K92</p>
+              <button type="button" class="btn btn-block" style="margin-top:14px"><svg class="ico"><use href="#i-copy"/></svg>Copiar código</button>
+
+              <div class="qr-divider"></div>
+
+              <span class="timer-label">Tiempo restante</span>
+              <div class="timer">01:25:30</div>
+              <div class="progress"><i style="width:52%"></i></div>
+              <div class="timer-foot"><span>Inicio 10:00 a. m.</span><span>Fin 12:00 p. m.</span></div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 5 · ESTUDIANTE
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">05</span><h2>Estudiante · Registrar asistencia</h2><p>Interfaz simplificada: métodos de registro y confirmación exitosa</p></div>
+  <div class="frame">
+    <div class="app" style="grid-template-columns:minmax(0,1fr)">
+      <div class="app-main">
+        <header class="mini-topbar">
+          <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Sesión de clase</small></span></div>
+          <div class="row-gap">
+            <span class="badge b-green"><i class="dot dot-pulse"></i>Abierta</span>
+            <span class="person"><span class="avatar avatar-sm">LM</span><b style="font-size:13px">Laura Mena</b></span>
+          </div>
+        </header>
+
+        <div class="student-body">
+
+          <div class="student-col">
+            <div class="student-head">
+              <h2>Registrar asistencia</h2>
+              <p>Confirma tu presencia en la sesión en curso.</p>
+            </div>
+
+            <div class="card card-pad">
+              <div class="session-list">
+                <div class="session-row"><span>Asignatura</span><b>Teoría y Técnicas de Ruteo y Switcheo</b></div>
+                <div class="session-row"><span>Docente</span><b>Dra. María F. Rentería</b></div>
+                <div class="session-row"><span>Fecha</span><b>Viernes, 3 de octubre de 2026</b></div>
+                <div class="session-row"><span>Hora</span><b class="mono">10:00 – 12:00 a. m.</b></div>
+              </div>
+
+              <div class="segmented">
+                <button type="button" class="segment on"><svg class="ico"><use href="#i-scan"/></svg>Escanear QR</button>
+                <button type="button" class="segment"><svg class="ico"><use href="#i-keyboard"/></svg>Ingresar código</button>
+              </div>
+
+              <div class="scan-zone">
+                <i class="scan-corner tl"></i><i class="scan-corner tr"></i><i class="scan-corner bl"></i><i class="scan-corner br"></i>
+                <svg class="qr" viewBox="0 0 25 25" shape-rendering="crispEdges" role="img" aria-label="Código QR de la asistencia"><path fill="#111827" d="M0 0h7v1h-7zM13 0h1v1h-1zM18 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM11 1h1v1h-1zM14 1h1v1h-1zM16 1h1v1h-1zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM8 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM18 2h1v1h-1zM20 2h3v1h-3zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM10 3h1v1h-1zM14 3h1v1h-1zM18 3h1v1h-1zM20 3h3v1h-3zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM10 4h1v1h-1zM12 4h2v1h-2zM18 4h1v1h-1zM20 4h3v1h-3zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h4v1h-4zM16 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h7v1h-7zM8 7h1v1h-1zM10 7h2v1h-2zM13 7h2v1h-2zM2 8h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM10 8h5v1h-5zM17 8h4v1h-4zM23 8h1v1h-1zM1 9h2v1h-2zM4 9h2v1h-2zM7 9h1v1h-1zM9 9h2v1h-2zM13 9h1v1h-1zM15 9h1v1h-1zM17 9h1v1h-1zM20 9h1v1h-1zM23 9h2v1h-2zM0 10h1v1h-1zM2 10h1v1h-1zM6 10h1v1h-1zM13 10h1v1h-1zM15 10h2v1h-2zM18 10h1v1h-1zM21 10h1v1h-1zM23 10h1v1h-1zM0 11h1v1h-1zM4 11h2v1h-2zM7 11h1v1h-1zM10 11h2v1h-2zM14 11h2v1h-2zM21 11h2v1h-2zM1 12h1v1h-1zM5 12h2v1h-2zM9 12h1v1h-1zM13 12h1v1h-1zM15 12h1v1h-1zM17 12h1v1h-1zM20 12h1v1h-1zM22 12h2v1h-2zM0 13h2v1h-2zM3 13h3v1h-3zM7 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM23 13h2v1h-2zM1 14h1v1h-1zM4 14h1v1h-1zM6 14h6v1h-6zM19 14h1v1h-1zM21 14h2v1h-2zM24 14h1v1h-1zM0 15h1v1h-1zM2 15h2v1h-2zM5 15h1v1h-1zM7 15h1v1h-1zM10 15h2v1h-2zM13 15h1v1h-1zM15 15h1v1h-1zM17 15h2v1h-2zM20 15h1v1h-1zM22 15h1v1h-1zM24 15h1v1h-1zM2 16h1v1h-1zM5 16h7v1h-7zM13 16h1v1h-1zM16 16h5v1h-5zM24 16h1v1h-1zM8 17h1v1h-1zM11 17h2v1h-2zM14 17h3v1h-3zM20 17h1v1h-1zM0 18h7v1h-7zM9 18h4v1h-4zM15 18h2v1h-2zM18 18h1v1h-1zM20 18h3v1h-3zM24 18h1v1h-1zM0 19h1v1h-1zM6 19h1v1h-1zM8 19h1v1h-1zM10 19h1v1h-1zM12 19h1v1h-1zM14 19h3v1h-3zM20 19h1v1h-1zM23 19h1v1h-1zM0 20h1v1h-1zM2 20h3v1h-3zM6 20h1v1h-1zM10 20h2v1h-2zM13 20h1v1h-1zM16 20h5v1h-5zM23 20h2v1h-2zM0 21h1v1h-1zM2 21h3v1h-3zM6 21h1v1h-1zM8 21h6v1h-6zM24 21h1v1h-1zM0 22h1v1h-1zM2 22h3v1h-3zM6 22h1v1h-1zM10 22h3v1h-3zM14 22h1v1h-1zM17 22h1v1h-1zM20 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM11 23h3v1h-3zM15 23h1v1h-1zM18 23h1v1h-1zM20 23h1v1h-1zM22 23h1v1h-1zM0 24h7v1h-7zM8 24h2v1h-2zM11 24h2v1h-2zM16 24h1v1h-1zM19 24h4v1h-4zM24 24h1v1h-1z"/></svg>
+                <span class="lbl"><svg class="ico ico-sm"><use href="#i-scan"/></svg>Apunta la cámara al código de la asistencia</span>
+              </div>
+
+              <div class="field" style="margin-top:18px">
+                <label class="f-label" for="codigo">Código de asistencia</label>
+                <input class="input mono" id="codigo" value="8F4K92" maxlength="6" style="text-align:center;font-size:17px;letter-spacing:.22em;font-weight:700">
+                <p class="hint">El código lo comparte el representante al abrir la asistencia.</p>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-lg btn-block">Registrar asistencia</button>
+            </div>
+          </div>
+
+          <div class="student-col">
+            <div class="student-head">
+              <h2>Confirmación</h2>
+              <p>Estado que verá el estudiante después de registrar.</p>
+            </div>
+
+            <div class="card success-card">
+              <div class="success-icon"><svg class="ico"><use href="#i-check"/></svg></div>
+              <h3>¡Asistencia registrada!</h3>
+              <p class="success-time">Hora: <b>10:42 a. m.</b></p>
+
+              <div class="success-details">
+                <div class="session-row"><span>Asignatura</span><b>Ruteo y Switcheo</b></div>
+                <div class="session-row"><span>Docente</span><b>Dra. María F. Rentería</b></div>
+                <div class="session-row"><span>Método</span><b>Código QR</b></div>
+                <div class="session-row"><span>Estado</span><b><span class="badge b-green"><i class="dot"></i>Presente</span></b></div>
+                <div class="session-row"><span>Firma</span><b class="sig-script" style="font-size:26px">Laura Mena</b></div>
+              </div>
+
+              <div class="row-gap" style="justify-content:center;margin-top:18px">
+                <button type="button" class="btn">Ver mi historial</button>
+                <button type="button" class="btn btn-ghost">Registrar otra</button>
+              </div>
+            </div>
+
+            <div class="banner banner-neutral" style="margin-top:16px">
+              <svg class="ico"><use href="#i-info"/></svg>
+              <div><b>¿No puedes escanear?</b> Solicita al representante el código manual de la sesión.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 6 · ASISTENCIA CERRADA + MODAL DEL REPRESENTANTE
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">06</span><h2>Asistencia cerrada</h2><p>Estado final y alta manual de estudiantes — función exclusiva del representante</p></div>
+  <div class="frame" style="position:relative">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Asistencias</b><span class="sep">/</span><span>Teoría y Técnicas de Ruteo y Switcheo</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <div class="row-gap" style="margin-bottom:10px">
+                <span class="badge b-red"><i class="dot"></i>Cerrada</span>
+                <span class="pill-note"><svg class="ico"><use href="#i-clock"/></svg>Cerrada a las 12:04 p. m.</span>
+              </div>
+              <h1 class="page-title">Esta asistencia está cerrada</h1>
+              <p class="page-sub">Teoría y Técnicas de Ruteo y Switcheo · Viernes, 3 de octubre de 2026 · 10:00 – 12:00 a. m.</p>
+            </div>
+            <div class="page-actions">
+              <button type="button" class="btn"><svg class="ico"><use href="#i-file"/></svg>Ver acta</button>
+              <button type="button" class="btn"><svg class="ico"><use href="#i-download"/></svg>Descargar reporte</button>
+            </div>
+          </div>
+
+          <div class="banner banner-danger">
+            <svg class="ico"><use href="#i-lock"/></svg>
+            <div><b>El código y el código QR ya no están disponibles para nuevos registros.</b>Los estudiantes no pueden registrarse en esta sesión. Las modificaciones posteriores quedan registradas en el historial de auditoría.</div>
+          </div>
+
+          <div class="stats">
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Presentes</span><span class="stat-ico accent"><svg class="ico"><use href="#i-check-circle"/></svg></span></div>
+              <div class="stat-value">28</div>
+              <div class="stat-foot up">78% del grupo</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Ausentes</span><span class="stat-ico red"><svg class="ico"><use href="#i-x"/></svg></span></div>
+              <div class="stat-value">7</div>
+              <div class="stat-foot">Sin registro en la sesión</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Agregados manualmente</span><span class="stat-ico yellow"><svg class="ico"><use href="#i-user-plus"/></svg></span></div>
+              <div class="stat-value">1</div>
+              <div class="stat-foot">Con justificación</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Estudiantes</span><span class="stat-ico"><svg class="ico"><use href="#i-users"/></svg></span></div>
+              <div class="stat-value">36</div>
+              <div class="stat-foot">Matriculados en el grupo</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card card-pad">
+              <div class="row-gap" style="justify-content:space-between">
+                <div>
+                  <div class="card-title">Acción del representante</div>
+                  <div class="card-sub">Disponible solo para el rol Representante</div>
+                </div>
+                <span class="badge b-blue"><svg class="ico ico-sm"><use href="#i-shield"/></svg>Solo representante</span>
+              </div>
+
+              <button type="button" class="btn btn-primary" style="margin-top:16px"><svg class="ico"><use href="#i-user-plus"/></svg>Agregar estudiante manualmente</button>
+
+              <p class="hint" style="margin-top:12px">Se usa cuando un estudiante no pudo registrarse por falla de conexión o de dispositivo. Todo registro exige un motivo y queda en la auditoría.</p>
+            </div>
+
+            <div class="card card-pad">
+              <div class="card-title">Resumen de la sesión</div>
+              <div class="card-sub">Cierre y validación</div>
+              <div class="session-list" style="margin-top:12px">
+                <div class="session-row"><span>Estado</span><b><span class="badge b-red"><i class="dot"></i>Cerrada</span></b></div>
+                <div class="session-row"><span>Cerrada por</span><b>Jeanpier Polanco</b></div>
+                <div class="session-row"><span>Hora de cierre</span><b class="mono">12:04 p. m.</b></div>
+                <div class="session-row"><span>Acta</span><b><span class="badge b-yellow">Pendiente de firma</span></b></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Modal abierto (estado visual, sin JavaScript) -->
+      <div class="modal-layer">
+        <div class="modal" role="dialog" aria-label="Agregar estudiante manualmente">
+          <div class="modal-head">
+            <div class="badge-line">
+              <span class="badge b-blue"><svg class="ico ico-sm"><use href="#i-shield"/></svg>Solo representante</span>
+              <span class="badge b-red"><i class="dot"></i>Sesión cerrada</span>
+            </div>
+            <h3>Agregar estudiante manualmente</h3>
+            <p>Registro posterior al cierre de la asistencia. Será visible en el acta y en el historial de auditoría.</p>
+          </div>
+          <div class="modal-body">
+            <div class="field">
+              <label class="f-label" for="m-est">Estudiante</label>
+              <select class="select" id="m-est"><option>Juan Pablo Murillo Cárdenas</option></select>
+            </div>
+            <div class="field">
+              <label class="f-label" for="m-id">Número de identificación</label>
+              <input class="input mono" id="m-id" value="1077453269">
+            </div>
+            <div class="field">
+              <label class="f-label" for="m-mot">Motivo</label>
+              <select class="select" id="m-mot"><option>Falla de conexión durante la sesión</option></select>
+            </div>
+            <div class="field">
+              <label class="f-label" for="m-obs">Observación</label>
+              <textarea class="textarea" id="m-obs" style="min-height:70px" placeholder="Detalle adicional para el acta (opcional)"></textarea>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button type="button" class="btn">Cancelar</button>
+            <button type="button" class="btn btn-primary"><svg class="ico"><use href="#i-check"/></svg>Agregar registro</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 7 · LISTADO DE ESTUDIANTES
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">07</span><h2>Listado de estudiantes</h2><p>Tabla con buscador, filtros, badges de estado e importación</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Estudiantes</b><span class="sep">/</span><span>Grupo A · VII semestre</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg><i class="dot-alert"></i></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Estudiantes</h1>
+              <p class="page-sub">Ingeniería de Telecomunicaciones e Informática · VII semestre · Grupo A · Periodo 2026-II</p>
+            </div>
+            <div class="page-actions">
+              <button type="button" class="btn"><svg class="ico"><use href="#i-upload"/></svg>Importar estudiantes</button>
+              <button type="button" class="btn btn-primary"><svg class="ico"><use href="#i-plus"/></svg>Agregar estudiante</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="toolbar">
+              <div class="search">
+                <svg class="ico"><use href="#i-search"/></svg>
+                <input class="input" placeholder="Buscar estudiante">
+              </div>
+              <select class="select" style="width:auto;min-width:170px"><option>Todos los programas</option></select>
+              <select class="select" style="width:auto;min-width:140px"><option>Todos los estados</option><option>Activo</option><option>Pendiente</option><option>Inactivo</option></select>
+              <span class="spacer"></span>
+              <button type="button" class="btn"><svg class="ico"><use href="#i-filter"/></svg>Más filtros</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:52px">No.</th>
+                    <th>Nombre completo</th>
+                    <th>Identificación</th>
+                    <th>Programa</th>
+                    <th>Semestre</th>
+                    <th>Estado</th>
+                    <th>Asistencia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="mono cell-muted">1</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">LM</span><span><b>Laura Mena Palacios</b><small>lmena@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077452310</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Activo</span></td>
+                    <td><div class="meter-cell"><span class="pct">93%</span><div class="meter"><i style="width:93%"></i></div></div></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">2</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">AC</span><span><b>Andrés Córdoba Moreno</b><small>acordoba@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077452447</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Activo</span></td>
+                    <td><div class="meter-cell"><span class="pct">96%</span><div class="meter"><i style="width:96%"></i></div></div></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">3</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">CR</span><span><b>Camila Rentería Díaz</b><small>crenteria@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077452584</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Activo</span></td>
+                    <td><div class="meter-cell"><span class="pct">89%</span><div class="meter"><i style="width:89%"></i></div></div></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">4</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">SM</span><span><b>Sebastián Mosquera Lemos</b><small>smosquera@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077452721</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Activo</span></td>
+                    <td><div class="meter-cell"><span class="pct">92%</span><div class="meter"><i style="width:92%"></i></div></div></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">5</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">VA</span><span><b>Valentina Asprilla Perea</b><small>vasprilla@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077452858</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-yellow"><i class="dot"></i>Pendiente</span></td>
+                    <td><div class="meter-cell"><span class="pct">78%</span><div class="meter"><i class="warn" style="width:78%"></i></div></div></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">6</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">DH</span><span><b>Daniel Hinestroza Ríos</b><small>dhinestroza@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077452995</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Activo</span></td>
+                    <td><div class="meter-cell"><span class="pct">85%</span><div class="meter"><i style="width:85%"></i></div></div></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">7</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">MP</span><span><b>Mariana Palacios Cuesta</b><small>mpalacios@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077453132</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Activo</span></td>
+                    <td><div class="meter-cell"><span class="pct">98%</span><div class="meter"><i style="width:98%"></i></div></div></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">8</td>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">JM</span><span><b>Juan Pablo Murillo Cárdenas</b><small>jmurillo@utch.edu.co</small></span></div></td>
+                    <td class="mono">1077453269</td>
+                    <td>Ing. de Telecomunicaciones</td>
+                    <td>VII</td>
+                    <td><span class="badge b-gray"><i class="dot"></i>Inactivo</span></td>
+                    <td><div class="meter-cell"><span class="pct">61%</span><div class="meter"><i class="low" style="width:61%"></i></div></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card-foot">
+              <span>Mostrando 8 de 36 estudiantes</span>
+              <div class="row-gap">
+                <button type="button" class="btn btn-sm">Anterior</button>
+                <button type="button" class="btn btn-sm btn-primary">1</button>
+                <button type="button" class="btn btn-sm">2</button>
+                <button type="button" class="btn btn-sm">3</button>
+                <button type="button" class="btn btn-sm">Siguiente</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 8 · REGISTRO DE ASISTENCIA
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">08</span><h2>Registro de asistencia</h2><p>Tabla con firma, hora y estado, basada en el formato institucional</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Asistencias</b><span class="sep">/</span><span>Registro · 3 oct 2026</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <div class="row-gap" style="margin-bottom:10px">
+                <span class="badge b-gray">Sesión finalizada</span>
+                <span class="pill-note"><svg class="ico"><use href="#i-clock"/></svg>10:00 – 12:00 a. m.</span>
+              </div>
+              <h1 class="page-title">Registro de asistencia</h1>
+              <p class="page-sub">Teoría y Técnicas de Ruteo y Switcheo · Viernes, 3 de octubre de 2026 · Docente: Dra. María F. Rentería</p>
+            </div>
+            <div class="page-actions">
+              <button type="button" class="btn"><svg class="ico"><use href="#i-download"/></svg>Exportar</button>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Presentes</span><span class="stat-ico accent"><svg class="ico"><use href="#i-check-circle"/></svg></span></div>
+              <div class="stat-value">28</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Ausentes</span><span class="stat-ico red"><svg class="ico"><use href="#i-x"/></svg></span></div>
+              <div class="stat-value">7</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Retardo</span><span class="stat-ico yellow"><svg class="ico"><use href="#i-clock"/></svg></span></div>
+              <div class="stat-value">3</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Total del grupo</span><span class="stat-ico"><svg class="ico"><use href="#i-users"/></svg></span></div>
+              <div class="stat-value">36</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="toolbar">
+              <div class="search">
+                <svg class="ico"><use href="#i-search"/></svg>
+                <input class="input" placeholder="Buscar estudiante">
+              </div>
+              <select class="select" style="width:auto;min-width:150px"><option>Todos los estados</option><option>Presente</option><option>Retardo</option><option>Ausente</option></select>
+              <span class="spacer"></span>
+              <span class="pill-note"><svg class="ico"><use href="#i-shield"/></svg>Firma validada en cada registro</span>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:52px">No.</th>
+                    <th>Nombres y apellidos</th>
+                    <th>Número de identificación</th>
+                    <th>Firma</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="mono cell-muted">1</td>
+                    <td class="cell-strong">Laura Mena Palacios</td>
+                    <td class="mono">1077452310</td>
+                    <td><span class="sig-script">Laura Mena</span></td>
+                    <td class="mono">10:31</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Presente</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">2</td>
+                    <td class="cell-strong">Andrés Córdoba Moreno</td>
+                    <td class="mono">1077452447</td>
+                    <td><span class="sig-script">A. Córdoba</span></td>
+                    <td class="mono">10:32</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Presente</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">3</td>
+                    <td class="cell-strong">Juan David Mosquera</td>
+                    <td class="mono">1077452514</td>
+                    <td><span class="sig-script">J. D. Mosquera</span></td>
+                    <td class="mono">10:32</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Presente</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">4</td>
+                    <td class="cell-strong">Camila Rentería Díaz</td>
+                    <td class="mono">1077452584</td>
+                    <td><span class="sig-script">C. Rentería</span></td>
+                    <td class="mono">10:33</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Presente</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">5</td>
+                    <td class="cell-strong">Sebastián Mosquera Lemos</td>
+                    <td class="mono">1077452721</td>
+                    <td><span class="sig-script">S. Mosquera</span></td>
+                    <td class="mono">10:34</td>
+                    <td><span class="badge b-green"><i class="dot"></i>Presente</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">6</td>
+                    <td class="cell-strong">Daniel Hinestroza Ríos</td>
+                    <td class="mono">1077452995</td>
+                    <td><span class="sig-script">D. Hinestroza</span></td>
+                    <td class="mono">10:47</td>
+                    <td><span class="badge b-yellow"><i class="dot"></i>Retardo</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">7</td>
+                    <td class="cell-strong">Valentina Asprilla Perea</td>
+                    <td class="mono">1077452858</td>
+                    <td class="cell-muted">—</td>
+                    <td class="mono cell-muted">—</td>
+                    <td><span class="badge b-red"><i class="dot"></i>Ausente</span></td>
+                  </tr>
+                  <tr>
+                    <td class="mono cell-muted">8</td>
+                    <td class="cell-strong">Juan Pablo Murillo Cárdenas</td>
+                    <td class="mono">1077453269</td>
+                    <td><span class="sig-script">J. Murillo</span></td>
+                    <td class="mono">12:06</td>
+                    <td><span class="badge b-blue"><i class="dot"></i>Agregado manual</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card-foot">
+              <span>Mostrando 8 de 36 registros de la sesión</span>
+              <div class="row-gap">
+                <button type="button" class="btn btn-sm">Anterior</button>
+                <button type="button" class="btn btn-sm btn-primary">1</button>
+                <button type="button" class="btn btn-sm">2</button>
+                <button type="button" class="btn btn-sm">Siguiente</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 9 · VISTA DEL ACTA
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">09</span><h2>Vista del acta</h2><p>Previsualización del formato oficial con firmas del docente y del representante</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Asistencias</b><span class="sep">/</span><span>Acta · 3 oct 2026</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="acta-toolbar">
+            <div class="left">
+              <span class="stat-ico"><svg class="ico"><use href="#i-file"/></svg></span>
+              <div>
+                <h3>Registro de Asistencia a Clases</h3>
+                <div class="card-sub">Vista previa del documento · Periodo 2026-II</div>
+              </div>
+              <span class="badge b-yellow"><i class="dot"></i>Pendiente de firma</span>
+            </div>
+            <div class="row-gap">
+              <button type="button" class="btn"><svg class="ico"><use href="#i-eye"/></svg>Vista previa</button>
+              <button type="button" class="btn"><svg class="ico"><use href="#i-download"/></svg>Descargar PDF</button>
+              <button type="button" class="btn btn-primary"><svg class="ico"><use href="#i-edit"/></svg>Firmar acta</button>
+            </div>
+          </div>
+
+          <div class="paper">
+            <div class="paper-head">
+              <p class="uni">Universidad Tecnológica del Chocó · Diego Luis Córdoba</p>
+              <h3>REGISTRO DE ASISTENCIA A CLASES</h3>
+              <p class="sub">Documento de referencia · el acta se genera con los datos de la sesión</p>
+            </div>
+
+            <div class="paper-fields">
+              <div class="paper-field"><span>Facultad:</span><b>Facultad de Ingeniería</b></div>
+              <div class="paper-field"><span>Periodo académico:</span><b>2026-II</b></div>
+              <div class="paper-field"><span>Programa:</span><b>Ing. de Telecomunicaciones e Informática</b></div>
+              <div class="paper-field"><span>CDS:</span><b>Grupo A</b></div>
+              <div class="paper-field"><span>Nivel:</span><b>VII semestre</b></div>
+              <div class="paper-field"><span>Fecha:</span><b>03/10/2026</b></div>
+              <div class="paper-field"><span>Asignatura:</span><b>Teoría y Técnicas de Ruteo y Switcheo</b></div>
+              <div class="paper-field"><span>Código de asignatura:</span><b>TTR-701</b></div>
+              <div class="paper-field full"><span>Docente:</span><b>Dra. María Fernanda Rentería</b></div>
+              <div class="paper-field full"><span>Temas tratados:</span><b>Protocolos de enrutamiento dinámico: OSPF y EIGRP. Métricas, vecindad y configuración básica en el laboratorio virtual.</b></div>
+            </div>
+
+            <div class="table-wrap" style="margin-top:22px">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:56px">No.</th>
+                    <th>Nombre del estudiante</th>
+                    <th>Identificación</th>
+                    <th style="width:210px">Firma</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="mono cell-muted">1</td><td>Laura Mena Palacios</td><td class="mono">1077452310</td><td><span class="sig-script">Laura Mena</span></td></tr>
+                  <tr><td class="mono cell-muted">2</td><td>Andrés Córdoba Moreno</td><td class="mono">1077452447</td><td><span class="sig-script">A. Córdoba</span></td></tr>
+                  <tr><td class="mono cell-muted">3</td><td>Juan David Mosquera</td><td class="mono">1077452514</td><td><span class="sig-script">J. D. Mosquera</span></td></tr>
+                  <tr><td class="mono cell-muted">4</td><td>Camila Rentería Díaz</td><td class="mono">1077452584</td><td><span class="sig-script">C. Rentería</span></td></tr>
+                  <tr><td class="mono cell-muted">5</td><td>Sebastián Mosquera Lemos</td><td class="mono">1077452721</td><td><span class="sig-script">S. Mosquera</span></td></tr>
+                  <tr><td class="mono cell-muted">6</td><td>Valentina Asprilla Perea</td><td class="mono">1077452858</td><td class="cell-muted center">—</td></tr>
+                  <tr><td class="mono cell-muted">7</td><td>Daniel Hinestroza Ríos</td><td class="mono">1077452995</td><td><span class="sig-script">D. Hinestroza</span></td></tr>
+                  <tr><td class="mono cell-muted">8</td><td>Juan Pablo Murillo Cárdenas</td><td class="mono">1077453269</td><td><span class="sig-script">J. Murillo</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sig-area">
+              <div class="sig-box">
+                <div class="sig-script">M. F. Rentería</div>
+                <div class="sig-line">Firma del docente</div>
+                <p class="cell-muted" style="margin-top:7px">Dra. María Fernanda Rentería</p>
+              </div>
+              <div class="sig-box">
+                <div class="sig-script">Jeanpier P.</div>
+                <div class="sig-line">Firma del representante</div>
+                <p class="cell-muted" style="margin-top:7px">Jeanpier Polanco · Grupo A</p>
+              </div>
+            </div>
+
+            <div class="paper-foot">
+              <span>Asistencia registrada mediante código QR y firma digital</span>
+              <span>Página 1 de 1 · Generado el 03/10/2026</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 10 · REPORTES
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">10</span><h2>Reportes</h2><p>Indicadores principales y gráficos sobrios de asistencia</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Reportes</b><span class="sep">/</span><span>Periodo 2026-II</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Reportes de asistencia</h1>
+              <p class="page-sub">Consolidado del grupo A · VII semestre · periodo 2026-II</p>
+            </div>
+            <div class="page-actions">
+              <select class="select" style="width:auto;min-width:160px"><option>Periodo 2026-II</option></select>
+              <button type="button" class="btn"><svg class="ico"><use href="#i-download"/></svg>Exportar reporte</button>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Total de sesiones</span><span class="stat-ico blue"><svg class="ico"><use href="#i-calendar"/></svg></span></div>
+              <div class="stat-value">17</div>
+              <div class="stat-foot">14 cerradas · 2 programadas · 1 abierta</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Asistencia promedio</span><span class="stat-ico accent"><svg class="ico"><use href="#i-trend"/></svg></span></div>
+              <div class="stat-value">91%</div>
+              <div class="stat-foot up">+3% frente al periodo anterior</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Presentes</span><span class="stat-ico accent"><svg class="ico"><use href="#i-check-circle"/></svg></span></div>
+              <div class="stat-value">412</div>
+              <div class="stat-foot">Registros confirmados</div>
+            </div>
+            <div class="card stat">
+              <div class="stat-top"><span class="stat-label">Ausentes</span><span class="stat-ico red"><svg class="ico"><use href="#i-x"/></svg></span></div>
+              <div class="stat-value">38</div>
+              <div class="stat-foot">9% de los registros</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Distribución de registros</div><div class="card-sub">Presentes vs. ausentes</div></div>
+              </div>
+              <div class="chart-body">
+                <div class="donut-wrap">
+                  <div class="donut">
+                    <svg viewBox="0 0 42 42" role="img" aria-label="91% de asistencia">
+                      <circle cx="21" cy="21" r="15.9" fill="none" stroke="#ECEEF1" stroke-width="6"></circle>
+                      <circle cx="21" cy="21" r="15.9" fill="none" stroke="#0E7C42" stroke-width="6" stroke-dasharray="91 9" stroke-linecap="round"></circle>
+                    </svg>
+                    <div class="center"><b>91%</b><small>asistencia</small></div>
+                  </div>
+                  <div class="legend-list">
+                    <div class="legend-row"><i class="swatch" style="background:#0E7C42"></i>Presentes <b>412</b></div>
+                    <div class="legend-row"><i class="swatch" style="background:#ECEEF1"></i>Ausentes <b>38</b></div>
+                    <div class="legend-row"><i class="swatch" style="background:#B45309"></i>Agregados manualmente <b>6</b></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Asistencia por semana</div><div class="card-sub">Últimas 4 semanas del periodo</div></div>
+                <span class="pill-note"><svg class="ico"><use href="#i-trend"/></svg>Promedio 93%</span>
+              </div>
+              <div class="chart-body">
+                <div class="bars">
+                  <div class="bar-col"><span class="v">96%</span><div class="bar-fill" style="height:78%"></div><span class="k">Semana 1</span></div>
+                  <div class="bar-col"><span class="v">93%</span><div class="bar-fill" style="height:70%"></div><span class="k">Semana 2</span></div>
+                  <div class="bar-col"><span class="v">88%</span><div class="bar-fill" style="height:56%"></div><span class="k">Semana 3</span></div>
+                  <div class="bar-col"><span class="v">94%</span><div class="bar-fill" style="height:73%"></div><span class="k">Semana 4</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Asistencia por asignatura</div><div class="card-sub">Promedio del periodo</div></div>
+              </div>
+              <div class="chart-body">
+                <div class="hbars">
+                  <div class="hbar"><span class="k">Ruteo y Switcheo</span><div class="track"><i style="width:94%"></i></div><span class="v">94%</span></div>
+                  <div class="hbar"><span class="k">Redes Convergentes</span><div class="track"><i style="width:89%"></i></div><span class="v">89%</span></div>
+                  <div class="hbar"><span class="k">Gestión de Redes</span><div class="track"><i style="width:92%"></i></div><span class="v">92%</span></div>
+                  <div class="hbar"><span class="k">Seguridad Informática</span><div class="track"><i class="dim" style="width:87%"></i></div><span class="v">87%</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Mayor número de inasistencias</div><div class="card-sub">Estudiantes con más ausencias</div></div>
+                <button type="button" class="btn btn-sm">Ver listado</button>
+              </div>
+              <div class="chart-body">
+                <div class="hbars">
+                  <div class="hbar"><span class="k">Juan Pablo Murillo</span><div class="track"><i class="danger" style="width:82%"></i></div><span class="v">5</span></div>
+                  <div class="hbar"><span class="k">Valentina Asprilla</span><div class="track"><i class="danger" style="width:66%"></i></div><span class="v">4</span></div>
+                  <div class="hbar"><span class="k">Daniel Hinestroza</span><div class="track"><i class="warn" style="width:49%"></i></div><span class="v">3</span></div>
+                  <div class="hbar"><span class="k">Sara Córdoba</span><div class="track"><i class="warn" style="width:49%"></i></div><span class="v">3</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANTALLA 11 · HISTORIAL / AUDITORÍA
+     ============================================================ -->
+<section class="screen">
+  <div class="screen-label"><span class="num">11</span><h2>Historial y auditoría</h2><p>Registro de acciones por usuario, fecha, hora y sesión</p></div>
+  <div class="frame">
+    <div class="app">
+
+      <aside class="side">
+        <div class="brand"><span class="mark">UTCH</span><span class="brand-txt"><b>Asistencia</b><small>Gestión académica</small></span></div>
+        <nav class="nav" aria-label="Menú principal">
+          <p class="nav-label">Menú</p>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-home"/></svg><span>Inicio</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-clipboard"/></svg><span>Asistencias</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-book"/></svg><span>Mis asignaturas</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-users"/></svg><span>Estudiantes</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-chart"/></svg><span>Reportes</span></a>
+          <a class="nav-item active" href="#"><svg class="ico"><use href="#i-history"/></svg><span>Historial</span></a>
+          <a class="nav-item" href="#"><svg class="ico"><use href="#i-settings"/></svg><span>Configuración</span></a>
+        </nav>
+        <div class="side-user">
+          <span class="avatar">JP</span>
+          <span class="side-user-txt"><b>Jeanpier Polanco</b><small>Representante</small></span>
+          <button type="button" class="icon-btn" aria-label="Cerrar sesión"><svg class="ico"><use href="#i-logout"/></svg></button>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="topbar">
+          <button type="button" class="icon-btn only-mobile" aria-label="Abrir menú"><svg class="ico"><use href="#i-menu"/></svg></button>
+          <div class="topbar-crumbs"><b>Historial</b><span class="sep">/</span><span>Auditoría</span></div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" aria-label="Notificaciones"><svg class="ico"><use href="#i-bell"/></svg></button>
+            <span class="topbar-divider"></span>
+            <span class="topbar-user"><b>Jeanpier Polanco</b><small>Representante</small></span>
+            <span class="avatar">JP</span>
+          </div>
+        </header>
+
+        <div class="content">
+
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Historial y auditoría</h1>
+              <p class="page-sub">Todas las acciones importantes sobre las asistencias, ordenadas de más reciente a más antigua.</p>
+            </div>
+            <div class="page-actions">
+              <button type="button" class="btn"><svg class="ico"><use href="#i-download"/></svg>Exportar historial</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="toolbar">
+              <div class="search">
+                <svg class="ico"><use href="#i-search"/></svg>
+                <input class="input" placeholder="Buscar por usuario o descripción">
+              </div>
+              <select class="select" style="width:auto;min-width:150px"><option>Todos los roles</option><option>Representante</option><option>Docente</option><option>Estudiante</option></select>
+              <select class="select" style="width:auto;min-width:160px"><option>Últimos 30 días</option><option>Últimos 7 días</option></select>
+              <span class="spacer"></span>
+              <button type="button" class="btn"><svg class="ico"><use href="#i-filter"/></svg>Filtrar</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Sesión</th>
+                    <th>Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm">JP</span><span><b>Jeanpier Polanco</b><small>Representante</small></span></div></td>
+                    <td><span class="badge b-blue">Firmó acta</span></td>
+                    <td class="nowrap">3 oct 2026</td>
+                    <td class="mono nowrap">12:20</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Acta validada del periodo 2026-II</td>
+                  </tr>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm">JP</span><span><b>Jeanpier Polanco</b><small>Representante</small></span></div></td>
+                    <td><span class="badge b-yellow">Agregó estudiante</span></td>
+                    <td class="nowrap">3 oct 2026</td>
+                    <td class="mono nowrap">12:06</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Juan Pablo Murillo · Falla de conexión durante la sesión</td>
+                  </tr>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm">JP</span><span><b>Jeanpier Polanco</b><small>Representante</small></span></div></td>
+                    <td><span class="badge b-red">Cerró asistencia</span></td>
+                    <td class="nowrap">3 oct 2026</td>
+                    <td class="mono nowrap">12:04</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Cierre de la sesión; QR y código desactivados</td>
+                  </tr>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">DH</span><span><b>Daniel Hinestroza Ríos</b><small>Estudiante</small></span></div></td>
+                    <td><span class="badge b-green">Registró asistencia</span></td>
+                    <td class="nowrap">3 oct 2026</td>
+                    <td class="mono nowrap">10:47</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Registro con retardo mediante código manual</td>
+                  </tr>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm avatar-soft">LM</span><span><b>Laura Mena Palacios</b><small>Estudiante</small></span></div></td>
+                    <td><span class="badge b-green">Registró asistencia</span></td>
+                    <td class="nowrap">3 oct 2026</td>
+                    <td class="mono nowrap">10:31</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Registro por código QR con firma digital</td>
+                  </tr>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm">JP</span><span><b>Jeanpier Polanco</b><small>Representante</small></span></div></td>
+                    <td><span class="badge b-green">Abrió asistencia</span></td>
+                    <td class="nowrap">3 oct 2026</td>
+                    <td class="mono nowrap">10:01</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Código 8F4K92 y QR habilitados para el grupo</td>
+                  </tr>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm">JP</span><span><b>Jeanpier Polanco</b><small>Representante</small></span></div></td>
+                    <td><span class="badge b-blue">Programó asistencia</span></td>
+                    <td class="nowrap">1 oct 2026</td>
+                    <td class="mono nowrap">18:24</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Asistencia preparada con 2 días de anticipación</td>
+                  </tr>
+                  <tr>
+                    <td><div class="person"><span class="avatar avatar-sm">JP</span><span><b>Jeanpier Polanco</b><small>Representante</small></span></div></td>
+                    <td><span class="badge b-blue">Creó asistencia</span></td>
+                    <td class="nowrap">30 sep 2026</td>
+                    <td class="mono nowrap">07:00</td>
+                    <td>Ruteo y Switcheo · 3 oct</td>
+                    <td class="cell-muted">Encabezado académico completado como borrador</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card-foot">
+              <span>Mostrando 8 de 126 acciones registradas</span>
+              <div class="row-gap">
+                <button type="button" class="btn btn-sm">Anterior</button>
+                <button type="button" class="btn btn-sm btn-primary">1</button>
+                <button type="button" class="btn btn-sm">2</button>
+                <button type="button" class="btn btn-sm">3</button>
+                <button type="button" class="btn btn-sm">Siguiente</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="proto-foot">
+  Prototipo visual · Plataforma de gestión de asistencia · Interfaz estática en HTML + CSS, sin JavaScript. Nombre de la plataforma y contenidos de ejemplo editables en <span class="mono">diseño/index.html</span>.
+</footer>
+
+</body>
+</html>
