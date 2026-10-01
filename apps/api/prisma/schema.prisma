@@ -1,0 +1,496 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model academic_groups {
+  id                         BigInt                       @id @default(autoincrement())
+  program_id                 BigInt                      
+  academic_period_id         BigInt                      
+  academic_level_id          BigInt                      
+  name                       String                       @db.VarChar(50)
+  code                       String?                      @db.VarChar(50)
+  status                     String                       @default("ACTIVE") @db.VarChar(20)
+  created_at                 DateTime                     @default(now()) @db.Timestamp(0)
+  updated_at                 DateTime                     @default(now()) @db.Timestamp(0)
+  academic_levels            academic_levels              @relation(fields: [academic_level_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_groups_level")
+  academic_periods           academic_periods             @relation(fields: [academic_period_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_groups_period")
+  academic_programs          academic_programs            @relation(fields: [program_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_groups_program")
+  course_offerings           course_offerings[]
+  group_students             group_students[]
+  representative_assignments representative_assignments[]
+
+  @@unique([program_id, academic_period_id, name], map: "uq_group_period_name")
+  @@index([academic_level_id], map: "idx_groups_level")
+  @@index([academic_period_id], map: "idx_groups_period")
+  @@index([program_id], map: "idx_groups_program")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model academic_levels {
+  id                  BigInt                @id @default(autoincrement())
+  number              Int                   @unique(map: "uq_academic_levels_number") @db.SmallInt
+  name                String                @unique(map: "uq_academic_levels_name") @db.VarChar(50)
+  academic_groups     academic_groups[]
+  curriculum_subjects curriculum_subjects[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model academic_periods {
+  id                         BigInt                       @id @default(autoincrement())
+  name                       String                       @unique(map: "uq_academic_periods_name") @db.VarChar(30)
+  year                       Int                          @db.SmallInt
+  term                       Int                          @db.SmallInt
+  start_date                 DateTime?                    @db.Date
+  end_date                   DateTime?                    @db.Date
+  status                     String                       @default("ACTIVE") @db.VarChar(20)
+  created_at                 DateTime                     @default(now()) @db.Timestamp(0)
+  updated_at                 DateTime                     @default(now()) @db.Timestamp(0)
+  academic_groups            academic_groups[]
+  course_offerings           course_offerings[]
+  representative_assignments representative_assignments[]
+
+  @@unique([year, term], map: "uq_academic_periods_year_term")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model academic_programs {
+  id                 BigInt            @id @default(autoincrement())
+  faculty_id         BigInt           
+  name               String            @db.VarChar(200)
+  code               String?           @unique(map: "uq_programs_code") @db.VarChar(50)
+  modality           String?           @db.VarChar(50)
+  duration_semesters Int?              @db.SmallInt
+  status             String            @default("ACTIVE") @db.VarChar(20)
+  created_at         DateTime          @default(now()) @db.Timestamp(0)
+  updated_at         DateTime          @default(now()) @db.Timestamp(0)
+  academic_groups    academic_groups[]
+  faculties          faculties         @relation(fields: [faculty_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_programs_faculty")
+  curricula          curricula[]
+
+  @@unique([faculty_id, name], map: "uq_programs_faculty_name")
+  @@index([faculty_id], map: "idx_programs_faculty")
+}
+
+model attendance_record_signatures {
+  id                   BigInt             @id @default(autoincrement())
+  attendance_record_id BigInt             @unique(map: "uq_record_signature")
+  signature_id         BigInt            
+  signature_snapshot   String?            @db.Text
+  signed_at            DateTime           @default(now()) @db.Timestamp(0)
+  attendance_records   attendance_records @relation(fields: [attendance_record_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_record_signature_record")
+  signatures           signatures         @relation(fields: [signature_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_record_signature_signature")
+
+  @@index([signature_id], map: "idx_record_signature_signature")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model attendance_records {
+  id                              BigInt                           @id @default(autoincrement())
+  attendance_session_id           BigInt                          
+  student_id                      BigInt                          
+  attendance_status_id            BigInt                          
+  registration_method_id          BigInt?                         
+  registered_at                   DateTime?                        @db.Timestamp(0)
+  is_manual                       Boolean                          @default(false)
+  manual_reason                   String?                          @db.VarChar(500)
+  created_by_user_id              BigInt?                         
+  created_at                      DateTime                         @default(now()) @db.Timestamp(0)
+  updated_at                      DateTime                         @default(now()) @db.Timestamp(0)
+  attendance_record_signatures    attendance_record_signatures?
+  users                           users?                           @relation(fields: [created_by_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_record_creator")
+  attendance_registration_methods attendance_registration_methods? @relation(fields: [registration_method_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_record_method")
+  attendance_sessions             attendance_sessions              @relation(fields: [attendance_session_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_record_session")
+  attendance_statuses             attendance_statuses              @relation(fields: [attendance_status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_record_status")
+  students                        students                         @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_record_student")
+
+  @@unique([attendance_session_id, student_id], map: "uq_attendance_record_student")
+  @@index([created_by_user_id], map: "idx_attendance_record_creator")
+  @@index([registration_method_id], map: "idx_attendance_record_method")
+  @@index([attendance_session_id], map: "idx_attendance_records_session")
+  @@index([attendance_status_id], map: "idx_attendance_records_status")
+  @@index([student_id], map: "idx_attendance_records_student")
+}
+
+model attendance_registration_methods {
+  id                 BigInt               @id @default(autoincrement())
+  code               String               @unique(map: "uq_registration_method_code") @db.VarChar(30)
+  name               String               @unique(map: "uq_registration_method_name") @db.VarChar(100)
+  description        String?              @db.VarChar(255)
+  attendance_records attendance_records[]
+}
+
+model attendance_session_signatures {
+  id                    BigInt              @id @default(autoincrement())
+  attendance_session_id BigInt             
+  user_id               BigInt             
+  signature_id          BigInt             
+  role_id               BigInt             
+  signature_snapshot    String?             @db.Text
+  signed_at             DateTime            @default(now()) @db.Timestamp(0)
+  roles                 roles               @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_session_signature_role")
+  attendance_sessions   attendance_sessions @relation(fields: [attendance_session_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_session_signature_session")
+  signatures            signatures          @relation(fields: [signature_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_session_signature_signature")
+  users                 users               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_session_signature_user")
+
+  @@unique([attendance_session_id, role_id], map: "uq_session_signature_role")
+  @@index([role_id], map: "idx_session_signature_role")
+  @@index([signature_id], map: "idx_session_signature_signature")
+  @@index([attendance_session_id], map: "idx_session_signatures_session")
+  @@index([user_id], map: "idx_session_signatures_user")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model attendance_sessions {
+  id                                                      BigInt                          @id @default(autoincrement())
+  course_offering_id                                      BigInt                         
+  teacher_user_id                                         BigInt                         
+  representative_user_id                                  BigInt                         
+  attendance_status_id                                    BigInt                         
+  session_date                                            DateTime                        @db.Date
+  start_time                                              DateTime                        @db.Time(0)
+  end_time                                                DateTime                        @db.Time(0)
+  opened_at                                               DateTime?                       @db.Timestamp(0)
+  closed_at                                               DateTime?                       @db.Timestamp(0)
+  attendance_code                                         String?                         @unique(map: "uq_attendance_code") @db.VarChar(50)
+  topics                                                  String?                         @db.Text
+  created_at                                              DateTime                        @default(now()) @db.Timestamp(0)
+  updated_at                                              DateTime                        @default(now()) @db.Timestamp(0)
+  attendance_records                                      attendance_records[]
+  attendance_session_signatures                           attendance_session_signatures[]
+  course_offerings                                        course_offerings                @relation(fields: [course_offering_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_session_course")
+  users_attendance_sessions_representative_user_idTousers users                           @relation("attendance_sessions_representative_user_idTousers", fields: [representative_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_session_representative")
+  attendance_statuses                                     attendance_statuses             @relation(fields: [attendance_status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_session_status")
+  users_attendance_sessions_teacher_user_idTousers        users                           @relation("attendance_sessions_teacher_user_idTousers", fields: [teacher_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_attendance_session_teacher")
+
+  @@unique([course_offering_id, session_date, start_time], map: "uq_attendance_session_time")
+  @@index([course_offering_id], map: "idx_attendance_sessions_course")
+  @@index([session_date], map: "idx_attendance_sessions_date")
+  @@index([representative_user_id], map: "idx_attendance_sessions_representative")
+  @@index([attendance_status_id], map: "idx_attendance_sessions_status")
+  @@index([teacher_user_id], map: "idx_attendance_sessions_teacher")
+}
+
+model attendance_statuses {
+  id                  BigInt                @id @default(autoincrement())
+  code                String                @unique(map: "uq_attendance_status_code") @db.VarChar(30)
+  name                String                @unique(map: "uq_attendance_status_name") @db.VarChar(100)
+  description         String?               @db.VarChar(255)
+  attendance_records  attendance_records[]
+  attendance_sessions attendance_sessions[]
+}
+
+model audit_logs {
+  id          BigInt   @id @default(autoincrement())
+  user_id     BigInt? 
+  action      String   @db.VarChar(100)
+  entity_type String   @db.VarChar(100)
+  entity_id   BigInt? 
+  description String?  @db.VarChar(1000)
+  metadata    Json?
+  ip_address  String?  @db.VarChar(45)
+  user_agent  String?  @db.VarChar(500)
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  users       users?   @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "fk_audit_user")
+
+  @@index([action], map: "idx_audit_action")
+  @@index([created_at], map: "idx_audit_created")
+  @@index([entity_type, entity_id], map: "idx_audit_entity")
+  @@index([user_id], map: "idx_audit_user")
+}
+
+model auth_sessions {
+  id               BigInt    @id @default(autoincrement())
+  user_id          BigInt
+  token_hash       String    @unique(map: "uq_auth_session_token") @db.VarChar(64)
+  family_id        String    @db.VarChar(36)
+  replaced_by_hash String?   @db.VarChar(64)
+  expires_at       DateTime  @db.Timestamp(0)
+  revoked_at       DateTime? @db.Timestamp(0)
+  ip_address       String?   @db.VarChar(45)
+  user_agent       String?   @db.VarChar(500)
+  created_at       DateTime  @default(now()) @db.Timestamp(0)
+  users            users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_auth_session_user")
+
+  @@index([user_id], map: "idx_auth_session_user")
+  @@index([family_id], map: "idx_auth_session_family")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model course_offerings {
+  id                    BigInt                 @id @default(autoincrement())
+  curriculum_subject_id BigInt                
+  academic_period_id    BigInt                
+  group_id              BigInt                
+  cds                   String?                @db.VarChar(100)
+  status                String                 @default("ACTIVE") @db.VarChar(20)
+  created_at            DateTime               @default(now()) @db.Timestamp(0)
+  updated_at            DateTime               @default(now()) @db.Timestamp(0)
+  attendance_sessions   attendance_sessions[]
+  academic_groups       academic_groups        @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_offerings_group")
+  academic_periods      academic_periods       @relation(fields: [academic_period_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_offerings_period")
+  curriculum_subjects   curriculum_subjects    @relation(fields: [curriculum_subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_offerings_subject")
+  teaching_assignments  teaching_assignments[]
+
+  @@unique([curriculum_subject_id, academic_period_id, group_id], map: "uq_course_offering")
+  @@index([group_id], map: "idx_course_offerings_group")
+  @@index([academic_period_id], map: "idx_course_offerings_period")
+  @@index([curriculum_subject_id], map: "idx_course_offerings_subject")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model curricula {
+  id                  BigInt                @id @default(autoincrement())
+  program_id          BigInt               
+  name                String                @db.VarChar(150)
+  code                String?               @unique(map: "uq_curricula_code") @db.VarChar(50)
+  version             String?               @db.VarChar(30)
+  effective_from      DateTime?             @db.Date
+  effective_until     DateTime?             @db.Date
+  status              String                @default("ACTIVE") @db.VarChar(20)
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  updated_at          DateTime              @default(now()) @db.Timestamp(0)
+  academic_programs   academic_programs     @relation(fields: [program_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_curricula_program")
+  curriculum_subjects curriculum_subjects[]
+
+  @@unique([program_id, name], map: "uq_curricula_program_name")
+  @@index([program_id], map: "idx_curricula_program")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model curriculum_subjects {
+  id                                                                                       BigInt                  @id @default(autoincrement())
+  curriculum_id                                                                            BigInt                 
+  subject_id                                                                               BigInt                 
+  academic_level_id                                                                        BigInt                 
+  subject_type                                                                             String                  @default("NORMAL") @db.VarChar(30)
+  credits                                                                                  Decimal?                @db.Decimal(4, 2)
+  is_mandatory                                                                             Boolean                 @default(true)
+  position                                                                                 Int?                    @db.SmallInt
+  course_offerings                                                                         course_offerings[]
+  curricula                                                                                curricula               @relation(fields: [curriculum_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_curriculum_subjects_curriculum")
+  academic_levels                                                                          academic_levels         @relation(fields: [academic_level_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_curriculum_subjects_level")
+  subjects                                                                                 subjects                @relation(fields: [subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_curriculum_subjects_subject")
+  subject_prerequisites_subject_prerequisites_curriculum_subject_idTocurriculum_subjects   subject_prerequisites[] @relation("subject_prerequisites_curriculum_subject_idTocurriculum_subjects")
+  subject_prerequisites_subject_prerequisites_prerequisite_subject_idTocurriculum_subjects subject_prerequisites[] @relation("subject_prerequisites_prerequisite_subject_idTocurriculum_subjects")
+
+  @@unique([curriculum_id, subject_id], map: "uq_curriculum_subject")
+  @@index([curriculum_id], map: "idx_curriculum_subjects_curriculum")
+  @@index([academic_level_id], map: "idx_curriculum_subjects_level")
+  @@index([subject_id], map: "idx_curriculum_subjects_subject")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model faculties {
+  id                BigInt              @id @default(autoincrement())
+  institution_id    BigInt             
+  name              String              @db.VarChar(200)
+  code              String?             @db.VarChar(30)
+  status            String              @default("ACTIVE") @db.VarChar(20)
+  created_at        DateTime            @default(now()) @db.Timestamp(0)
+  updated_at        DateTime            @default(now()) @db.Timestamp(0)
+  academic_programs academic_programs[]
+  institutions      institutions        @relation(fields: [institution_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_faculties_institution")
+
+  @@unique([institution_id, code], map: "uq_faculties_institution_code")
+  @@unique([institution_id, name], map: "uq_faculties_institution_name")
+  @@index([institution_id], map: "idx_faculties_institution")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model group_students {
+  id              BigInt          @id @default(autoincrement())
+  group_id        BigInt         
+  student_id      BigInt         
+  status          String          @default("ACTIVE") @db.VarChar(20)
+  joined_at       DateTime        @default(now()) @db.Timestamp(0)
+  left_at         DateTime?       @db.Timestamp(0)
+  academic_groups academic_groups @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_students_group")
+  students        students        @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_group_students_student")
+
+  @@unique([group_id, student_id], map: "uq_group_student")
+  @@index([group_id], map: "idx_group_students_group")
+  @@index([student_id], map: "idx_group_students_student")
+}
+
+model identification_types {
+  id      BigInt    @id @default(autoincrement())
+  code    String    @unique(map: "uq_identification_types_code") @db.VarChar(20)
+  name    String    @unique(map: "uq_identification_types_name") @db.VarChar(100)
+  persons persons[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model institutions {
+  id         BigInt      @id @default(autoincrement())
+  name       String      @db.VarChar(200)
+  code       String?     @unique(map: "uq_institutions_code") @db.VarChar(30)
+  status     String      @default("ACTIVE") @db.VarChar(20)
+  created_at DateTime    @default(now()) @db.Timestamp(0)
+  updated_at DateTime    @default(now()) @db.Timestamp(0)
+  faculties  faculties[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model persons {
+  id                     BigInt               @id @default(autoincrement())
+  identification_type_id BigInt              
+  identification_number  String               @db.VarChar(50)
+  first_name             String               @db.VarChar(100)
+  middle_name            String?              @db.VarChar(100)
+  last_name              String               @db.VarChar(100)
+  second_last_name       String?              @db.VarChar(100)
+  email                  String?              @unique(map: "uq_person_email") @db.VarChar(200)
+  phone                  String?              @db.VarChar(50)
+  status                 String               @default("ACTIVE") @db.VarChar(20)
+  created_at             DateTime             @default(now()) @db.Timestamp(0)
+  updated_at             DateTime             @default(now()) @db.Timestamp(0)
+  identification_types   identification_types @relation(fields: [identification_type_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_persons_identification_type")
+  signatures             signatures[]
+  students               students?
+  users                  users?
+
+  @@unique([identification_type_id, identification_number], map: "uq_person_identification")
+  @@index([identification_number], map: "idx_persons_identification")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model representative_assignments {
+  id                 BigInt           @id @default(autoincrement())
+  group_id           BigInt          
+  user_id            BigInt          
+  academic_period_id BigInt          
+  assigned_at        DateTime         @default(now()) @db.Timestamp(0)
+  ended_at           DateTime?        @db.Timestamp(0)
+  status             String           @default("ACTIVE") @db.VarChar(20)
+  academic_groups    academic_groups  @relation(fields: [group_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_representative_assignment_group")
+  academic_periods   academic_periods @relation(fields: [academic_period_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_representative_assignment_period")
+  users              users            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_representative_assignment_user")
+
+  @@unique([group_id, academic_period_id], map: "uq_representative_group_period")
+  @@unique([user_id, academic_period_id], map: "uq_representative_user_period")
+  @@index([group_id], map: "idx_representative_assignment_group")
+  @@index([academic_period_id], map: "idx_representative_assignment_period")
+  @@index([user_id], map: "idx_representative_assignment_user")
+}
+
+model roles {
+  id                            BigInt                          @id @default(autoincrement())
+  name                          String                          @unique(map: "uq_roles_name") @db.VarChar(50)
+  description                   String?                         @db.VarChar(255)
+  attendance_session_signatures attendance_session_signatures[]
+  user_roles                    user_roles[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model signatures {
+  id                            BigInt                          @id @default(autoincrement())
+  person_id                     BigInt                         
+  signature_type                String                          @db.VarChar(30)
+  storage_path                  String?                         @db.VarChar(500)
+  mime_type                     String?                         @db.VarChar(100)
+  signature_data                String?                         @db.Text
+  status                        String                          @default("ACTIVE") @db.VarChar(20)
+  created_at                    DateTime                        @default(now()) @db.Timestamp(0)
+  updated_at                    DateTime                        @default(now()) @db.Timestamp(0)
+  attendance_record_signatures  attendance_record_signatures[]
+  attendance_session_signatures attendance_session_signatures[]
+  persons                       persons                         @relation(fields: [person_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_signatures_person")
+
+  @@index([person_id], map: "idx_signatures_person")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model students {
+  id                 BigInt               @id @default(autoincrement())
+  person_id          BigInt               @unique(map: "uq_students_person")
+  student_code       String?              @unique(map: "uq_students_code") @db.VarChar(50)
+  status             String               @default("ACTIVE") @db.VarChar(20)
+  created_at         DateTime             @default(now()) @db.Timestamp(0)
+  updated_at         DateTime             @default(now()) @db.Timestamp(0)
+  attendance_records attendance_records[]
+  group_students     group_students[]
+  persons            persons              @relation(fields: [person_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_students_person")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model subject_prerequisites {
+  id                                                                                     BigInt              @id @default(autoincrement())
+  curriculum_subject_id                                                                  BigInt             
+  prerequisite_subject_id                                                                BigInt             
+  curriculum_subjects_subject_prerequisites_curriculum_subject_idTocurriculum_subjects   curriculum_subjects @relation("subject_prerequisites_curriculum_subject_idTocurriculum_subjects", fields: [curriculum_subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_prerequisite_subject")
+  curriculum_subjects_subject_prerequisites_prerequisite_subject_idTocurriculum_subjects curriculum_subjects @relation("subject_prerequisites_prerequisite_subject_idTocurriculum_subjects", fields: [prerequisite_subject_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_required_subject")
+
+  @@unique([curriculum_subject_id, prerequisite_subject_id], map: "uq_subject_prerequisite")
+  @@index([prerequisite_subject_id], map: "idx_required_subject")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model subjects {
+  id                  BigInt                @id @default(autoincrement())
+  code                String                @unique(map: "uq_subjects_code") @db.VarChar(50)
+  name                String                @db.VarChar(200)
+  description         String?               @db.Text
+  credits             Decimal?              @db.Decimal(4, 2)
+  hours_theoretical   Decimal?              @db.Decimal(5, 2)
+  hours_practical     Decimal?              @db.Decimal(5, 2)
+  hours_independent   Decimal?              @db.Decimal(5, 2)
+  status              String                @default("ACTIVE") @db.VarChar(20)
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  updated_at          DateTime              @default(now()) @db.Timestamp(0)
+  curriculum_subjects curriculum_subjects[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model teaching_assignments {
+  id                 BigInt           @id @default(autoincrement())
+  course_offering_id BigInt          
+  user_id            BigInt          
+  assigned_at        DateTime         @default(now()) @db.Timestamp(0)
+  ended_at           DateTime?        @db.Timestamp(0)
+  status             String           @default("ACTIVE") @db.VarChar(20)
+  course_offerings   course_offerings @relation(fields: [course_offering_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_teaching_assignments_course")
+  users              users            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_teaching_assignments_user")
+
+  @@unique([course_offering_id, user_id], map: "uq_teaching_assignment")
+  @@index([course_offering_id], map: "idx_teaching_assignments_course")
+  @@index([user_id], map: "idx_teaching_assignments_user")
+}
+
+model user_roles {
+  id      BigInt @id @default(autoincrement())
+  user_id BigInt
+  role_id BigInt
+  roles   roles  @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_roles_role")
+  users   users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_roles_user")
+
+  @@unique([user_id, role_id], map: "uq_user_role")
+  @@index([role_id], map: "idx_user_roles_role")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model users {
+  id                                                                    BigInt                          @id @default(autoincrement())
+  person_id                                                             BigInt                          @unique(map: "uq_users_person")
+  username                                                              String                          @unique(map: "uq_users_username") @db.VarChar(100)
+  password_hash                                                         String                          @db.VarChar(255)
+  status                                                                String                          @default("ACTIVE") @db.VarChar(20)
+  last_login_at                                                         DateTime?                       @db.Timestamp(0)
+  created_at                                                            DateTime                        @default(now()) @db.Timestamp(0)
+  updated_at                                                            DateTime                        @default(now()) @db.Timestamp(0)
+  attendance_records                                                    attendance_records[]
+  attendance_session_signatures                                         attendance_session_signatures[]
+  attendance_sessions_attendance_sessions_representative_user_idTousers attendance_sessions[]           @relation("attendance_sessions_representative_user_idTousers")
+  attendance_sessions_attendance_sessions_teacher_user_idTousers        attendance_sessions[]           @relation("attendance_sessions_teacher_user_idTousers")
+  audit_logs                                                            audit_logs[]
+  auth_sessions                                                         auth_sessions[]
+  representative_assignments                                            representative_assignments[]
+  teaching_assignments                                                  teaching_assignments[]
+  user_roles                                                            user_roles[]
+  persons                                                               persons                         @relation(fields: [person_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_users_person")
+}
