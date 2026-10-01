@@ -1,0 +1,322 @@
+/* Catálogo académico mock. Nombres de campo alineados 1:1 con las
+   tablas de referencia: institutions, faculties, academic_programs,
+   curricula, academic_levels, subjects, curriculum_subjects,
+   subject_prerequisites, academic_periods. Al conectar la API basta con
+   mapear la respuesta. */
+
+/* institutions: la plataforma es multi-institución; el mock arranca con
+   una sola activa. */
+export const instituciones = [
+  {
+    id: "ins-001",
+    nombre: "Universidad Tecnológica del Chocó",
+    codigo: "UTCH",
+    sigla: "UTCH",
+    nit: "890.205.148-1",
+    rector: "Dr. Diego Luis Córdoba",
+    ubicacion: "Quibdó, Chocó, Colombia",
+    telefono: "(+57) 604 593 12 34",
+    correo: "rectoria@utch.edu.co",
+    sitioWeb: "utch.edu.co",
+    estado: "Activo",
+  },
+];
+
+export const facultades = [
+  {
+    id: "fac-001",
+    nombre: "Facultad de Ingeniería",
+    codigo: "FI",
+    institucionId: "ins-001",
+    descripcion: "Ingenierías, tecnologías y disciplinas técnicas aplicadas.",
+    decano: "Dr. Álvaro Antonio Mosquera",
+    estado: "Activo",
+  },
+  {
+    id: "fac-002",
+    nombre: "Facultad de Ciencias",
+    codigo: "FC",
+    institucionId: "ins-001",
+    descripcion: "Ciencias naturales, sociales y aplicadas.",
+    decano: "Dra. Berta Nur Martínez",
+    estado: "Activo",
+  },
+  {
+    id: "fac-003",
+    nombre: "Facultad de Educación",
+    codigo: "FE",
+    institucionId: "ins-001",
+    descripcion: "Formación de licenciados en educación.",
+    decano: "Mg. Jhon Faber Orobio",
+    estado: "Inactivo",
+  },
+];
+
+export const programas = [
+  {
+    id: "prog-001",
+    nombre: "Ingeniería de Sistemas",
+    codigo: "IS",
+    facultadId: "fac-001",
+    modalidad: "Presencial",
+    semestres: 10,
+    estado: "Activo",
+  },
+  {
+    id: "prog-002",
+    nombre: "Ingeniería de Telecomunicaciones e Informática",
+    codigo: "ITEL",
+    facultadId: "fac-001",
+    modalidad: "Presencial",
+    semestres: 10,
+    estado: "Activo",
+  },
+  {
+    id: "prog-003",
+    nombre: "Licenciatura en Matemáticas",
+    codigo: "LM",
+    facultadId: "fac-002",
+    modalidad: "Presencial",
+    semestres: 8,
+    estado: "Activo",
+  },
+];
+
+export const planesEstudio = [
+  {
+    id: "pla-001",
+    nombre: "Plan de estudios Ingeniería de Sistemas 2026",
+    codigo: "IS-2026",
+    programaId: "prog-001",
+    version: 2026,
+    creditosTotales: 240,
+    vigenciaInicio: "2026-01-01",
+    vigenciaFin: "2027-12-31",
+    estado: "Activo",
+  },
+  {
+    id: "pla-002",
+    nombre: "Plan de estudios Ing. Telecomunicaciones 2026",
+    codigo: "ITEL-2026",
+    programaId: "prog-002",
+    version: 2026,
+    creditosTotales: 245,
+    vigenciaInicio: "2026-01-01",
+    vigenciaFin: "2027-12-31",
+    estado: "Activo",
+  },
+];
+
+/* academic_levels: los niveles I a X del plan. Cada nivel pertenece a un
+   plan; el mock cubre la estructura completa del plan principal. */
+export const niveles = [
+  { id: "niv-001", numero: 1, nombre: "Nivel I", planId: "pla-001" },
+  { id: "niv-002", numero: 2, nombre: "Nivel II", planId: "pla-001" },
+  { id: "niv-003", numero: 3, nombre: "Nivel III", planId: "pla-001" },
+  { id: "niv-004", numero: 7, nombre: "Nivel VII", planId: "pla-002" },
+  { id: "niv-005", numero: 4, nombre: "Nivel IV", planId: "pla-001" },
+  { id: "niv-006", numero: 5, nombre: "Nivel V", planId: "pla-001" },
+  { id: "niv-007", numero: 6, nombre: "Nivel VI", planId: "pla-001" },
+  { id: "niv-008", numero: 7, nombre: "Nivel VII", planId: "pla-001" },
+  { id: "niv-009", numero: 8, nombre: "Nivel VIII", planId: "pla-001" },
+  { id: "niv-010", numero: 9, nombre: "Nivel IX", planId: "pla-001" },
+  { id: "niv-011", numero: 10, nombre: "Nivel X", planId: "pla-001" },
+  { id: "niv-012", numero: 8, nombre: "Nivel VIII", planId: "pla-002" },
+];
+
+/* subjects: catálogo con descripción, créditos e intensidad horaria
+   desglosada (teóricas, prácticas e independientes). */
+export const asignaturas = [
+  {
+    id: "asg-001",
+    nombre: "Matemáticas I",
+    codigo: "MAT-101",
+    descripcion: "Cálculo diferencial y álgebra lineal aplicada a la ingeniería.",
+    creditos: 4,
+    horasTeoricas: 3,
+    horasPracticas: 1,
+    horasIndependientes: 2,
+    tipo: "NORMAL",
+    estado: "Activo",
+  },
+  {
+    id: "asg-002",
+    nombre: "Programación I",
+    codigo: "PRO-101",
+    descripcion: "Fundamentos de programación estructurada y lógica algorítmica.",
+    creditos: 4,
+    horasTeoricas: 2,
+    horasPracticas: 2,
+    horasIndependientes: 2,
+    tipo: "NORMAL",
+    estado: "Activo",
+  },
+  {
+    id: "asg-003",
+    nombre: "Bases de Datos",
+    codigo: "BD-201",
+    descripcion: "Modelo relacional, normalización y lenguaje SQL.",
+    creditos: 3,
+    horasTeoricas: 2,
+    horasPracticas: 1,
+    horasIndependientes: 2,
+    tipo: "NORMAL",
+    estado: "Activo",
+  },
+  {
+    id: "asg-004",
+    nombre: "Sistemas Operativos",
+    codigo: "SOP-701",
+    descripcion: "Gestión de procesos, memoria y planificación del CPU.",
+    creditos: 4,
+    horasTeoricas: 3,
+    horasPracticas: 1,
+    horasIndependientes: 2,
+    tipo: "NORMAL",
+    estado: "Activo",
+  },
+  {
+    id: "asg-005",
+    nombre: "Redes de Computadores",
+    codigo: "RC-701",
+    descripcion: "Modelo OSI, direccionamiento IP y protocolos de transporte.",
+    creditos: 4,
+    horasTeoricas: 2,
+    horasPracticas: 2,
+    horasIndependientes: 2,
+    tipo: "NORMAL",
+    estado: "Activo",
+  },
+  {
+    id: "asg-006",
+    nombre: "Teoría y Técnicas de Ruteo y Switcheo",
+    codigo: "RTS-701",
+    descripcion: "Enrutamiento dinámico, conmutación y diseño de redes LAN.",
+    creditos: 4,
+    horasTeoricas: 2,
+    horasPracticas: 2,
+    horasIndependientes: 2,
+    tipo: "ELECTIVE",
+    estado: "Activo",
+  },
+  {
+    id: "asg-007",
+    nombre: "Inteligencia Artificial",
+    codigo: "IA-701",
+    descripcion: "Aprendizaje automático, redes neuronales y razonamiento.",
+    creditos: 3,
+    horasTeoricas: 2,
+    horasPracticas: 1,
+    horasIndependientes: 2,
+    tipo: "ELECTIVE",
+    estado: "Inactivo",
+  },
+  {
+    id: "asg-008",
+    nombre: "Matemáticas II",
+    codigo: "MAT-102",
+    descripcion: "Cálculo integral y ecuaciones diferenciales.",
+    creditos: 4,
+    horasTeoricas: 3,
+    horasPracticas: 1,
+    horasIndependientes: 2,
+    tipo: "NORMAL",
+    estado: "Activo",
+  },
+  {
+    id: "asg-009",
+    nombre: "Programación II",
+    codigo: "PRO-201",
+    descripcion: "Programación orientada a objetos y estructuras de datos.",
+    creditos: 4,
+    horasTeoricas: 2,
+    horasPracticas: 2,
+    horasIndependientes: 2,
+    tipo: "NORMAL",
+    estado: "Activo",
+  },
+  {
+    id: "asg-010",
+    nombre: "Redes Inalámbricas",
+    codigo: "RI-801",
+    descripcion: "Tecnologías WLAN, seguridad y despliegue de redes inalámbricas.",
+    creditos: 3,
+    horasTeoricas: 1,
+    horasPracticas: 2,
+    horasIndependientes: 2,
+    tipo: "PRACTICE",
+    estado: "Activo",
+  },
+  {
+    id: "asg-011",
+    nombre: "Seminario de Investigación",
+    codigo: "INV-901",
+    descripcion: "Metodología de la investigación y elaboración de trabajos de grado.",
+    creditos: 2,
+    horasTeoricas: 2,
+    horasPracticas: 0,
+    horasIndependientes: 4,
+    tipo: "OTHER",
+    estado: "Activo",
+  },
+];
+
+/* curriculum_subjects: qué asignatura vive en qué nivel de qué plan, con la
+   configuración curricular (obligatoriedad, créditos y posición). */
+export const planAsignaturas = [
+  { id: "pas-001", planId: "pla-001", nivelId: "niv-001", asignaturaId: "asg-001", obligatoria: true, posicion: 1, creditos: 4 },
+  { id: "pas-002", planId: "pla-001", nivelId: "niv-001", asignaturaId: "asg-002", obligatoria: true, posicion: 2, creditos: 4 },
+  { id: "pas-003", planId: "pla-001", nivelId: "niv-002", asignaturaId: "asg-003", obligatoria: true, posicion: 1, creditos: 3 },
+  { id: "pas-004", planId: "pla-002", nivelId: "niv-004", asignaturaId: "asg-004", obligatoria: true, posicion: 1, creditos: 4 },
+  { id: "pas-005", planId: "pla-002", nivelId: "niv-004", asignaturaId: "asg-005", obligatoria: true, posicion: 2, creditos: 4 },
+  { id: "pas-006", planId: "pla-002", nivelId: "niv-004", asignaturaId: "asg-006", obligatoria: false, posicion: 3, creditos: 4 },
+  { id: "pas-007", planId: "pla-002", nivelId: "niv-004", asignaturaId: "asg-007", obligatoria: false, posicion: 4, creditos: 3 },
+  { id: "pas-008", planId: "pla-001", nivelId: "niv-002", asignaturaId: "asg-008", obligatoria: true, posicion: 2, creditos: 4 },
+  { id: "pas-009", planId: "pla-001", nivelId: "niv-003", asignaturaId: "asg-009", obligatoria: true, posicion: 1, creditos: 4 },
+  { id: "pas-010", planId: "pla-001", nivelId: "niv-006", asignaturaId: "asg-010", obligatoria: false, posicion: 1, creditos: 3 },
+  { id: "pas-011", planId: "pla-001", nivelId: "niv-010", asignaturaId: "asg-011", obligatoria: false, posicion: 1, creditos: 2 },
+  { id: "pas-012", planId: "pla-002", nivelId: "niv-012", asignaturaId: "asg-006", obligatoria: true, posicion: 1, creditos: 4 },
+];
+
+/* subject_prerequisites: qué asignatura se debe haber cursado antes de
+   otra. Una asignatura nunca es prerrequisito de sí misma. */
+export const subjectPrerequisites = [
+  { id: "spr-001", asignaturaId: "asg-002", prerrequisitoId: "asg-001" },
+  { id: "spr-002", asignaturaId: "asg-003", prerrequisitoId: "asg-002" },
+  { id: "spr-003", asignaturaId: "asg-004", prerrequisitoId: "asg-002" },
+  { id: "spr-004", asignaturaId: "asg-005", prerrequisitoId: "asg-004" },
+  { id: "spr-005", asignaturaId: "asg-006", prerrequisitoId: "asg-005" },
+  { id: "spr-006", asignaturaId: "asg-008", prerrequisitoId: "asg-001" },
+  { id: "spr-007", asignaturaId: "asg-009", prerrequisitoId: "asg-002" },
+  { id: "spr-008", asignaturaId: "asg-010", prerrequisitoId: "asg-005" },
+];
+
+export const periodos = [
+  {
+    id: "per-001",
+    nombre: "2026-2",
+    anio: 2026,
+    periodo: 2,
+    fechaInicio: "2026-08-03",
+    fechaFin: "2026-12-05",
+    estado: "ACTIVE",
+  },
+  {
+    id: "per-002",
+    nombre: "2026-1",
+    anio: 2026,
+    periodo: 1,
+    fechaInicio: "2026-02-02",
+    fechaFin: "2026-06-13",
+    estado: "CLOSED",
+  },
+  {
+    id: "per-003",
+    nombre: "2027-1",
+    anio: 2027,
+    periodo: 1,
+    fechaInicio: "2027-02-01",
+    fechaFin: "2027-06-12",
+    estado: "PLANNED",
+  },
+];

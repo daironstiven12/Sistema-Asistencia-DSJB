@@ -1,0 +1,2184 @@
+/* Primitivas visuales del panel administrativo.
+   Un solo módulo CSS para toda la librería: las clases se componen
+   con `composes` implícito vía className, nunca se redefinen tokens. */
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Superficies ─────────────────────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: var(--sp-md) 18px;
+}
+
+.cardFlush {
+  padding: 0;
+  overflow: hidden;
+}
+
+.cardFlushCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: 0;
+  overflow: hidden;
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-md);
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.cardSub {
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+
+/* ── Encabezado de ficha (elemento firma del módulo) ─────────── */
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.recordCode {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-700);
+  background: var(--accent-50);
+  border: 1px solid var(--accent-200);
+  border-radius: var(--r-sm);
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.rule {
+  height: 1px;
+  background: var(--border);
+  border: 0;
+  margin: var(--sp-sm) 0;
+}
+
+.ruleStrong {
+  height: 2px;
+  background: var(--text);
+  border: 0;
+  margin: var(--sp-sm) 0;
+  opacity: 0.85;
+}
+
+/* Rejilla de ficha: traduce el formato oficial F-GCA-24 a la UI. */
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0;
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--border);
+}
+
+.fieldCell {
+  background: var(--surface);
+  padding: 10px 13px;
+  min-width: 0;
+}
+
+.fieldCell dt {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.fieldCell dd {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* ── Botones ─────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnPrimary {
+  composes: btn;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: var(--sh);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: var(--accent-700);
+  border-color: var(--accent-700);
+}
+
+.btnSecondary {
+  composes: btn;
+  background: var(--surface);
+  border-color: var(--border-2);
+  color: var(--text-2);
+  box-shadow: var(--sh);
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: var(--border-3);
+}
+
+.btnGhost {
+  composes: btn;
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-2);
+}
+
+.btnGhost:hover:not(:disabled) {
+  background: var(--surface-3);
+}
+
+.btnDanger {
+  composes: btn;
+  background: var(--danger-fg);
+  border-color: var(--danger-fg);
+  color: #fff;
+  box-shadow: var(--sh);
+}
+
+.btnDanger:hover:not(:disabled) {
+  background: var(--danger-hover);
+  border-color: var(--danger-hover);
+}
+
+.btnDangerGhost {
+  composes: btn;
+  background: transparent;
+  border-color: var(--danger-border);
+  color: var(--danger-fg);
+}
+
+.btnDangerGhost:hover:not(:disabled) {
+  background: var(--danger-bg);
+}
+
+.btnSm {
+  composes: btn;
+  composes: btnSecondary;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 12.5px;
+}
+
+.btnSm svg {
+  width: 14px;
+  height: 14px;
+}
+
+.btnIcon {
+  composes: btnGhost;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-700);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.linkBtn:hover {
+  color: var(--accent-800);
+  text-decoration: underline;
+}
+
+.linkBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Campos de formulario ────────────────────────────────────── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field > label,
+.fieldLegend {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.req {
+  color: var(--danger-fg);
+  margin-left: 2px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-4);
+}
+
+.input:hover,
+.select:hover,
+.textarea:hover {
+  border-color: var(--border-3);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.input[readonly],
+.input:disabled,
+.select:disabled {
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+
+.inputInvalid,
+.inputInvalid:hover {
+  border-color: var(--danger-fg);
+}
+
+.fieldError {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--danger-fg-soft);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fieldError svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.fieldHint {
+  font-size: 12px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.45;
+}
+
+.fieldHint svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: var(--text-4);
+}
+
+/* ── Buscador ────────────────────────────────────────────────── */
+
+.search {
+  position: relative;
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+
+.search svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-4);
+  pointer-events: none;
+}
+
+.search input {
+  width: 100%;
+  height: 40px;
+  padding: 0 34px 0 34px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  font-size: 14px;
+}
+
+.search input::placeholder {
+  color: var(--text-4);
+}
+
+.search input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.searchClear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--text-4);
+  cursor: pointer;
+}
+
+.searchClear:hover {
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.searchClear svg {
+  position: static;
+  transform: none;
+  width: 14px;
+  height: 14px;
+  color: inherit;
+  pointer-events: auto;
+}
+
+/* ── Barra de herramientas y filtros ─────────────────────────── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: 13px 15px;
+}
+
+.toolbarSpacer {
+  flex: 1 1 auto;
+}
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+
+.filterBar .select,
+.filterBar .input {
+  width: auto;
+  min-width: 150px;
+  min-height: 36px;
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13.5px;
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-700);
+  background: var(--accent-50);
+  border: 1px solid var(--accent-200);
+  border-radius: var(--r-pill);
+  padding: 2px 9px;
+}
+
+/* Etiqueta visible de un filtro (p. ej. "Desde" junto a un date input). */
+.filterLabel {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  align-self: center;
+}
+
+/* Etiqueta + control pegados: nunca se separan al ajustar la fila. */
+.filterGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.toggleWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+/* ── Píldoras de estado ──────────────────────────────────────── */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.pill i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+
+.toneOk {
+  background: var(--ok-bg);
+  color: var(--ok-fg);
+  border-color: var(--ok-border);
+}
+
+.toneInfo {
+  background: var(--info-bg);
+  color: var(--info-fg);
+  border-color: var(--info-border);
+}
+
+.toneWarn {
+  background: var(--warn-bg);
+  color: var(--warn-fg);
+  border-color: var(--warn-border);
+}
+
+.toneDanger {
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+  border-color: var(--danger-border);
+}
+
+.toneTeal {
+  background: var(--teal-bg);
+  color: var(--teal-fg);
+  border-color: var(--teal-border);
+}
+
+.toneNeutral {
+  background: var(--surface-3);
+  color: var(--text-2);
+  border-color: var(--border-2);
+}
+
+.pillSolid {
+  background: var(--accent-800);
+  color: #fff;
+  border-color: var(--accent-800);
+}
+
+/* ── Notificaciones en línea ─────────────────────────────────── */
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: var(--r);
+  padding: 11px 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.notice svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+
+.noticeOk {
+  composes: notice;
+  background: var(--ok-bg);
+  color: var(--ok-fg);
+  border-color: var(--ok-border);
+}
+
+.noticeError {
+  composes: notice;
+  background: var(--danger-bg);
+  color: var(--danger-fg-soft);
+  border-color: var(--danger-border);
+}
+
+.noticeInfo {
+  composes: notice;
+  background: var(--info-bg);
+  color: var(--info-fg);
+  border-color: var(--info-border);
+}
+
+.noticeWarn {
+  composes: notice;
+  background: var(--warn-bg);
+  color: var(--warn-fg);
+  border-color: var(--warn-border);
+}
+
+/* ── Estado vacío ────────────────────────────────────────────── */
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  border: 1px dashed var(--border-2);
+  border-radius: var(--r);
+  padding: 40px 24px;
+  color: var(--text-3);
+}
+
+.emptyIcon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-4);
+}
+
+.emptyIcon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.empty strong {
+  font-size: 14.5px;
+  color: var(--text);
+}
+
+.empty p {
+  font-size: 13px;
+  max-width: 42ch;
+  line-height: 1.55;
+}
+
+.emptyActions {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+/* ── Diálogo y hoja lateral ──────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  background: var(--scrim);
+  padding: 20px;
+  animation: fade 140ms ease;
+}
+
+.overlayCenter {
+  align-items: center;
+  justify-content: center;
+}
+
+.overlayRight {
+  justify-content: flex-end;
+  padding: 0;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.dialog {
+  width: min(560px, 100%);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-3);
+  padding: 22px;
+  animation: rise 160ms ease;
+}
+
+.dialogWide {
+  width: min(760px, 100%);
+}
+
+.dialogNarrow {
+  width: min(430px, 100%);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.drawer {
+  width: min(520px, 100%);
+  height: 100dvh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  box-shadow: var(--sh-3);
+  padding: 22px 24px 32px;
+  animation: slide 180ms ease;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+}
+
+.dialogHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  margin-bottom: 14px;
+}
+
+.dialogHead h2 {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.dialogSub {
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dialogActions {
+  display: flex;
+  gap: var(--sp-sm);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 18px;
+}
+
+.dialogActions > * {
+  flex: 1;
+}
+
+.dialogActionsFlush {
+  border-top: 0;
+  padding-top: 4px;
+  margin-top: 4px;
+}
+
+.dialogIcon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.dialogIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dialogIconDanger {
+  composes: dialogIcon;
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+}
+
+.dialogIconInfo {
+  composes: dialogIcon;
+  background: var(--info-bg);
+  color: var(--info-fg);
+}
+
+/* ── Formularios por secciones ───────────────────────────────── */
+
+.formSection {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formLegend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.formLegend::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 14px 16px;
+}
+
+.formGridWide {
+  grid-column: 1 / -1;
+}
+
+/* ── Segmentado / tabs ───────────────────────────────────────── */
+
+.segmented {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 4px;
+}
+
+.segmented button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.segmented button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.segmented button[aria-selected="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--sh);
+}
+
+/* ── Meter / medidor ─────────────────────────────────────────── */
+
+.meter {
+  height: 8px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.meterFill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: var(--r-pill);
+  transition: width 200ms ease;
+}
+
+.meterFillWarn {
+  background: var(--warn-fg);
+}
+
+.meterFillDanger {
+  background: var(--danger-fg);
+}
+
+/* ── Tabla de datos ──────────────────────────────────────────── */
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+}
+
+.table thead th {
+  text-align: left;
+  padding: 10px 16px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 13.5px;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr {
+  transition: background 100ms ease;
+}
+
+.table tbody tr:hover td {
+  background: var(--surface-2);
+}
+
+.tableEmpty {
+  padding: 44px 20px;
+  text-align: center;
+}
+
+.cellPrimary {
+  font-weight: 650;
+  color: var(--text);
+}
+
+.cellMuted {
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+.cellMono {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+}
+
+/* Fechas y códigos: nunca deben partirse a mitad de palabra. */
+.cellNowrap {
+  white-space: nowrap;
+}
+
+/* Columna secundaria: información de apoyo, jerarquía por debajo del dato
+   principal. El flag `muted` de cada columna la activa. La especificidad
+   `.table tbody td` gana al font-size base de las celdas. */
+.table tbody td.cellSecondary {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+/* Celda de acciones: racimo compacto con ritmo uniforme. El wrapper que
+   devuelve cada página se vuelve flex para que los botones nunca se peguen.
+   El min-width del wrapper evita que dos botones se apilen en dos líneas. */
+.cellActions {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cellActions > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  flex-wrap: wrap;
+  min-width: 168px;
+}
+
+.cellActions > * + * {
+  margin-left: 6px;
+}
+
+/* Pila de identidad: avatar + nombre + dato secundario. */
+.person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.personAvatar {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-2);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.personAvatarAccent {
+  background: var(--accent-50);
+  color: var(--accent-800);
+}
+
+.personText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.personText strong {
+  font-size: 13.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.personText small {
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Carga ───────────────────────────────────────────────────── */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-3) 25%,
+    var(--surface-2) 37%,
+    var(--surface-3) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.3s ease infinite;
+  border-radius: var(--r-sm);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+.spin {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .spin,
+  .overlay,
+  .dialog,
+  .drawer {
+    animation: none;
+  }
+
+  .meterFill,
+  .table tbody tr {
+    transition: none;
+  }
+}
+
+/* ── Gráficos (SVG + CSS, sin librería) ─────────────────────── */
+
+.chartCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: var(--sp-md) 18px;
+  min-width: 0;
+}
+
+.chartTitle {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.chartSub {
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+
+.chartLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.chartLegend li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  flex: none;
+  display: inline-block;
+}
+
+.legendValue {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.donut {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  position: relative;
+}
+
+.donutHole {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.donutValue {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.donutLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  margin-top: 2px;
+}
+
+.donutRow {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-top: var(--sp-md);
+  flex-wrap: wrap;
+}
+
+.hbars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: var(--sp-md);
+}
+
+.hbar {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.1fr) minmax(0, 2fr) 52px;
+  gap: 12px;
+  align-items: center;
+}
+
+.hbarLabel {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hbarTrack {
+  height: 10px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.hbarFill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+}
+
+.hbarValue {
+  font-size: 13px;
+  font-weight: 650;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.columns {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 168px;
+  margin-top: var(--sp-lg);
+  padding-bottom: 26px;
+  position: relative;
+}
+
+.columns::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 26px;
+  height: 1px;
+  background: var(--border-2);
+}
+
+.column {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.columnStack {
+  width: 100%;
+  max-width: 44px;
+  display: flex;
+  flex-direction: column-reverse;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  min-height: 3px;
+}
+
+.columnSeg {
+  width: 100%;
+  transition: height 200ms ease;
+}
+
+.columnValue {
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+}
+
+.columnLabel {
+  position: absolute;
+  bottom: 4px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.columnSlot {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+
+.lineChartWrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.lineChart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: var(--sp-md);
+  overflow: visible;
+}
+
+/* El relleno viene del degradado del propio SVG (fill attribute). */
+.lineArea {
+  stroke: none;
+}
+
+.linePath {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.linePoint {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 2;
+  transition: r 140ms ease, stroke-width 140ms ease;
+}
+
+.lineDot {
+  cursor: default;
+}
+
+.lineDot:hover .linePoint {
+  r: 7px;
+  stroke-width: 2.5;
+}
+
+.lineDot:hover .lineValue {
+  fill: var(--accent-800);
+}
+
+/* Valor sobre cada punto: con halo para que se lea sobre rejilla y área. */
+.lineValue {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  fill: var(--text-2);
+  stroke: var(--surface);
+  stroke-width: 3.5;
+  paint-order: stroke;
+  animation: valueIn 300ms ease backwards;
+}
+
+/* Líneas de referencia (promedio y umbral) con etiqueta a la derecha. */
+.lineRef {
+  stroke: var(--text-4);
+  stroke-width: 1.25;
+  stroke-dasharray: 7 6;
+}
+
+.lineRefThr {
+  stroke: var(--danger-fg);
+  stroke-width: 1.25;
+  stroke-dasharray: 7 6;
+  opacity: 0.8;
+}
+
+.lineRefLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  fill: var(--text-3);
+  stroke: var(--surface);
+  stroke-width: 3.5;
+  paint-order: stroke;
+}
+
+.lineRefLabelThr {
+  fill: var(--danger-fg);
+}
+
+/* Carril inferior: volumen de registros por jornada. */
+.lineBar {
+  fill: var(--chart-2);
+  opacity: 0.24;
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: barIn 460ms cubic-bezier(0.33, 1, 0.68, 1) backwards;
+}
+
+.lineBar:hover {
+  opacity: 0.45;
+}
+
+.lineLaneAxis {
+  stroke: var(--border-2);
+  stroke-width: 1;
+}
+
+@keyframes barIn {
+  from {
+    transform: scaleY(0.05);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes valueIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Leyenda compacta bajo el gráfico: qué es la línea, el carril y las
+   referencias. */
+.lineLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.lineLegend li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.lineLegend i {
+  display: inline-block;
+  flex: none;
+}
+
+.lineLegendLine {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.lineLegendBar {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--chart-2);
+  opacity: 0.3;
+}
+
+.lineLegendAvg {
+  width: 18px;
+  height: 0;
+  border-top: 2px dashed var(--text-4);
+}
+
+.lineLegendThr {
+  width: 18px;
+  height: 0;
+  border-top: 2px dashed var(--danger-fg);
+}
+
+.lineGridLine {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.lineLabel {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 550;
+  fill: var(--text-4);
+}
+
+/* Etiquetas del eje Y: porcentajes alineados a la izquierda del área. */
+.lineTick {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: var(--text-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.lineAxis {
+  stroke: var(--border-2);
+  stroke-width: 1;
+}
+
+/* Trazo que se dibuja al entrar y área que aparece con él. */
+.linePath {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: lineDraw 900ms cubic-bezier(0.33, 1, 0.68, 1) forwards 120ms;
+}
+
+.lineArea {
+  opacity: 0;
+  animation: areaIn 700ms ease forwards 380ms;
+}
+
+.linePoint {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pointIn 320ms ease forwards;
+}
+
+@keyframes lineDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes areaIn {
+  to { opacity: 1; }
+}
+
+@keyframes pointIn {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.sparkBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 26px;
+}
+
+.sparkBar {
+  width: 5px;
+  border-radius: 2px;
+  background: var(--accent-200);
+  min-height: 2px;
+}
+
+.sparkBarOn {
+  background: var(--accent);
+}
+
+.chartStatRow {
+  display: flex;
+  gap: var(--sp-lg);
+  flex-wrap: wrap;
+  margin-top: var(--sp-md);
+}
+
+.chartStat {
+  min-width: 84px;
+}
+
+.chartStat strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.chartStat span {
+  font-size: 11.5px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+/* ── Tarjeta KPI ─────────────────────────────────────────────── */
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(184px, 1fr));
+  gap: 14px;
+}
+
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: 15px 17px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kpiTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+}
+
+.kpiLabel {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-3);
+  line-height: 1.35;
+}
+
+.kpiIcon {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.kpiIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.kpiIconAccent {
+  background: var(--accent-50);
+  color: var(--accent);
+}
+
+.kpiIconInfo {
+  background: var(--info-bg);
+  color: var(--info-fg);
+}
+
+.kpiIconWarn {
+  background: var(--warn-bg);
+  color: var(--warn-fg);
+}
+
+.kpiIconDanger {
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+}
+
+.kpiIconTeal {
+  background: var(--teal-bg);
+  color: var(--teal-fg);
+}
+
+.kpiValue {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpiFoot {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
+.kpiDelta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.kpiDeltaUp {
+  color: var(--ok-fg);
+}
+
+.kpiDeltaDown {
+  color: var(--danger-fg);
+}
+
+.kpiDeltaFlat {
+  color: var(--text-4);
+}
+
+.kpiDelta svg {
+  width: 13px;
+  height: 13px;
+}
+
+.kpiWide {
+  grid-column: span 2;
+}
+
+@media (max-width: 640px) {
+  .kpiWide {
+    grid-column: span 1;
+  }
+}
+
+/* ── Adaptación móvil: la tabla se convierte en fichas ────────── */
+
+@media (max-width: 640px) {
+  .table {
+    min-width: 0;
+    display: block;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+  }
+
+  .table tr {
+    border-bottom: 1px solid var(--border);
+    padding: 4px 0;
+  }
+
+  .table tr:last-child {
+    border-bottom: 0;
+  }
+
+  .table tbody td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    text-align: right;
+    border-bottom: 0;
+    padding: 7px 14px;
+  }
+
+  .table tbody td::before {
+    content: attr(data-label);
+    flex: none;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    text-align: left;
+  }
+
+  .table tbody tr:hover td {
+    background: none;
+  }
+
+  .cellActions {
+    text-align: right;
+  }
+
+  .cellActions > div {
+    justify-content: flex-end;
+    gap: 7px;
+    min-width: 0;
+  }
+
+  .cellActions > * + * {
+    margin-left: 6px;
+  }
+}
+
+
+/* Utilidades del dashboard. */
+.miniTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.miniTable thead th {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  padding: 0 8px 5px;
+  text-align: left;
+}
+
+.miniTable thead th[align="right"] {
+  text-align: right;
+}
+
+.miniTable tbody td {
+  padding: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.miniTable tbody td[align="right"] {
+  text-align: right;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.legendList {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  margin: 12px 0 0;
+  list-style: none;
+}
+
+.legendList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 9px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  font-size: 12.5px;
+}
+
+.legendList li i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alertList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.alertList li svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+  margin-top: 1px;
+}
+
+.alertList b {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lista de definiciones para fichas de resumen. */
+.defList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+}
+
+.defList > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.defList > div:last-child {
+  border-bottom: 0;
+}
+
+.defList dt {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.defList dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Fila de dato con barra proporcional, para resúmenes. */
+.defRow {
+  display: grid;
+  grid-template-columns: minmax(90px, 150px) minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+  font-size: 13px;
+}
+
+.defRow > span {
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.defRow > b {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.defBar {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.defBar i {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  transition: width 200ms ease;
+}
+
+/* Listado de riesgo: nombre a la izquierda, indicador a la derecha. */
+.riskList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.riskList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.riskList li:last-child {
+  border-bottom: 0;
+}
+
+.riskList li > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.riskList b {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.riskList span {
+  font-size: 12px;
+}
+
+/* Opciones seleccionables y secuencia de pasos. */
+.optionRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.optionCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 13px;
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 110ms ease, background 110ms ease;
+}
+
+.optionCard:hover {
+  border-color: var(--border-3);
+}
+
+.optionCard[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-50);
+}
+
+.optionCard b {
+  font-size: 13.5px;
+  font-weight: 650;
+}
+
+.optionCard > svg {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+
+.optionCard .input {
+  height: 34px;
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.stepList li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.stepList li:last-child {
+  border-bottom: 0;
+}
+
+.stepList li > div {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.stepList b {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.stepList p {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+}
+
+.stepIndex {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* -- Carga: spinner de marca y esqueletos con brillo ----------- */
+
+.loader {
+  display: grid;
+  place-items: center;
+  gap: 16px;
+  min-height: 100dvh;
+  padding: 24px;
+}
+
+.loaderSpin {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-200);
+  border-top-color: var(--accent);
+  animation: spin 750ms linear infinite;
+}
+
+.loaderMark {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  box-shadow: var(--sh-2);
+  animation: markPulse 1.6s ease-in-out infinite;
+}
+
+.loaderRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.loaderText {
+  font-size: 13.5px;
+  color: var(--text-3);
+}
+
+@keyframes markPulse {
+  0%, 100% { transform: scale(1); box-shadow: var(--sh-2); }
+  50% { transform: scale(1.06); box-shadow: var(--sh-3); }
+}
+
+.skeletonBar {
+  height: 13px;
+  margin: 9px 0;
+}
+
+.skeletonBarWide {
+  width: 70%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loaderSpin,
+  .loaderMark,
+  .linePath,
+  .lineArea,
+  .linePoint,
+  .lineBar,
+  .lineValue {
+    animation: none !important;
+  }
+
+  .linePath {
+    stroke-dashoffset: 0;
+  }
+
+  .lineArea,
+  .linePoint,
+  .lineValue {
+    opacity: 1;
+  }
+}

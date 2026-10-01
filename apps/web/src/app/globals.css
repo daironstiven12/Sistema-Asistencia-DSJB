@@ -1,4 +1,6 @@
-/* Tokens visuales globales. Referencia: diseño/styles.css */
+/* Tokens visuales globales. Referencia: diseño/styles.css
+   Dos capas: base (superficies, texto, acento) + semántica (estados).
+   Toda cifra, radio y sombra del panel se deriva de aquí. */
 
 :root {
   /* Superficies */
@@ -29,10 +31,12 @@
   --r-sm: 8px;
   --r: 10px;
   --r-lg: 14px;
+  --r-pill: 999px;
 
   /* Sombras sutiles */
   --sh: 0 1px 2px rgba(16, 24, 40, 0.05);
   --sh-2: 0 4px 14px -4px rgba(16, 24, 40, 0.1);
+  --sh-3: 0 24px 48px -20px rgba(16, 24, 40, 0.16);
 
   /* Espaciado */
   --sp-xs: 8px;
@@ -41,6 +45,106 @@
   --sp-lg: 24px;
   --sp-xl: 32px;
   --sp-2xl: 44px;
+
+  /* Tipografía: escala fluida derivada de la base de 14px */
+  --font-sans: var(--font-inter), Inter, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas,
+    monospace;
+  --font-script: "Segoe Script", "Brush Script MT", cursive;
+
+  /* Anillo de foco: un único valor para todos los controles */
+  --focus-ring: 0 0 0 3px rgba(14, 124, 66, 0.14);
+
+  /* Semántica de estado. Reemplaza hex sueltos repetidos en los módulos. */
+  --ok-fg: var(--accent-800);
+  --ok-bg: var(--accent-50);
+  --ok-border: var(--accent-200);
+
+  --info-fg: #1d4ed8;
+  --info-bg: #eff6ff;
+  --info-border: #bfdbfe;
+
+  --warn-fg: #b45309;
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+
+  --danger-fg: #b42318;
+  --danger-fg-soft: #7f1d1d;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --danger-hover: #9b1c12;
+
+  --teal-fg: #0f766e;
+  --teal-bg: #f0fdfa;
+  --teal-border: #99f6e4;
+  /* Paleta categórica: se usa en gráficos, nunca como color de estado. */
+  --chart-1: #0e7c42;
+  --chart-2: #1d4ed8;
+  --chart-3: #b45309;
+  --chart-4: #0f766e;
+  --chart-5: #b42318;
+  --chart-6: #6d28d9;
+
+  /* Elevación */
+  --card: var(--surface) var(--border) var(--r) var(--sh);
+  --scrim: rgba(17, 24, 39, 0.48);
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --surface: #111a2b;
+  --surface-2: #162033;
+  --surface-3: #1e2b42;
+
+  --border: #253349;
+  --border-2: #33425c;
+  --border-3: #4c5d7a;
+
+  --text: #eef2f8;
+  --text-2: #cbd5e4;
+  --text-3: #94a3b8;
+  --text-4: #6b7c96;
+
+  --accent: #2fbf73;
+  --accent-700: #26a862;
+  --accent-800: #1d8f52;
+  --accent-50: #10291d;
+  --accent-200: #1d5738;
+
+  --info-bg: #10243d;
+  --info-border: #1c3f66;
+  --info-fg: #93b8f0;
+
+  --warn-bg: #2c2010;
+  --warn-border: #5b441a;
+  --warn-fg: #e8b263;
+
+  --danger-bg: #2c1418;
+  --danger-border: #5c2229;
+  --danger-fg: #f19a91;
+  --danger-fg-soft: #f5b3ac;
+  --danger-hover: #c4554b;
+
+  --teal-bg: #0d2622;
+  --teal-border: #1a4b43;
+  --teal-fg: #6fd3c2;
+
+  --ok-bg: #10291d;
+  --ok-border: #1d5738;
+  --ok-fg: #7fd6a5;
+
+  --chart-1: #2fbf73;
+  --chart-2: #6ea8fe;
+  --chart-3: #e8b263;
+  --chart-4: #6fd3c2;
+  --chart-5: #f19a91;
+  --chart-6: #a78bfa;
+
+  --sh: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sh-2: 0 4px 14px -4px rgba(0, 0, 0, 0.5);
+  --sh-3: 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+  --scrim: rgba(2, 6, 14, 0.66);
 }
 
 *,
@@ -58,8 +162,7 @@ body {
   min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-inter), Inter, system-ui, -apple-system, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -77,15 +180,22 @@ p {
   margin: 0;
 }
 
-ul {
+ul,
+ol {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
+  color: inherit;
+}
+
+a {
   color: inherit;
 }
 
@@ -99,4 +209,14 @@ input[type="checkbox"] {
   accent-color: var(--accent);
   width: 15px;
   height: 15px;
+}
+
+input[type="date"],
+input[type="time"] {
+  min-width: 0;
+}
+
+::selection {
+  background: var(--accent-200);
+  color: var(--accent-800);
 }
