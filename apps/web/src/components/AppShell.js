@@ -8,13 +8,10 @@ import {
   History,
   LayoutDashboard,
   LogOut,
-  Moon,
   Settings,
-  Sun,
   Users,
 } from "lucide-react";
 import { representative } from "@/data/representante";
-import { useTheme } from "@/lib/theme";
 import styles from "./AppShell.module.css";
 
 const navItems = [
@@ -28,7 +25,6 @@ const navItems = [
 /* Estructura de la aplicación: sidebar en desktop, barra superior y
    navegación horizontal en móvil. `active` indica la sección actual. */
 export default function AppShell({ active, children }) {
-  const { theme, toggle } = useTheme();
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar} aria-label="Navegación principal">
@@ -97,14 +93,6 @@ export default function AppShell({ active, children }) {
             <small>Representante</small>
           </span>
           <span className={styles.mobileActions}>
-            <button
-              type="button"
-              className={styles.iconBtn}
-              onClick={toggle}
-              aria-label={theme === "dark" ? "Usar tema claro" : "Usar tema oscuro"}
-            >
-              {theme === "dark" ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
-            </button>
             <button
               type="button"
               className={styles.iconBtn}

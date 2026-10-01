@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, ChevronRight, LogOut, Menu, Moon, Sun, X } from "lucide-react";
+import { Bell, ChevronRight, LogOut, Menu, X } from "lucide-react";
 import { NAV_BY_ROLE, ROLE_META } from "./roleConfig";
-import { useTheme } from "@/lib/theme";
 import styles from "./RoleShell.module.css";
 
 export default function RoleShell({
@@ -15,12 +14,10 @@ export default function RoleShell({
   breadcrumb,
   actions,
   children,
-  showThemeToggle = true,
 }) {
   const pathname = usePathname() ?? "";
   const meta = ROLE_META[role];
   const nav = NAV_BY_ROLE[role];
-  const themeApi = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
 
   /* La sección activa se deriva de la ruta, no de cada página. */
@@ -132,17 +129,6 @@ export default function RoleShell({
           </nav>
 
           <span className={styles.spacer} />
-
-          {showThemeToggle ? (
-            <button
-              type="button"
-              className={styles.iconBtn}
-              onClick={themeApi.toggle}
-              aria-label={themeApi.theme === "dark" ? "Usar tema claro" : "Usar tema oscuro"}
-            >
-              {themeApi.theme === "dark" ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
-            </button>
-          ) : null}
 
           <button type="button" className={styles.iconBtn} aria-label="Notificaciones">
             <Bell aria-hidden="true" />

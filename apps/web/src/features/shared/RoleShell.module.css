@@ -1,6 +1,6 @@
 /* Shell único para los cuatro paneles. Reemplaza la duplicación de
-   sidebar/header que tenían AppShell y PageHeader, y añade selector
-   de rol, tema claro/oscuro y navegación móvil. */
+   sidebar/header que tenían AppShell y PageHeader, y añade navegación
+   móvil. */
 
 .ren {
   display: grid;
