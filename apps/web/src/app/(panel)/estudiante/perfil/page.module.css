@@ -1,0 +1,66 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.card {
+  margin: 0;
+  padding: 6px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row dt {
+  font-size: 12.5px;
+  color: var(--text-3);
+  flex: none;
+}
+
+.row dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 650;
+  text-align: right;
+}
+
+.locked {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.locked svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  margin-top: 1px;
+}
+
+@media (max-width: 900px) {
+  .content {
+    padding: 18px 16px 26px;
+  }
+}
+

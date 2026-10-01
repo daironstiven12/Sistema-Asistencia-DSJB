@@ -133,6 +133,6 @@ export const students = [
   { n: 5, name: "Sebastián Mosquera Lemos", id: "1077452721", status: "Presente", time: "2:09 PM" },
   { n: 6, name: "Daniel Hinestroza Ríos", id: "1077452995", status: "Presente", time: "2:31 PM" },
   { n: 7, name: "Valentina Asprilla Perea", id: "1077452858", status: "Ausente", time: "—" },
-  { n: 8, name: "Juan Pablo Murillo Cárdenas", id: "1077453269", status: "Pendiente", time: "—" },
+  { n: 8, name: "Jeanpier Polanco", id: "1077488001", status: "Pendiente", time: "—" },
 ];
 

@@ -73,11 +73,45 @@ export function formatDisplayDate(iso) {
   return `${Number(day)} de ${name} de ${year}`;
 }
 
+/* 2026-09-30 -> "30/09/2026". */
+export function formatShortDate(iso) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso ?? ""));
+  if (!match) return String(iso ?? "");
+  const [, year, month, day] = match;
+  return `${day}/${month}/${year}`;
+}
+
 /* Solo el grupo del período activo es operativo para el representante. */
 export function isActiveRecord(record, assignment) {
   return (
     record.group === assignment.group && record.period === assignment.period
   );
+}
+
+const CLOSED_STATES = ["Cerrada", "Validada", "Firmada"];
+
+/* Resuelve un código manual contra asistencias activas.
+   Devuelve { result, recordId } con result en:
+   "confirm" | "duplicate" | "closed" | "invalid". */
+export function resolveCode(records, code, expectedCode, studentKey, assignment) {
+  const normalized = String(code ?? "").trim().toUpperCase();
+  if (!normalized || normalized !== String(expectedCode).toUpperCase()) {
+    return { result: "invalid", recordId: null };
+  }
+  const active = records.filter((r) => isActiveRecord(r, assignment));
+  const open = active.find((r) => r.status === "Abierta");
+  if (open) {
+    const entry = open.students.find((s) => s.key === studentKey);
+    if (entry?.status === "Presente") {
+      return { result: "duplicate", recordId: open.id };
+    }
+    return { result: "confirm", recordId: open.id };
+  }
+  const closed = active.filter((r) => CLOSED_STATES.includes(r.status));
+  if (closed.length > 0) {
+    return { result: "closed", recordId: closed[closed.length - 1].id };
+  }
+  return { result: "invalid", recordId: null };
 }
 
 export function nextDraftId() {
@@ -130,7 +164,7 @@ export function setStatus(record, to) {
 }
 
 /* Registro normal: solo con la asistencia abierta y sin duplicados. */
-export function registerStudent(record, studentKey, at) {
+export function registerStudent(record, studentKey, at, extra = {}) {
   if (record.status !== "Abierta") {
     return {
       ok: false,
@@ -150,7 +184,16 @@ export function registerStudent(record, studentKey, at) {
     };
   }
   const students = record.students.map((s) =>
-    s.key === studentKey ? { ...s, status: "Presente", time: at, manual: false } : s,
+    s.key === studentKey
+      ? {
+          ...s,
+          status: "Presente",
+          time: at,
+          manual: false,
+          method: extra.method ?? s.method ?? null,
+          sig: extra.signature ?? s.sig ?? null,
+        }
+      : s,
   );
   return { ok: true, record: { ...record, students }, message: "" };
 }

@@ -220,6 +220,11 @@
   font-size: 15px;
 }
 
+.studentSigImg {
+  max-height: 26px;
+  max-width: 130px;
+}
+
 .manualMark {
   font-family: inherit;
   font-size: 10px;

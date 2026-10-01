@@ -1,0 +1,284 @@
+.shell {
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 18px 14px 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: 2px 6px 14px;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+}
+
+.product strong {
+  font-size: 14.5px;
+  letter-spacing: -0.01em;
+}
+
+.product small {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+
+.rolePill {
+  align-self: flex-start;
+  margin: 0 6px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navLabel {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  padding: 14px 10px 7px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: 9px 10px;
+  border-radius: var(--r-sm);
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font-size: 13.5px;
+  font-weight: 550;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navItem svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  color: var(--text-3);
+}
+
+.navItem:hover {
+  background: var(--surface-3);
+}
+
+.navItem.active {
+  background: var(--accent-50);
+  color: var(--accent-800);
+  font-weight: 650;
+}
+
+.navItem.active svg {
+  color: var(--accent);
+}
+
+.sideFoot {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-sm);
+  padding: 14px 6px 2px;
+  border-top: 1px solid var(--border);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #1f2937;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.userText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  min-width: 0;
+  flex: 1;
+}
+
+.userText strong {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userText small {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+
+.logout {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.logout:hover {
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.logout svg {
+  width: 16px;
+  height: 16px;
+}
+
+.main {
+  min-width: 0;
+  background: var(--surface-2);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px 0;
+  max-width: 1220px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.topbarSpacer {
+  flex: 1;
+}
+
+.topbarUser {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: inherit;
+  padding: 4px 6px;
+  border-radius: var(--r-sm);
+}
+
+.topbarUser:hover {
+  background: var(--surface-3);
+}
+
+.topbarUser svg {
+  width: 15px;
+  height: 15px;
+  color: var(--text-4);
+}
+
+.topbarName {
+  font-size: 13.5px;
+  font-weight: 650;
+}
+
+.mobileBar,
+.mobileNav {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .topbar {
+    display: none;
+  }
+
+  .mobileBar {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+    padding: var(--sp-sm) var(--sp-md);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobileBar .product {
+    flex: 1;
+  }
+
+  .mobileActions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xs);
+  }
+
+  .mobileNav {
+    display: flex;
+    gap: 4px;
+    padding: var(--sp-xs) var(--sp-sm);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+}

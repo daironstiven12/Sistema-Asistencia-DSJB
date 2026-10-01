@@ -119,12 +119,21 @@ export default function ActaContent({ id }) {
                 <td>{row.idNumber}</td>
                 <td>
                   {row.status === "Presente" ? (
-                    <span className={styles.studentSig}>
-                      {row.name}
-                      {row.manual && (
-                        <sup className={styles.manualMark}> 1</sup>
-                      )}
-                    </span>
+                    row.sig && row.sig.kind !== "typed" ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img
+                        src={row.sig.data}
+                        alt={`Firma de ${row.name}`}
+                        className={styles.studentSigImg}
+                      />
+                    ) : (
+                      <span className={styles.studentSig}>
+                        {row.name}
+                        {row.manual && (
+                          <sup className={styles.manualMark}> 1</sup>
+                        )}
+                      </span>
+                    )
                   ) : (
                     <span className={styles.absentMark}>
                       {row.status === "Ausente" ? "Ausente" : "—"}

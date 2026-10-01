@@ -135,7 +135,7 @@ export default function AttendanceDetail({ id }) {
 
   function doSimulate() {
     if (!simulateKey) return;
-    const result = register(id, simulateKey);
+    const result = register(id, simulateKey, { method: "Código" });
     if (!result.ok) {
       flash(result.message, "error");
       return;

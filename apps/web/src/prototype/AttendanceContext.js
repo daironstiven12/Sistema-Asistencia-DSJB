@@ -35,14 +35,25 @@ function seedStudents(mode) {
         status: src.status,
         time: src.time,
         manual: false,
+        method: src.status === "Presente" ? "Código" : null,
+        sig: null,
       };
     }
     if (mode === "closed") {
-      if (i < 6) return { ...s, status: "Presente", time: "2:05 PM", manual: false };
-      if (i === 6) return { ...s, status: "Ausente", time: "—", manual: false };
-      return { ...s, status: "Pendiente", time: "—", manual: false };
+      if (i < 6)
+        return {
+          ...s,
+          status: "Presente",
+          time: "2:05 PM",
+          manual: false,
+          method: "Código",
+          sig: null,
+        };
+      if (i === 6)
+        return { ...s, status: "Ausente", time: "—", manual: false, method: null, sig: null };
+      return { ...s, status: "Pendiente", time: "—", manual: false, method: null, sig: null };
     }
-    return { ...s, status: "Pendiente", time: "—", manual: false };
+    return { ...s, status: "Pendiente", time: "—", manual: false, method: null, sig: null };
   });
 }
 
@@ -216,17 +227,27 @@ export function AttendanceProvider({ children }) {
         return { ok: true, message: "" };
       },
 
-      register(id, studentKey) {
+      register(id, studentKey, options = {}) {
         const rec = getRecord(id);
         if (!rec) return { ok: false, message: "No existe." };
         const at = tick();
-        const out = registerStudent(rec, studentKey, at);
+        const out = registerStudent(rec, studentKey, at, {
+          method: options.method ?? null,
+          signature: options.signature ?? null,
+        });
         if (!out.ok) return out;
         const student = rec.students.find((s) => s.key === studentKey);
+        const methodLabel = options.method ? `Método: ${options.method}` : "";
         setRecords((prev) =>
           prev.map((r) =>
             r.id === id
-              ? addAudit(out.record, at, student.name, "Estudiante registrado", "")
+              ? addAudit(
+                  out.record,
+                  at,
+                  student.name,
+                  "Estudiante registrado",
+                  methodLabel,
+                )
               : r,
           ),
         );
