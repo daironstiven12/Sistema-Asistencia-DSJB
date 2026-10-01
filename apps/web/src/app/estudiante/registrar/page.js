@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import StudentShell from "@/components/StudentShell";
 import RegistrarContent from "./RegistrarContent";
 
 export const metadata = {
@@ -9,10 +8,8 @@ export const metadata = {
 
 export default function RegistrarPage() {
   return (
-    <StudentShell active="registrar">
-      <Suspense>
-        <RegistrarContent />
-      </Suspense>
-    </StudentShell>
+    <Suspense>
+      <RegistrarContent />
+    </Suspense>
   );
 }

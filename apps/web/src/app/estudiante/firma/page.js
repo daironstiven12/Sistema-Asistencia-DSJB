@@ -1,4 +1,3 @@
-import StudentShell from "@/components/StudentShell";
 import FirmaContent from "./FirmaContent";
 
 export const metadata = {
@@ -7,9 +6,5 @@ export const metadata = {
 };
 
 export default function FirmaPage() {
-  return (
-    <StudentShell active="firma">
-      <FirmaContent />
-    </StudentShell>
-  );
+  return <FirmaContent />;
 }

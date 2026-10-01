@@ -17,7 +17,6 @@ export default function AdminShell({ children }) {
       <RoleShell
         role="admin"
         title="Administrador"
-        showRoleSwitcher={false}
         showThemeToggle={false}
       >
         {children}

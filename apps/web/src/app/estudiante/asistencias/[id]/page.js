@@ -1,4 +1,3 @@
-import StudentShell from "@/components/StudentShell";
 import MiAsistenciaDetail from "./MiAsistenciaDetail";
 
 export const metadata = {
@@ -8,9 +7,5 @@ export const metadata = {
 
 export default async function MiAsistenciaPage({ params }) {
   const { id } = await params;
-  return (
-    <StudentShell active="asistencias">
-      <MiAsistenciaDetail id={id} />
-    </StudentShell>
-  );
+  return <MiAsistenciaDetail id={id} />;
 }

@@ -256,12 +256,4 @@
     border-bottom: 1px solid var(--border);
     overflow-x: auto;
   }
-
-  /* El selector ocupa un extremo de la barra horizontal: se separa del
-     resto con un borde para que no se confunda con un enlace más. */
-  .mobileRole {
-    margin-left: auto;
-    padding-left: var(--sp-sm);
-    border-left: 1px solid var(--border);
-  }
 }

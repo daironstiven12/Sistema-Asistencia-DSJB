@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bell, ChevronRight, LogOut, Menu, Moon, Sun, X } from "lucide-react";
 import { NAV_BY_ROLE, ROLE_META } from "./roleConfig";
-import RoleSwitcher from "./RoleSwitcher";
 import { useTheme } from "@/lib/theme";
 import styles from "./RoleShell.module.css";
 
@@ -16,7 +15,6 @@ export default function RoleShell({
   breadcrumb,
   actions,
   children,
-  showRoleSwitcher = true,
   showThemeToggle = true,
 }) {
   const pathname = usePathname() ?? "";
@@ -134,8 +132,6 @@ export default function RoleShell({
           </nav>
 
           <span className={styles.spacer} />
-
-          {showRoleSwitcher ? <RoleSwitcher current={role} /> : null}
 
           {showThemeToggle ? (
             <button

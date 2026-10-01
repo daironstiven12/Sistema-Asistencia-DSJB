@@ -1,4 +1,3 @@
-import StudentShell from "@/components/StudentShell";
 import MisAsistencias from "./MisAsistencias";
 
 export const metadata = {
@@ -7,9 +6,5 @@ export const metadata = {
 };
 
 export default function MisAsistenciasPage() {
-  return (
-    <StudentShell active="asistencias">
-      <MisAsistencias />
-    </StudentShell>
-  );
+  return <MisAsistencias />;
 }

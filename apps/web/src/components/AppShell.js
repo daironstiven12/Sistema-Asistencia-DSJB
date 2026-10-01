@@ -14,8 +14,6 @@ import {
   Users,
 } from "lucide-react";
 import { representative } from "@/data/representante";
-import RoleSwitcher from "@/features/shared/RoleSwitcher";
-import { ROLES } from "@/features/shared/roleConfig";
 import { useTheme } from "@/lib/theme";
 import styles from "./AppShell.module.css";
 
@@ -70,9 +68,6 @@ export default function AppShell({ active, children }) {
             <Settings aria-hidden="true" />
             <span>Configuración</span>
           </Link>
-          {/* Mismo selector del resto de paneles: permite volver a
-              administración, docente o estudiante sin pasar por el login. */}
-          <RoleSwitcher current={ROLES.REPRESENTANTE} />
           <div className={styles.user}>
             <span className={styles.avatar} aria-hidden="true">
               {representative.initials}
@@ -144,11 +139,6 @@ export default function AppShell({ active, children }) {
             <Settings aria-hidden="true" />
             <span>Configuración</span>
           </Link>
-          {/* En móvil el sidebar no existe: el selector va en la barra
-              superior para no perder el acceso a los otros paneles. */}
-          <div className={styles.mobileRole}>
-            <RoleSwitcher current={ROLES.REPRESENTANTE} />
-          </div>
         </nav>
 
         {children}
