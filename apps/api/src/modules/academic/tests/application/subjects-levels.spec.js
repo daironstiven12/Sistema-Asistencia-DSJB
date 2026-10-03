@@ -48,4 +48,41 @@ describe("subjects", () => {
       "academic.update",
     ]);
   });
+
+  test("detalle, búsqueda, código en edición y estados", async () => {
+    const { deps } = makeDeps(fakeAcademicStore());
+    await subjects.create(
+      { code: "MAT-101", name: "Matemáticas I", credits: 4, actorId: "1" },
+      deps,
+    );
+    const second = await subjects.create(
+      { code: "PRO-101", name: "Programación I", credits: 4, actorId: "1" },
+      deps,
+    );
+    expect(await subjects.get({ id: second.id }, deps)).toMatchObject({
+      code: "PRO-101",
+    });
+    await expect(subjects.get({ id: "99" }, deps)).rejects.toBeInstanceOf(
+      AcademicNotFoundError,
+    );
+    expect(await subjects.list({ query: "mat" }, deps)).toHaveLength(1);
+    expect(await subjects.list({ query: "zzz" }, deps)).toHaveLength(0);
+    const renamed = await subjects.update(
+      { id: second.id, code: "PRO-102", actorId: "1" },
+      deps,
+    );
+    expect(renamed.code).toBe("PRO-102");
+    await expect(
+      subjects.update({ id: second.id, code: "MAT-101", actorId: "1" }, deps),
+    ).rejects.toBeInstanceOf(AcademicConflictError);
+    await expect(
+      subjects.update({ id: "99", name: "X", actorId: "1" }, deps),
+    ).rejects.toBeInstanceOf(AcademicNotFoundError);
+    await expect(
+      subjects.setStatus({ id: "99", status: "INACTIVE", actorId: "1" }, deps),
+    ).rejects.toBeInstanceOf(AcademicNotFoundError);
+    await expect(
+      subjects.setStatus({ id: second.id, status: "ELIMINADO", actorId: "1" }, deps),
+    ).rejects.toMatchObject({ code: "INVALID_STATUS" });
+  });
 });

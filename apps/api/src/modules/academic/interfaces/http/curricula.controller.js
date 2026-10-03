@@ -65,7 +65,7 @@ class CurriculaController {
 
   @Get()
   async list(query, req) {
-    return this.curricula.list({ programId: query?.programId });
+    return this.curricula.list({ programId: query?.programId, q: query?.q });
   }
 
   @Get(":id")

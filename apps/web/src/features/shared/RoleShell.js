@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bell, ChevronRight, LogOut, Menu, X } from "lucide-react";
 import { NAV_BY_ROLE, ROLE_META } from "./roleConfig";
+import {
+  leerSnapshotSesion,
+  suscribirSesion,
+  usuarioDesdeSnapshot,
+} from "@/lib/sesionRepresentante";
+import { authApi } from "@/services/api/auth";
 import styles from "./RoleShell.module.css";
 
 export default function RoleShell({
@@ -16,9 +22,24 @@ export default function RoleShell({
   children,
 }) {
   const pathname = usePathname() ?? "";
+  const router = useRouter();
   const meta = ROLE_META[role];
   const nav = NAV_BY_ROLE[role];
   const [menuOpen, setMenuOpen] = useState(false);
+  const [saliendo, setSaliendo] = useState(false);
+  /* Usuario real de la sesión (sin mocks): mismo snapshot estable que AppShell. */
+  const snapshot = useSyncExternalStore(suscribirSesion, leerSnapshotSesion, () => null);
+  const usuarioSesion = useMemo(() => usuarioDesdeSnapshot(snapshot), [snapshot]);
+
+  async function cerrarSesion() {
+    if (saliendo) return;
+    setSaliendo(true);
+    try {
+      await authApi.logout();
+    } finally {
+      router.push("/");
+    }
+  }
 
   /* La sección activa se deriva de la ruta, no de cada página. */
   const currentKey =
@@ -52,7 +73,8 @@ export default function RoleShell({
       >
         <div className={styles.brand}>
           <span className={styles.mark} aria-hidden="true">
-            UTCH
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.markLogo} src="/referencias/logo.jpeg" alt="" />
           </span>
           <span className={styles.product}>
             <strong>Asistencia</strong>
@@ -92,17 +114,19 @@ export default function RoleShell({
         <div className={styles.foot}>
           <div className={styles.user}>
             <span className={styles.avatar} aria-hidden="true">
-              {meta.persona.iniciales}
+              {usuarioSesion?.iniciales ?? "···"}
             </span>
             <span className={styles.userText}>
-              <strong>{meta.persona.nombre}</strong>
-              <small>{meta.persona.descripcion}</small>
+              <strong>{usuarioSesion?.nombre ?? "···"}</strong>
+              <small>{usuarioSesion?.rol || meta.label}</small>
             </span>
             <button
               type="button"
               className={styles.iconBtn}
               aria-label="Cerrar sesión"
               style={{ marginLeft: "auto" }}
+              onClick={cerrarSesion}
+              disabled={saliendo}
             >
               <LogOut aria-hidden="true" />
             </button>

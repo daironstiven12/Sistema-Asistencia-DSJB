@@ -66,7 +66,8 @@ function memorySessions() {
 
 const USER = {
   id: "7",
-  username: "jp Delegate",
+  username: "jp.delegate",
+  email: "jp.delegate@utch.edu.co",
   status: "ACTIVE",
   roles: ["REPRESENTANTE"],
 };
@@ -82,7 +83,10 @@ async function makeDeps(userOverrides = {}) {
           ...userOverrides,
         };
   const users = {
-    findByUsername: async () => user,
+    findByUsername: async (username) =>
+      user && user.username === String(username ?? "").trim() ? user : null,
+    findByEmail: async (email) =>
+      user && user.email === String(email ?? "").trim().toLowerCase() ? user : null,
     findById: async (id) => (user && String(id) === user.id ? user : null),
   };
   const tokens = new JwtTokenIssuer({ secret: "secreto-de-prueba-largo-1234567890" });
@@ -97,12 +101,13 @@ describe("login-user", () => {
   test("credenciales válidas crean sesión y devuelven tokens", async () => {
     const { deps, sessions, audits } = await makeDeps();
     const result = await loginUser(
-      { username: "jp Delegate", password: "Clave-Segura-123" },
+      { email: "JP.Delegate@utch.edu.co", password: "Clave-Segura-123" },
       deps,
     );
     expect(result.user).toEqual({
       id: "7",
-      username: "jp Delegate",
+      username: "jp.delegate",
+      email: "jp.delegate@utch.edu.co",
       roles: ["REPRESENTANTE"],
       status: "ACTIVE",
     });
@@ -122,10 +127,16 @@ describe("login-user", () => {
   ])("%s responde credenciales inválidas", async (_label, overrides, password) => {
     const { deps, sessions, audits } = await makeDeps(overrides);
     await expect(
-      loginUser({ username: "jp Delegate", password }, deps),
+      loginUser({ email: "jp.delegate@utch.edu.co", password }, deps),
     ).rejects.toBeInstanceOf(InvalidCredentialsError);
     expect(sessions.rows).toHaveLength(0);
     expect(audits.map((a) => a.action)).toEqual(["auth.login.failed"]);
+  });
+
+  test("compatibilidad: username histórico sin @ aún accede", async () => {
+    const { deps } = await makeDeps();
+    const result = await loginUser({ email: "jp.delegate", password: "Clave-Segura-123" }, deps);
+    expect(result.user.id).toBe("7");
   });
 });
 
@@ -133,7 +144,7 @@ describe("refresh-session", () => {
   async function loggedIn() {
     const ctx = await makeDeps();
     const result = await loginUser(
-      { username: "jp Delegate", password: "Clave-Segura-123" },
+      { email: "JP.Delegate@utch.edu.co", password: "Clave-Segura-123" },
       ctx.deps,
     );
     return { ...ctx, result };
@@ -183,7 +194,7 @@ describe("logout y revocación", () => {
     const { deps, sessions, result } = await (async () => {
       const ctx = await makeDeps();
       const result = await loginUser(
-        { username: "jp Delegate", password: "Clave-Segura-123" },
+        { email: "JP.Delegate@utch.edu.co", password: "Clave-Segura-123" },
         ctx.deps,
       );
       return { ...ctx, result };
@@ -195,8 +206,8 @@ describe("logout y revocación", () => {
 
   test("revoca todas las sesiones del usuario", async () => {
     const { deps, sessions } = await makeDeps();
-    await loginUser({ username: "x", password: "Clave-Segura-123" }, deps);
-    await loginUser({ username: "x", password: "Clave-Segura-123" }, deps);
+    await loginUser({ email: "jp.delegate@utch.edu.co", password: "Clave-Segura-123" }, deps);
+    await loginUser({ email: "jp.delegate@utch.edu.co", password: "Clave-Segura-123" }, deps);
     const out = await revokeUserSessions({ userId: "7" }, deps);
     expect(out).toEqual({ revoked: 2 });
     expect(sessions.rows.every((r) => r.revokedAt)).toBe(true);

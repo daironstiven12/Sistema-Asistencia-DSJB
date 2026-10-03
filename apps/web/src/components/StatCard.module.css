@@ -50,6 +50,11 @@
   color: #1d4ed8;
 }
 
+.tonePurple {
+  background: #F3EFFF;
+  color: #7C3AED;
+}
+
 .value {
   font-size: 28px;
   font-weight: 700;

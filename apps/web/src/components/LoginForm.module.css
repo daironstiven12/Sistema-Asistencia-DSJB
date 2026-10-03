@@ -1,15 +1,17 @@
 /* Tarjeta de inicio de sesión sobre fondo claro. */
 
 .card {
-  width: min(480px, 100%);
-  justify-self: center;
+  width: 100%;
+  max-width: 400px;
+  min-width: 0;
+  margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow:
     0 24px 48px -20px rgba(16, 24, 40, 0.16),
     0 2px 6px -2px rgba(16, 24, 40, 0.06);
-  padding: 38px 40px 32px;
+  padding: 34px 34px 28px;
 }
 
 .head {
@@ -26,11 +28,20 @@
   width: 46px;
   height: 46px;
   border-radius: 13px;
-  background: var(--accent);
+  background: #fff;
+  border: 1px solid var(--border);
+  overflow: hidden;
   color: #fff;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.04em;
+}
+
+.markLogo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .product {
@@ -51,7 +62,7 @@
 }
 
 .title {
-  font-size: 27px;
+  font-size: 25px;
   font-weight: 800;
   letter-spacing: -0.025em;
   color: #0f1b2d;
@@ -59,9 +70,9 @@
 
 .sub {
   color: var(--text-3);
-  font-size: 14.5px;
+  font-size: 14px;
   margin-top: 8px;
-  margin-bottom: 26px;
+  margin-bottom: 24px;
 }
 
 .fields {
@@ -213,6 +224,15 @@
   height: 18px;
 }
 
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .secure {
   display: flex;
   align-items: flex-start;
@@ -235,12 +255,71 @@
   color: var(--text-3);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 640px) {
   .card {
-    padding: 28px 24px 26px;
+    width: calc(100% - 32px);
+    max-width: 340px;
+    margin: auto;
+    padding: 18px 18px 16px;
+    border-radius: var(--r-lg);
+  }
+
+  .head {
+    margin-bottom: 14px;
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+
+  .product strong {
+    font-size: 15px;
+  }
+
+  .product small {
+    font-size: 11.5px;
   }
 
   .title {
-    font-size: 24px;
+    font-size: 21px;
+  }
+
+  .sub {
+    font-size: 14px;
+    margin-top: 6px;
+    margin-bottom: 14px;
+  }
+
+  .label {
+    font-size: 13.5px;
+    margin-bottom: 6px;
+  }
+
+  .field {
+    margin-bottom: 11px;
+  }
+
+  .input {
+    height: 42px;
+  }
+
+  .rememberRow {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+
+  .button {
+    height: 44px;
+  }
+
+  .secure {
+    margin-top: 12px;
+    padding-top: 10px;
+    font-size: 11.5px;
   }
 }

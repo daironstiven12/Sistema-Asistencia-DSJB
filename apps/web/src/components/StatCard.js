@@ -5,6 +5,7 @@ const tones = {
   blue: styles.toneBlue,
   accent: styles.toneAccent,
   warn: styles.toneWarn,
+  purple: styles.tonePurple,
 };
 
 /* Tarjeta de resumen con icono, valor y texto secundario. */

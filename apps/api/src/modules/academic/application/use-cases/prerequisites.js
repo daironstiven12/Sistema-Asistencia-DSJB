@@ -14,6 +14,8 @@ async function create(
   if (String(curriculumSubjectId) === String(prerequisiteSubjectId)) {
     throw new AcademicInvalidReferenceError();
   }
+  await store.curriculumSubjectGet(curriculumSubjectId);
+  await store.curriculumSubjectGet(prerequisiteSubjectId);
   const record = await store.prerequisiteCreate({
     curriculumSubjectId,
     prerequisiteSubjectId,

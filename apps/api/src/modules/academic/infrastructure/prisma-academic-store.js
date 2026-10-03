@@ -76,8 +76,16 @@ class PrismaAcademicStore {
     return run(this.prisma.institutions.findUnique({ where: whereId(id) }).then(required)).then(normalize);
   }
 
-  async institutionList() {
-    return this.prisma.institutions.findMany({ orderBy: { name: "asc" } }).then(normalize);
+  async institutionList({ query } = {}) {
+    return this.prisma.institutions
+      .findMany({
+        where: query
+          // rector no existe en institutions: búsqueda solo sobre name/code reales.
+          ? { OR: [{ name: { contains: query, mode: "insensitive" } }, { code: { contains: query, mode: "insensitive" } }] }
+          : {},
+        orderBy: { name: "asc" },
+      })
+      .then(normalize);
   }
 
   async institutionCreate({ name, code }) {
@@ -98,10 +106,21 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async facultyList({ institutionId } = {}) {
+  async facultyList({ institutionId, query } = {}) {
     return this.prisma.faculties
       .findMany({
-        where: institutionId ? { institution_id: bigId(institutionId) } : {},
+        where: {
+          ...(institutionId ? { institution_id: bigId(institutionId) } : {}),
+          // decano no existe en faculties: búsqueda solo sobre name/code reales.
+          ...(query
+            ? {
+                OR: [
+                  { name: { contains: query, mode: "insensitive" } },
+                  { code: { contains: query, mode: "insensitive" } },
+                ],
+              }
+            : {}),
+        },
         orderBy: { name: "asc" },
       })
       .then(normalize);
@@ -119,9 +138,16 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async facultyUpdate(id, { name, code }) {
+  async facultyUpdate(id, { institutionId, name, code }) {
     return run(
-      this.prisma.faculties.update({ where: whereId(id), data: clean({ name, code }) }),
+      this.prisma.faculties.update({
+        where: whereId(id),
+        data: clean({
+          institution_id: institutionId === undefined ? undefined : bigId(institutionId),
+          name,
+          code,
+        }),
+      }),
     ).then(normalize);
   }
 
@@ -131,10 +157,20 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async programList({ facultyId } = {}) {
+  async programList({ facultyId, query } = {}) {
     return this.prisma.academic_programs
       .findMany({
-        where: facultyId ? { faculty_id: bigId(facultyId) } : {},
+        where: {
+          ...(facultyId ? { faculty_id: bigId(facultyId) } : {}),
+          ...(query
+            ? {
+                OR: [
+                  { name: { contains: query, mode: "insensitive" } },
+                  { code: { contains: query, mode: "insensitive" } },
+                ],
+              }
+            : {}),
+        },
         orderBy: { name: "asc" },
       })
       .then(normalize);
@@ -158,11 +194,17 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async programUpdate(id, { name, code, modality, durationSemesters }) {
+  async programUpdate(id, { facultyId, name, code, modality, durationSemesters }) {
     return run(
       this.prisma.academic_programs.update({
         where: whereId(id),
-        data: clean({ name, code, modality, duration_semesters: durationSemesters }),
+        data: clean({
+          faculty_id: facultyId === undefined ? undefined : bigId(facultyId),
+          name,
+          code,
+          modality,
+          duration_semesters: durationSemesters,
+        }),
       }),
     ).then(normalize);
   }
@@ -173,10 +215,20 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async curriculumList({ programId } = {}) {
+  async curriculumList({ programId, query } = {}) {
     return this.prisma.curricula
       .findMany({
-        where: programId ? { program_id: bigId(programId) } : {},
+        where: {
+          ...(programId ? { program_id: bigId(programId) } : {}),
+          ...(query
+            ? {
+                OR: [
+                  { name: { contains: query, mode: "insensitive" } },
+                  { code: { contains: query, mode: "insensitive" } },
+                ],
+              }
+            : {}),
+        },
         orderBy: { name: "asc" },
       })
       .then(normalize);
@@ -201,11 +253,18 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async curriculumUpdate(id, { name, code, version, effectiveFrom, effectiveUntil }) {
+  async curriculumUpdate(id, { programId, name, code, version, effectiveFrom, effectiveUntil }) {
     return run(
       this.prisma.curricula.update({
         where: whereId(id),
-        data: clean({ name, code, version, effective_from: effectiveFrom, effective_until: effectiveUntil }),
+        data: clean({
+          program_id: programId === undefined ? undefined : bigId(programId),
+          name,
+          code,
+          version,
+          effective_from: effectiveFrom,
+          effective_until: effectiveUntil,
+        }),
       }),
     ).then(normalize);
   }
@@ -255,11 +314,12 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async subjectUpdate(id, { name, description, credits, hoursTheoretical, hoursPractical, hoursIndependent }) {
+  async subjectUpdate(id, { code, name, description, credits, hoursTheoretical, hoursPractical, hoursIndependent }) {
     return run(
       this.prisma.subjects.update({
         where: whereId(id),
         data: clean({
+          code,
           name,
           description,
           credits,
@@ -277,12 +337,13 @@ class PrismaAcademicStore {
     ).then(normalize);
   }
 
-  async curriculumSubjectList({ curriculumId, levelId } = {}) {
+  async curriculumSubjectList({ curriculumId, levelId, subjectId } = {}) {
     return this.prisma.curriculum_subjects
       .findMany({
         where: clean({
           curriculum_id: curriculumId ? bigId(curriculumId) : undefined,
           academic_level_id: levelId ? bigId(levelId) : undefined,
+          subject_id: subjectId ? bigId(subjectId) : undefined,
         }),
         orderBy: { id: "asc" },
       })

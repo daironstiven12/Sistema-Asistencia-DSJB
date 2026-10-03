@@ -1,0 +1,92 @@
+/* Layout de /registro: tarjeta de autenticación centrada sobre el fondo
+   sutil del sistema. Sin paneles laterales ni elementos flotantes. */
+
+.login {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #f7f9fa;
+}
+
+.decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arc {
+  position: absolute;
+  top: 6%;
+  right: 6%;
+  width: min(880px, 90vw);
+  aspect-ratio: 1;
+  border: 1.5px solid rgba(14, 124, 66, 0.28);
+  border-radius: 50%;
+}
+
+.blob {
+  position: absolute;
+  right: -12%;
+  bottom: -24%;
+  width: min(760px, 80vw);
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    rgba(14, 124, 66, 0.16) 0%,
+    rgba(14, 124, 66, 0.05) 55%,
+    transparent 70%
+  );
+  filter: blur(10px);
+}
+
+.dotsLeft,
+.dotsRight {
+  position: absolute;
+  width: 130px;
+  height: 110px;
+  background-image: radial-gradient(circle, #c9d8cf 1.3px, transparent 1.4px);
+  background-size: 20px 20px;
+}
+
+.dotsLeft {
+  left: 4%;
+  bottom: 12%;
+  opacity: 0.7;
+}
+
+.dotsRight {
+  right: 3%;
+  top: 34%;
+  opacity: 0.8;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 40px 24px;
+}
+
+@media (max-width: 640px) {
+  .inner {
+    padding: 24px 0;
+    align-items: flex-start;
+  }
+
+  .arc {
+    top: -8%;
+    right: -40%;
+    opacity: 0.6;
+  }
+
+  .dotsLeft {
+    display: none;
+  }
+
+  .dotsRight {
+    top: 18%;
+  }
+}

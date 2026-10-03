@@ -71,6 +71,31 @@ class ConflictException extends Error {
   }
 }
 
+class InternalServerErrorException extends Error {
+  constructor(message) {
+    super(message);
+    this.status = 500;
+  }
+
+  getStatus() {
+    return this.status;
+  }
+}
+
+class Logger {
+  constructor(context) {
+    this.context = context;
+  }
+
+  error() {}
+
+  warn() {}
+
+  log() {}
+
+  debug() {}
+}
+
 class ValidationPipe {
   constructor() {}
 }
@@ -114,6 +139,8 @@ module.exports = {
   BadRequestException,
   NotFoundException,
   ConflictException,
+  InternalServerErrorException,
+  Logger,
   ValidationPipe,
   SetMetadata,
   __readMetadata,

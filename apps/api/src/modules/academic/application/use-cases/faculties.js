@@ -1,7 +1,7 @@
 const { assertStatus } = require("../../domain/academic-status");
 
-async function list({ institutionId }, deps) {
-  return deps.store.facultyList({ institutionId });
+async function list({ institutionId, q }, deps) {
+  return deps.store.facultyList({ institutionId, query: q });
 }
 
 async function get({ id }, deps) {
@@ -10,6 +10,7 @@ async function get({ id }, deps) {
 
 async function create({ institutionId, name, code, actorId, ip, userAgent }, deps) {
   const { store, audit } = deps;
+  await store.institutionGet(institutionId);
   const record = await store.facultyCreate({ institutionId, name, code });
   await audit.log({
     action: "academic.create",
@@ -23,9 +24,12 @@ async function create({ institutionId, name, code, actorId, ip, userAgent }, dep
   return record;
 }
 
-async function update({ id, name, code, actorId, ip, userAgent }, deps) {
+async function update({ id, institutionId, name, code, actorId, ip, userAgent }, deps) {
   const { store, audit } = deps;
-  const record = await store.facultyUpdate(id, { name, code });
+  if (institutionId !== undefined) {
+    await store.institutionGet(institutionId);
+  }
+  const record = await store.facultyUpdate(id, { institutionId, name, code });
   await audit.log({
     action: "academic.update",
     userId: actorId,

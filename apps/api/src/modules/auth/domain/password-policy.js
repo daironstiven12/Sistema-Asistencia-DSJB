@@ -1,4 +1,6 @@
-const MIN_LENGTH = 10;
+// Mínimo 6 (fase registro básico): también aplica al gate de longitud
+// del login, que usa esta misma política. Argon2id sin cambios.
+const MIN_LENGTH = 6;
 const MAX_LENGTH = 128;
 
 // Valores por defecto alineados con .env (Argon2id obligatorio).

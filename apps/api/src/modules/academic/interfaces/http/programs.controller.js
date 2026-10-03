@@ -65,7 +65,7 @@ class ProgramsController {
 
   @Get()
   async list(query, req) {
-    return this.programs.list({ facultyId: query?.facultyId });
+    return this.programs.list({ facultyId: query?.facultyId, q: query?.q });
   }
 
   @Get(":id")

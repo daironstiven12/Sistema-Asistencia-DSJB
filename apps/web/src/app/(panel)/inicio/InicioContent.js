@@ -1,61 +1,118 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   BookOpen,
   CalendarDays,
   ChevronRight,
-  Clock,
+  Clock3,
   Eye,
+  FileClock,
   History,
-  Info,
   Lock,
   Plus,
   QrCode,
-  Users,
+  Radio,
+  ShieldCheck,
+  UsersRound,
+  Zap,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import StatCard from "@/components/StatCard";
 import StatusBadge from "@/components/StatusBadge";
-import { useAttendance } from "@/prototype/AttendanceContext";
-import { isActiveRecord } from "@/lib/attendanceFlow";
-import { activeAssignment, quickActions } from "@/data/representante";
+import { useMySessions } from "../asistencias/useSessionsApi";
+import { attendanceApi } from "@/services/api/attendance";
 import styles from "./page.module.css";
 
 const actionIcons = {
   prepare: Plus,
-  groups: Users,
+  groups: UsersRound,
   history: History,
 };
 
-const actionHrefs = {
-  prepare: "/asistencias/nueva",
-  groups: "/grupos",
-  history: "/historial",
-};
+const ACCIONES = [
+  {
+    key: "prepare",
+    label: "Preparar asistencia",
+    hint: "Programa una sesión para tu grupo",
+    href: "/asistencias/nueva",
+  },
+  {
+    key: "groups",
+    label: "Ver mi grupo",
+    hint: "Grupo asignado",
+    href: "/grupos",
+  },
+  {
+    key: "history",
+    label: "Ver historial",
+    hint: "Actividad reciente de asistencias",
+    href: "/historial",
+  },
+];
 
-/* Panel del representante: opera sobre un único grupo del período activo. */
+/* Panel del representante: sesiones y ofertas reales de la API.
+   La lógica de estados NO se toca: solo ABIERTA es "activa". */
 export default function InicioContent() {
-  const { records } = useAttendance();
-  const current = records.filter((r) =>
-    isActiveRecord(r, activeAssignment),
-  );
-
+  const { filas, cargando } = useMySessions();
+  const [registrados, setRegistrados] = useState([]);
+  const [ofertas, setOfertas] = useState([]);
+  const current = filas;
   const openList = current.filter((r) => r.status === "Abierta");
-  const pendingList = current.filter(
-    (r) => r.status === "Borrador" || r.status === "Programada",
-  );
+  const pendingList = current.filter((r) => r.status === "Borrador");
   const upcoming = pendingList;
-  const active = openList[0] ?? pendingList[0] ?? current[0] ?? null;
+  /* Solo una sesión ABIERTA puede ser "activa". Nunca Borrador, Cerrada,
+     Firmada ni ninguna otra: sin Abierta no hay tarjeta activa. */
+  const active = openList[0] ?? null;
+
+  const activeId = active?.id ?? null;
+
+  useEffect(() => {
+    if (!activeId) return undefined;
+    let viva = true;
+    attendanceApi
+      .records(activeId)
+      .catch(() => [])
+      .then((rows) => {
+        if (viva) setRegistrados(Array.isArray(rows) ? rows : []);
+      });
+    return () => {
+      viva = false;
+    };
+  }, [activeId]);
+
+  useEffect(() => {
+    let viva = true;
+    attendanceApi
+      .listOfferings()
+      .catch(() => [])
+      .then((rows) => {
+        if (viva) setOfertas(Array.isArray(rows) ? rows : []);
+      });
+    return () => {
+      viva = false;
+    };
+  }, []);
+
+  /* Grupo/período reales: de las ofertas asignadas; respaldo en sesiones. */
+  const grupoAsignado =
+    ofertas.find((o) => o.group)?.group ??
+    current.find((r) => r.group && r.group !== "—")?.group ??
+    null;
+  const periodoAsignado =
+    ofertas.find((o) => o.period)?.period ??
+    current.find((r) => r.period)?.period ??
+    null;
 
   const summary = [
     {
       key: "group",
-      icon: Users,
+      icon: UsersRound,
       label: "Grupo asignado",
-      value: activeAssignment.group,
-      foot: `${activeAssignment.students} estudiantes`,
-      tone: "neutral",
+      value: grupoAsignado ?? "—",
+      foot: periodoAsignado ?? "Sin período detectado",
+      tone: "blue",
     },
     {
       key: "today",
@@ -63,7 +120,7 @@ export default function InicioContent() {
       label: "Asistencias de hoy",
       value: String(openList.length + pendingList.length),
       foot: `${openList.length} abierta · ${pendingList.length} pendientes`,
-      tone: "blue",
+      tone: "purple",
     },
     {
       key: "open",
@@ -75,7 +132,7 @@ export default function InicioContent() {
     },
     {
       key: "pending",
-      icon: Clock,
+      icon: Clock3,
       label: "Asistencias pendientes",
       value: String(pendingList.length),
       foot: "Borrador o programadas",
@@ -83,12 +140,7 @@ export default function InicioContent() {
     },
   ];
 
-  const presentCount = active
-    ? active.students.filter((s) => s.status === "Presente").length
-    : 0;
-  const progress = active?.students.length
-    ? Math.round((presentCount / active.students.length) * 100)
-    : 0;
+  const presentCount = registrados.length;
 
   return (
     <div className={styles.content}>
@@ -96,10 +148,12 @@ export default function InicioContent() {
         title="Inicio"
         subtitle="Gestiona las asistencias de tu grupo."
       />
-      <p className={styles.context}>
-        Período académico {activeAssignment.period} · Grupo{" "}
-        {activeAssignment.group}
-      </p>
+      {grupoAsignado && periodoAsignado ? (
+        <p className={styles.context}>
+          <BookOpen aria-hidden="true" />
+          Período académico {periodoAsignado} · Grupo {grupoAsignado}
+        </p>
+      ) : null}
 
       <div className={styles.stats}>
         {summary.map((item) => (
@@ -114,9 +168,13 @@ export default function InicioContent() {
         ))}
       </div>
 
-      {active && (
+      {cargando && !active ? (
+        <p role="status">Cargando asistencias…</p>
+      ) : null}
+      {active ? (
         <section aria-labelledby="active-title">
           <h2 id="active-title" className={styles.sectionTitle}>
+            <Radio aria-hidden="true" />
             Asistencia activa
           </h2>
           <article className={styles.activeCard}>
@@ -128,7 +186,7 @@ export default function InicioContent() {
             <dl className={styles.meta}>
               <div className={styles.metaItem}>
                 <dt>
-                  <Users aria-hidden="true" />
+                  <UsersRound aria-hidden="true" />
                   Grupo
                 </dt>
                 <dd>{active.group}</dd>
@@ -142,7 +200,7 @@ export default function InicioContent() {
               </div>
               <div className={styles.metaItem}>
                 <dt>
-                  <Clock aria-hidden="true" />
+                  <Clock3 aria-hidden="true" />
                   Hora
                 </dt>
                 <dd>
@@ -153,14 +211,8 @@ export default function InicioContent() {
             </dl>
 
             <div className={styles.progressRow}>
-              <div className={styles.progressTrack}>
-                <i
-                  className={styles.progressFill}
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
               <b className={styles.progressText}>
-                {presentCount} / {active.students.length} estudiantes
+                {presentCount} registrado{presentCount === 1 ? "" : "s"}
               </b>
             </div>
 
@@ -182,87 +234,123 @@ export default function InicioContent() {
             </div>
           </article>
         </section>
-      )}
-
-      <section aria-labelledby="upcoming-title">
-        <div className={styles.sectionHead}>
-          <h2 id="upcoming-title" className={styles.sectionTitle}>
-            Próximas asistencias
+      ) : null}
+      {!active && !cargando ? (
+        <section aria-labelledby="active-title">
+          <h2 id="active-title" className={styles.sectionTitle}>
+            <Radio aria-hidden="true" />
+            Asistencia activa
           </h2>
-          <Link href="/asistencias" className={styles.linkBtn}>
-            Ver todas
-            <ChevronRight aria-hidden="true" />
-          </Link>
-        </div>
-        <div className={styles.list}>
-          {upcoming.map((item) => (
-            <article key={item.id} className={styles.row}>
-              <span className={styles.rowIcon} aria-hidden="true">
-                <BookOpen />
-              </span>
-              <div className={styles.rowText}>
-                <strong>{item.subject}</strong>
-                <small>
-                  {item.group} · {item.date} · {item.startTime}
-                  {item.endTime ? ` - ${item.endTime}` : ""}
-                </small>
-              </div>
-              <StatusBadge status={item.status} />
-              <Link
-                href={`/asistencias/${item.id}`}
-                className={styles.btnSecondary}
-              >
-                Gestionar
-              </Link>
-            </article>
-          ))}
-        </div>
-      </section>
+          <article className={styles.emptyActive}>
+            <span className={styles.emptyIcon} aria-hidden="true">
+              <FileClock />
+            </span>
+            <h3>No tienes una asistencia abierta</h3>
+            <p>Aquí aparecerá la asistencia que tengas abierta para registrar estudiantes.</p>
+            <Link href="/asistencias/nueva" className={styles.btnPrimary}>
+              <Plus aria-hidden="true" />
+              Preparar asistencia
+            </Link>
+          </article>
+        </section>
+      ) : null}
 
       <div className={styles.twoCol}>
-        <section aria-labelledby="quick-title">
-          <h2 id="quick-title" className={styles.sectionTitle}>
-            Acciones rápidas
-          </h2>
-          <div className={styles.quick}>
-            {quickActions.map((action) => {
-              const Icon = actionIcons[action.key];
-              return (
-                <Link
-                  key={action.key}
-                  href={actionHrefs[action.key]}
-                  className={styles.quickBtn}
-                >
-                  <span className={styles.quickIcon} aria-hidden="true">
-                    <Icon />
-                  </span>
-                  <span className={styles.quickText}>
-                    <strong>{action.label}</strong>
-                    <small>{action.hint}</small>
-                  </span>
-                  <ChevronRight aria-hidden="true" />
-                </Link>
-              );
-            })}
+        <section aria-labelledby="upcoming-title">
+          <div className={styles.sectionHead}>
+            <h2 id="upcoming-title" className={styles.sectionTitle}>
+              <CalendarDays aria-hidden="true" />
+              Próximas asistencias
+            </h2>
+            <Link href="/asistencias" className={styles.linkBtn}>
+              Ver todas
+              <ChevronRight aria-hidden="true" />
+            </Link>
           </div>
+          {upcoming.length === 0 ? (
+            <p className={styles.emptyList} role="status">
+              No tienes próximas asistencias programadas.
+            </p>
+          ) : (
+            <div className={styles.list}>
+              {upcoming.map((item) => (
+                <article key={item.id} className={styles.row}>
+                  <span className={styles.rowIcon} aria-hidden="true">
+                    <BookOpen />
+                  </span>
+                  <div className={styles.rowText}>
+                    <strong>{item.subject}</strong>
+                    <small>
+                      {item.group} · {item.date} · {item.startTime}
+                      {item.endTime ? ` - ${item.endTime}` : ""}
+                    </small>
+                  </div>
+                  <StatusBadge status={item.status} />
+                  <Link
+                    href={`/asistencias/${item.id}`}
+                    className={styles.btnSecondary}
+                    aria-label={`Gestionar ${item.subject}`}
+                  >
+                    <ChevronRight aria-hidden="true" />
+                  </Link>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
 
-        <section aria-labelledby="role-title">
-          <h2 id="role-title" className={styles.sectionTitle}>
-            Tu rol
-          </h2>
-          <div className={styles.roleNote}>
-            <Info aria-hidden="true" />
-            <div>
-              <strong>Representante de grupo</strong>
-              <p>
-                Operas únicamente sobre el grupo {activeAssignment.group} del
-                período {activeAssignment.period}. Puedes preparar, abrir,
-                compartir y cerrar sus asistencias.
-              </p>
+        <div className={styles.sideCol}>
+          <section aria-labelledby="quick-title">
+            <h2 id="quick-title" className={styles.sectionTitle}>
+              <Zap aria-hidden="true" />
+              Acciones rápidas
+            </h2>
+            <div className={styles.quick}>
+              {ACCIONES.map((action) => {
+                const Icon = actionIcons[action.key];
+                return (
+                  <Link
+                    key={action.key}
+                    href={action.href}
+                    className={styles.quickBtn}
+                  >
+                    <span className={styles.quickIcon} aria-hidden="true">
+                      <Icon />
+                    </span>
+                    <span className={styles.quickText}>
+                      <strong>{action.label}</strong>
+                      <small>{action.hint}</small>
+                    </span>
+                    <ChevronRight aria-hidden="true" />
+                  </Link>
+                );
+              })}
             </div>
-          </div>
-        </section>
+          </section>
+
+          <section aria-labelledby="role-title">
+            <h2 id="role-title" className={styles.sectionTitle}>
+              Tu rol
+            </h2>
+            <div className={styles.roleNote}>
+              <ShieldCheck aria-hidden="true" />
+              <div>
+                <strong>Representante de grupo</strong>
+                <p>
+                  {grupoAsignado && periodoAsignado ? (
+                    <>
+                      Operas únicamente sobre el grupo {grupoAsignado} del
+                      período {periodoAsignado}.
+                    </>
+                  ) : (
+                    <>Operas únicamente sobre tu grupo asignado del período académico.</>
+                  )}{" "}
+                  Puedes preparar, abrir, compartir y cerrar sus asistencias.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

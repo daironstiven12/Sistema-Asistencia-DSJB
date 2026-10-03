@@ -20,6 +20,8 @@ IsOptional()(CreateCurriculumDto.prototype, "effectiveUntil");
 
 class UpdateCurriculumDto {}
 
+IsString()(UpdateCurriculumDto.prototype, "programId");
+IsOptional()(UpdateCurriculumDto.prototype, "programId");
 IsString()(UpdateCurriculumDto.prototype, "name");
 IsOptional()(UpdateCurriculumDto.prototype, "name");
 MaxLength(150)(UpdateCurriculumDto.prototype, "name");

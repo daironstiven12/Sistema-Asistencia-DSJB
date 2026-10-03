@@ -42,8 +42,19 @@ describe("curriculum-subjects", () => {
     ).rejects.toBeInstanceOf(AcademicConflictError);
     await expect(
       links.create({ curriculumId: "99", subjectId: "1", levelId: "1", actorId: "1" }, deps),
-    ).rejects.toBeInstanceOf(AcademicInvalidReferenceError);
+    ).rejects.toBeInstanceOf(AcademicNotFoundError);
+    await expect(
+      links.create({ curriculumId: "1", subjectId: "99", levelId: "1", actorId: "1" }, deps),
+    ).rejects.toBeInstanceOf(AcademicNotFoundError);
+    await expect(
+      links.create({ curriculumId: "1", subjectId: "1", levelId: "99", actorId: "1" }, deps),
+    ).rejects.toBeInstanceOf(AcademicNotFoundError);
     expect(await links.list({ curriculumId: "1" }, deps)).toHaveLength(1);
+    expect(await links.list({ subjectId: "1" }, deps)).toHaveLength(1);
+    expect(
+      await links.list({ curriculumId: "1", subjectId: "1", levelId: "1" }, deps),
+    ).toHaveLength(1);
+    expect(await links.list({ subjectId: "99" }, deps)).toHaveLength(0);
     const removed = await links.remove({ id: created.id, actorId: "1" }, deps);
     expect(removed.id).toBe(created.id);
     expect(audits.map((a) => a.action)).toEqual(["academic.create", "academic.delete"]);
@@ -84,7 +95,10 @@ describe("prerequisites", () => {
     ).rejects.toBeInstanceOf(AcademicConflictError);
     await expect(
       prerequisites.create({ curriculumSubjectId: "99", prerequisiteSubjectId: "1", actorId: "1" }, deps),
-    ).rejects.toBeInstanceOf(AcademicInvalidReferenceError);
+    ).rejects.toBeInstanceOf(AcademicNotFoundError);
+    await expect(
+      prerequisites.create({ curriculumSubjectId: "2", prerequisiteSubjectId: "99", actorId: "1" }, deps),
+    ).rejects.toBeInstanceOf(AcademicNotFoundError);
     expect(await prerequisites.list({ curriculumSubjectId: "2" }, deps)).toHaveLength(1);
     await prerequisites.remove({ id: created.id, actorId: "1" }, deps);
     expect(await prerequisites.list({}, deps)).toHaveLength(0);

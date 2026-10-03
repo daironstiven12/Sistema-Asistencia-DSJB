@@ -1,5 +1,9 @@
 const { assertStatus } = require("../../domain/academic-status");
 
+async function list({ q }, deps) {
+  return deps.store.institutionList({ query: q });
+}
+
 async function get({ id }, deps) {
   return deps.store.institutionGet(id);
 }
@@ -48,6 +52,7 @@ async function setStatus({ id, status, actorId, ip, userAgent }, deps) {
 }
 
 module.exports = {
+  list,
   get,
   create,
   update,

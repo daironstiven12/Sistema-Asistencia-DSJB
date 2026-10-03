@@ -36,6 +36,24 @@ class SessionReuseError extends AuthError {
   }
 }
 
+class EmailAlreadyRegisteredError extends AuthError {
+  constructor() {
+    super("EMAIL_TAKEN");
+  }
+}
+
+class IdentificationAlreadyRegisteredError extends AuthError {
+  constructor() {
+    super("IDENTIFICATION_TAKEN");
+  }
+}
+
+class InvalidRegistrationError extends AuthError {
+  constructor() {
+    super("INVALID_REGISTRATION");
+  }
+}
+
 module.exports = {
   AuthError,
   InvalidCredentialsError,
@@ -43,4 +61,7 @@ module.exports = {
   SessionExpiredError,
   SessionRevokedError,
   SessionReuseError,
+  EmailAlreadyRegisteredError,
+  IdentificationAlreadyRegisteredError,
+  InvalidRegistrationError,
 };

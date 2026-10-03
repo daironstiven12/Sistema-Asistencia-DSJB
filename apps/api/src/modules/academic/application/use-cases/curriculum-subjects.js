@@ -1,7 +1,7 @@
 const { assertSubjectType } = require("../../domain/academic-status");
 
-async function list({ curriculumId, levelId }, deps) {
-  return deps.store.curriculumSubjectList({ curriculumId, levelId });
+async function list({ curriculumId, levelId, subjectId }, deps) {
+  return deps.store.curriculumSubjectList({ curriculumId, levelId, subjectId });
 }
 
 async function get({ id }, deps) {
@@ -14,6 +14,9 @@ async function create(
 ) {
   const { store, audit } = deps;
   if (subjectType !== undefined) assertSubjectType(subjectType);
+  await store.curriculumGet(curriculumId);
+  await store.subjectGet(subjectId);
+  await store.levelGet(levelId);
   const record = await store.curriculumSubjectCreate({
     curriculumId,
     subjectId,

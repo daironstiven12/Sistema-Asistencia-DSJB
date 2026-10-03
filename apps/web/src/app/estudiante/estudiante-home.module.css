@@ -1,0 +1,308 @@
+/* Inicio del estudiante: densidad compacta, una columna, sin scroll
+   horizontal. Solo afecta a esta pantalla (módulo CSS propio). */
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: 14px 16px;
+  min-width: 0;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--accent-50);
+  color: var(--accent-700);
+}
+
+.icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.cardText strong {
+  font-size: 14.5px;
+}
+
+.cardText small {
+  font-size: 12.5px;
+  color: var(--text-3);
+  line-height: 1.45;
+}
+
+.cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.cta:hover {
+  background: var(--accent-700);
+  border-color: var(--accent-700);
+}
+
+/* Formulario del código: en escritorio solo se muestra el CTA, idéntico al
+   actual. El campo de código solo aparece en móvil (ver media query). */
+.codeForm {
+  display: flex;
+  align-items: center;
+  flex: none;
+  min-width: 0;
+}
+
+.codeField {
+  display: none;
+}
+
+.codeField svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  color: var(--text-4);
+}
+
+.codeField input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.codeField input::placeholder {
+  color: var(--text-4);
+  font-weight: 500;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.heroText {
+  flex: 1;
+  min-width: 0;
+}
+
+.heroImg {
+  display: block;
+  flex: none;
+  width: 230px;
+  max-width: 38%;
+  height: auto;
+  aspect-ratio: 1781 / 883;
+  object-fit: contain;
+  object-position: right center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.historyCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--sh);
+  padding: 16px;
+  min-width: 0;
+}
+
+.historyHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  min-width: 0;
+}
+
+.filterChip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-pill);
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+.filterChip svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-3);
+}
+
+.emptyWrap {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .home {
+    gap: 16px;
+  }
+
+  /* Hero: texto a la izquierda, ilustración arriba-derecha. */
+  .hero {
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .heroText {
+    padding-top: 2px;
+  }
+
+  /* PageHead usa estilos en línea: ajuste solo móvil de esta pantalla. */
+  .heroText h1 {
+    font-size: 22px !important;
+    line-height: 1.2;
+  }
+
+  .heroText p {
+    font-size: 13.5px !important;
+    line-height: 1.5;
+  }
+
+  .heroImg {
+    width: 128px;
+    max-width: 38%;
+    margin-top: 0;
+  }
+
+  /* Tarjeta de registro en vertical: icono, texto, input y botón a ancho
+     completo. */
+  .card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .cardText {
+    flex: none;
+  }
+
+  .cardText strong {
+    font-size: 15px;
+  }
+
+  .codeForm {
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .codeField {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid var(--border-2);
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+  }
+
+  .codeField:focus-within {
+    border-color: var(--accent);
+    box-shadow: var(--focus-ring);
+    background: var(--surface);
+  }
+
+  .cta {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 48px;
+    white-space: normal;
+  }
+
+  /* Historial: el chip cae debajo sin romper la composición. */
+  .historyCard {
+    padding: 16px;
+  }
+
+  .historyHead {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .filterChip {
+    margin-left: auto;
+  }
+
+  /* Empty state compacto, solo en esta pantalla (selectores por elemento
+     para no depender de las clases del módulo global). */
+  .emptyWrap > div {
+    padding: 22px 16px;
+    gap: 8px;
+  }
+
+  .emptyWrap > div > span {
+    width: 38px;
+    height: 38px;
+  }
+
+  .emptyWrap > div > span > svg {
+    width: 18px;
+    height: 18px;
+  }
+}

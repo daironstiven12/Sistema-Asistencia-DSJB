@@ -2,9 +2,12 @@ const { IsNotEmpty, IsString, MaxLength } = require("class-validator");
 
 class LoginDto {}
 
-IsString()(LoginDto.prototype, "username");
-IsNotEmpty()(LoginDto.prototype, "username");
-MaxLength(100)(LoginDto.prototype, "username");
+/* Identificador principal: correo institucional. Por compatibilidad con
+   usuarios históricos sin correo se acepta también el username (sin "@").
+   El frontend valida el formato email antes de enviar. */
+IsString()(LoginDto.prototype, "email");
+IsNotEmpty()(LoginDto.prototype, "email");
+MaxLength(200)(LoginDto.prototype, "email");
 IsString()(LoginDto.prototype, "password");
 IsNotEmpty()(LoginDto.prototype, "password");
 MaxLength(128)(LoginDto.prototype, "password");

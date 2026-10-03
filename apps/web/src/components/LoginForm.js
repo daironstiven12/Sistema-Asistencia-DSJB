@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Eye,
@@ -10,16 +12,48 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import styles from "./LoginForm.module.css";
+import { authApi } from "@/services/api/auth";
+import { ApiError } from "@/services/api/http";
 
-/* Tarjeta de inicio de sesión. Solo visual: sin autenticación real. */
+/* Tarjeta de inicio de sesión contra /auth/login. Guarda el JWT en
+   localStorage("sa.accessToken") y navega según el rol real. */
 export default function LoginForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [correo, setCorreo] = useState("");
+  const [clave, setClave] = useState("");
+  const [error, setError] = useState(null);
+  const [cargando, setCargando] = useState(false);
+
+  async function onSubmit(event) {
+    event.preventDefault();
+    if (cargando) return;
+    setError(null);
+    if (!correo.trim() || !clave) {
+      setError("Ingresa tu correo y tu contraseña.");
+      return;
+    }
+    setCargando(true);
+    try {
+      const { home } = await authApi.login({ email: correo, password: clave });
+      router.push(home);
+    } catch (e) {
+      setError(
+        e instanceof ApiError
+          ? e.message
+          : "No se pudo iniciar sesión. Intenta nuevamente.",
+      );
+    } finally {
+      setCargando(false);
+    }
+  }
 
   return (
     <section className={styles.card} aria-label="Formulario de inicio de sesión">
       <div className={styles.head}>
         <span className={styles.mark} aria-hidden="true">
-          UTCH
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className={styles.markLogo} src="/referencias/logo.jpeg" alt="" />
         </span>
         <span className={styles.product}>
           <strong>Asistencia</strong>
@@ -32,7 +66,15 @@ export default function LoginForm() {
         Ingresa con tu correo institucional para continuar.
       </p>
 
-      <form className={styles.fields} onSubmit={(event) => event.preventDefault()}>
+      {/* Sin method ni name: el envío es 100% React (onSubmit +
+          preventDefault + fetch POST). Sin esos atributos el navegador
+          tampoco puede serializar credenciales en un submit nativo. */}
+      <form className={styles.fields} onSubmit={onSubmit} noValidate>
+        {error ? (
+          <p role="alert" style={{ color: "#b42318", fontSize: 13, margin: 0 }}>
+            {error}
+          </p>
+        ) : null}
         <div className={styles.field}>
           <label className={styles.label} htmlFor="email">
             Correo institucional
@@ -42,10 +84,13 @@ export default function LoginForm() {
             <input
               className={`${styles.input} ${styles.withIcon}`}
               id="email"
-              name="email"
               type="email"
               autoComplete="username"
               placeholder="nombre@utch.edu.co"
+              value={correo}
+              onChange={(event) => setCorreo(event.target.value)}
+              disabled={cargando}
+              required
             />
           </div>
         </div>
@@ -59,9 +104,12 @@ export default function LoginForm() {
             <input
               className={`${styles.input} ${styles.withIcon} ${styles.withAffix}`}
               id="password"
-              name="password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
+              value={clave}
+              onChange={(event) => setClave(event.target.value)}
+              disabled={cargando}
+              required
             />
             <button
               type="button"
@@ -83,7 +131,7 @@ export default function LoginForm() {
 
         <div className={styles.rememberRow}>
           <label className={styles.check}>
-            <input type="checkbox" name="remember" defaultChecked />
+            <input type="checkbox" defaultChecked />
             Recordarme
           </label>
           <button type="button" className={styles.link}>
@@ -94,11 +142,21 @@ export default function LoginForm() {
         <button
           type="submit"
           className={styles.button}
+          disabled={cargando}
         >
-          Iniciar sesión
+          {cargando ? "Verificando…" : "Iniciar sesión"}
           <ArrowRight aria-hidden="true" />
         </button>
       </form>
+
+      <p className={styles.secure} style={{ borderTop: 0, marginTop: 16, paddingTop: 0 }}>
+        <span>
+          ¿No tienes una cuenta?{" "}
+          <Link href="/registro" className={styles.link}>
+            Registrarme
+          </Link>
+        </span>
+      </p>
 
       <p className={styles.secure}>
         <ShieldCheck aria-hidden="true" />

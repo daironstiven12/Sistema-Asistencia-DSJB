@@ -35,11 +35,12 @@ async function create(
 }
 
 async function update(
-  { id, name, description, credits, hoursTheoretical, hoursPractical, hoursIndependent, actorId, ip, userAgent },
+  { id, code, name, description, credits, hoursTheoretical, hoursPractical, hoursIndependent, actorId, ip, userAgent },
   deps,
 ) {
   const { store, audit } = deps;
   const record = await store.subjectUpdate(id, {
+    code,
     name,
     description,
     credits,

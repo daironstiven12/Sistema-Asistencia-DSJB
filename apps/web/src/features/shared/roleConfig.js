@@ -141,17 +141,13 @@ export const NAV_ESTUDIANTE = [
   {
     label: "Mi asistencia",
     items: [
-      { key: "materias", label: "Mis materias", icon: BookMarked, href: "/estudiante/materias" },
       { key: "registro", label: "Registrar asistencia", icon: ListChecks, href: "/estudiante/registro" },
-      { key: "registrar", label: "Escanear QR", icon: QrCode, href: "/estudiante/registrar" },
       { key: "historial", label: "Mi historial", icon: ScrollText, href: "/estudiante/historial" },
-      { key: "asistencias", label: "Mis asistencias", icon: ClipboardList, href: "/estudiante/asistencias" },
     ],
   },
   {
     label: "Mi cuenta",
     items: [
-      { key: "firma", label: "Mi firma", icon: PenLine, href: "/estudiante/firma" },
       { key: "perfil", label: "Mi perfil", icon: User, href: "/estudiante/perfil" },
     ],
   },

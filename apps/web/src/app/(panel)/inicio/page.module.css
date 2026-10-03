@@ -1,35 +1,77 @@
+/* Panel Inicio — SaaS académico institucional.
+   Paleta: verde #009B4D/#007A3D/#EAF8F1, azul #2563EB/#EFF6FF,
+   morado #7C3AED/#F3EFFF, ámbar #D97706/#FFF7E6, rojo solo destructivo. */
+
 .content {
+  --ini-bg: #F7F9FC;
+  --ini-card: #FFFFFF;
+  --ini-border: #E5E7EB;
+  --ini-text: #0F172A;
+  --ini-muted: #64748B;
+  --ini-faint: #94A3B8;
+  --ini-green: #009B4D;
+  --ini-green-dark: #007A3D;
+  --ini-green-soft: #EAF8F1;
+  --ini-green-border: #B7E4CB;
+  --ini-blue: #2563EB;
+  --ini-blue-soft: #EFF6FF;
+  --ini-purple: #7C3AED;
+  --ini-purple-soft: #F3EFFF;
+  --ini-amber: #D97706;
+  --ini-amber-soft: #FFF7E6;
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding: 24px;
+  gap: 20px;
+  padding: 32px 40px;
   width: 100%;
-  max-width: 1360px;
+  max-width: 1320px;
   margin: 0 auto;
+}
+
+.content :global(h1) {
+  font-size: 31px;
 }
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
 .context {
   align-self: flex-start;
-  font-size: 12.5px;
-  font-weight: 650;
-  color: var(--accent-800);
-  background: var(--accent-50);
-  border: 1px solid var(--accent-200);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ini-green-dark);
+  background: var(--ini-green-soft);
+  border: 1px solid var(--ini-green-border);
   border-radius: 999px;
-  padding: 5px 13px;
+  padding: 8px 14px;
+}
+
+.context svg {
+  width: 15px;
+  height: 15px;
 }
 
 .sectionTitle {
-  font-size: 15px;
-  font-weight: 650;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
   letter-spacing: -0.01em;
+  color: var(--ini-text);
   margin-bottom: var(--sp-sm);
+}
+
+.sectionTitle svg {
+  width: 17px;
+  height: 17px;
+  color: var(--ini-blue);
 }
 
 .sectionHead {
@@ -51,14 +93,14 @@
   border: 0;
   padding: 0;
   cursor: pointer;
-  color: var(--accent);
+  color: var(--ini-green);
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
 }
 
 .linkBtn:hover {
-  color: var(--accent-700);
+  color: var(--ini-green-dark);
   text-decoration: underline;
 }
 
@@ -69,10 +111,10 @@
 
 /* Asistencia activa */
 .activeCard {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  box-shadow: var(--sh);
+  background: var(--ini-card);
+  border: 1px solid var(--ini-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
   padding: 20px;
 }
 
@@ -88,6 +130,7 @@
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.02em;
+  color: var(--ini-text);
   max-width: 46ch;
 }
 
@@ -104,7 +147,7 @@
   gap: 7px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-3);
+  color: var(--ini-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -112,13 +155,14 @@
 .metaItem dt svg {
   width: 14px;
   height: 14px;
-  color: var(--text-4);
+  color: var(--ini-faint);
 }
 
 .metaItem dd {
   margin: 3px 0 0;
   font-size: 13.5px;
   font-weight: 650;
+  color: var(--ini-text);
 }
 
 .progressRow {
@@ -128,25 +172,11 @@
   margin-top: var(--sp-md);
 }
 
-.progressTrack {
-  flex: 1;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--surface-3);
-  overflow: hidden;
-}
-
-.progressFill {
-  display: block;
-  height: 100%;
-  background: var(--accent);
-  border-radius: 999px;
-}
-
 .progressText {
   font-size: 13.5px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  color: var(--ini-text);
 }
 
 .actions {
@@ -171,6 +201,7 @@
   cursor: pointer;
   text-decoration: none;
   box-shadow: var(--sh);
+  transition: background 150ms ease, border-color 150ms ease;
 }
 
 .btnPrimary svg,
@@ -181,20 +212,20 @@
 }
 
 .btnPrimary {
-  background: var(--accent);
-  border: 1px solid var(--accent);
+  background: var(--ini-green);
+  border: 1px solid var(--ini-green);
   color: #fff;
 }
 
 .btnPrimary:hover {
-  background: var(--accent-700);
-  border-color: var(--accent-700);
+  background: var(--ini-green-dark);
+  border-color: var(--ini-green-dark);
 }
 
 .btnSecondary {
-  background: var(--surface);
+  background: var(--ini-card);
   border: 1px solid var(--border-2);
-  color: var(--text);
+  color: var(--ini-text);
 }
 
 .btnSecondary:hover {
@@ -205,7 +236,7 @@
 .btnDangerGhost {
   background: transparent;
   border: 1px solid #fecaca;
-  color: #b42318;
+  color: #DC2626;
   box-shadow: none;
 }
 
@@ -213,14 +244,72 @@
   background: #fef2f2;
 }
 
-/* Próximas asistencias */
+/* Vacío de asistencia activa */
+.emptyActive {
+  text-align: center;
+  background: linear-gradient(135deg, #F8FFFB, #F7FBFF);
+  border: 1px solid #D6EAE0;
+  border-radius: 14px;
+  padding: 40px 24px;
+}
+
+.emptyActive .btnPrimary {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 9px;
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #EEF2F7;
+  color: #7C8DA6;
+}
+
+.emptyIcon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.emptyActive h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ini-text);
+  margin: 0 0 8px;
+}
+
+.emptyActive p {
+  font-size: 13.5px;
+  color: var(--ini-muted);
+  margin: 0 0 20px;
+}
+
+/* Próximas + lateral */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.sideCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
 .list {
   display: flex;
   flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  box-shadow: var(--sh);
+  background: var(--ini-card);
+  border: 1px solid var(--ini-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
   overflow: hidden;
 }
 
@@ -229,7 +318,7 @@
   align-items: center;
   gap: 14px;
   padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--ini-border);
 }
 
 .row:last-child {
@@ -243,8 +332,8 @@
   width: 36px;
   height: 36px;
   border-radius: 9px;
-  background: var(--surface-3);
-  color: var(--text-2);
+  background: var(--ini-blue-soft);
+  color: var(--ini-blue);
 }
 
 .rowIcon svg {
@@ -262,21 +351,33 @@
 .rowText strong {
   font-size: 14px;
   font-weight: 650;
+  color: var(--ini-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .rowText small {
   font-size: 12.5px;
-  color: var(--text-3);
+  color: var(--ini-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Acciones rápidas + rol */
-.twoCol {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 18px;
-  align-items: start;
+.emptyList {
+  background: var(--ini-card);
+  border: 1px solid var(--ini-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  padding: 26px 20px;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--ini-muted);
+  margin: 0;
 }
 
+/* Acciones rápidas */
 .quick {
   display: flex;
   flex-direction: column;
@@ -286,30 +387,17 @@
 .quickBtn {
   display: flex;
   align-items: center;
-  gap: var(--sp-sm);
-  padding: 13px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  box-shadow: var(--sh);
-  cursor: pointer;
-  text-align: left;
+  gap: 12px;
+  background: var(--ini-card);
+  border: 1px solid var(--ini-border);
+  border-radius: 10px;
+  padding: 14px;
   text-decoration: none;
-  color: inherit;
-  width: 100%;
+  transition: background 150ms ease;
 }
 
 .quickBtn:hover {
-  border-color: var(--border-3);
-  background: var(--surface-2);
-}
-
-.quickBtn > svg {
-  width: 16px;
-  height: 16px;
-  flex: none;
-  color: var(--text-4);
-  margin-left: auto;
+  background: #F8FAFC;
 }
 
 .quickIcon {
@@ -319,8 +407,8 @@
   width: 36px;
   height: 36px;
   border-radius: 9px;
-  background: var(--accent-50);
-  color: var(--accent);
+  background: var(--ini-green-soft);
+  color: var(--ini-green);
 }
 
 .quickIcon svg {
@@ -332,74 +420,80 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  flex: 1;
 }
 
 .quickText strong {
   font-size: 13.5px;
   font-weight: 650;
+  color: var(--ini-text);
 }
 
 .quickText small {
-  font-size: 12px;
-  color: var(--text-3);
+  font-size: 12.5px;
+  color: var(--ini-muted);
 }
 
-.roleNote {
-  display: flex;
-  gap: var(--sp-sm);
-  padding: 14px 16px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-2);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  box-shadow: var(--sh);
-}
-
-.roleNote > svg {
+.quickBtn > svg {
   width: 16px;
   height: 16px;
   flex: none;
-  margin-top: 2px;
-  color: var(--accent);
+  color: var(--ini-faint);
+}
+
+/* Tu rol */
+.roleNote {
+  display: flex;
+  gap: 12px;
+  background: #ECFDF5;
+  border: 1px solid #C7EBD8;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.roleNote > svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--ini-green);
 }
 
 .roleNote strong {
   display: block;
   font-size: 13.5px;
-  margin-bottom: 2px;
+  color: var(--ini-text);
+  margin-bottom: 4px;
 }
 
 .roleNote p {
-  color: var(--text-3);
-  font-size: 12.5px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ini-muted);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .twoCol {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
-@media (max-width: 900px) {
-  .content {
-    padding: 18px 16px 26px;
-    gap: 18px;
-  }
-}
-
 @media (max-width: 640px) {
-  .row {
-    flex-wrap: wrap;
+  .content {
+    padding: 20px 16px;
   }
 
-  .row .btnSecondary {
-    flex: 1 1 100%;
+  .stats {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .actions .btnPrimary,
+  .actions .btnSecondary,
   .actions .btnDangerGhost {
-    flex: 1;
+    flex: 1 1 100%;
   }
 }

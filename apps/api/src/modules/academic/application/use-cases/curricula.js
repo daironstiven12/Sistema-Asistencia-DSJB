@@ -1,7 +1,7 @@
 const { assertStatus } = require("../../domain/academic-status");
 
-async function list({ programId }, deps) {
-  return deps.store.curriculumList({ programId });
+async function list({ programId, q }, deps) {
+  return deps.store.curriculumList({ programId, query: q });
 }
 
 async function get({ id }, deps) {
@@ -13,6 +13,7 @@ async function create(
   deps,
 ) {
   const { store, audit } = deps;
+  await store.programGet(programId);
   const record = await store.curriculumCreate({
     programId,
     name,
@@ -34,11 +35,15 @@ async function create(
 }
 
 async function update(
-  { id, name, code, version, effectiveFrom, effectiveUntil, actorId, ip, userAgent },
+  { id, programId, name, code, version, effectiveFrom, effectiveUntil, actorId, ip, userAgent },
   deps,
 ) {
   const { store, audit } = deps;
+  if (programId !== undefined) {
+    await store.programGet(programId);
+  }
   const record = await store.curriculumUpdate(id, {
+    programId,
     name,
     code,
     version,

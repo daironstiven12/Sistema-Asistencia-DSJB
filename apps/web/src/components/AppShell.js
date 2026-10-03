@@ -1,6 +1,8 @@
 "use client";
 
+import { useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   BarChart3,
   Bell,
@@ -11,7 +13,8 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { representative } from "@/data/representante";
+import { authApi } from "@/services/api/auth";
+import { leerSnapshotSesion, suscribirSesion, usuarioDesdeSnapshot } from "@/lib/sesionRepresentante";
 import styles from "./AppShell.module.css";
 
 const navItems = [
@@ -25,12 +28,35 @@ const navItems = [
 /* Estructura de la aplicación: sidebar en desktop, barra superior y
    navegación horizontal en móvil. `active` indica la sección actual. */
 export default function AppShell({ active, children }) {
+  const router = useRouter();
+  /* Snapshot primitivo (string|null): estable entre renders. SSR y primer
+     render cliente coinciden (null → esqueleto neutro, sin mismatch).
+     El objeto usuario se deriva con useMemo, nunca en getSnapshot. */
+  const snapshot = useSyncExternalStore(suscribirSesion, leerSnapshotSesion, () => null);
+  const usuario = useMemo(() => usuarioDesdeSnapshot(snapshot), [snapshot]);
+  const [saliendo, setSaliendo] = useState(false);
+
+  async function cerrarSesion() {
+    if (saliendo) return;
+    setSaliendo(true);
+    try {
+      await authApi.logout();
+    } finally {
+      router.push("/");
+    }
+  }
+
+  const nombre = usuario?.nombre ?? null;
+  const rol = usuario?.rol ?? null;
+  const iniciales = usuario?.iniciales ?? null;
+
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar} aria-label="Navegación principal">
         <div className={styles.brand}>
           <span className={styles.mark} aria-hidden="true">
-            UTCH
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.markLogo} src="/referencias/logo.jpeg" alt="" />
           </span>
           <span className={styles.product}>
             <strong>Asistencia</strong>
@@ -65,17 +91,31 @@ export default function AppShell({ active, children }) {
             <span>Configuración</span>
           </Link>
           <div className={styles.user}>
-            <span className={styles.avatar} aria-hidden="true">
-              {representative.initials}
-            </span>
-            <span className={styles.userText}>
-              <strong>{representative.name}</strong>
-              <small>{representative.role}</small>
-            </span>
+            {usuario ? (
+              <>
+                <span className={styles.avatar} aria-hidden="true">
+                  {iniciales}
+                </span>
+                <span className={styles.userText}>
+                  <strong>{nombre}</strong>
+                  <small>{rol}</small>
+                </span>
+              </>
+            ) : (
+              <>
+                <span className={`${styles.avatar} ${styles.skel}`} aria-hidden="true" />
+                <span className={styles.userText} aria-hidden="true">
+                  <span className={styles.skelLine} />
+                  <span className={`${styles.skelLine} ${styles.skelShort}`} />
+                </span>
+              </>
+            )}
             <button
               type="button"
               className={styles.logout}
               aria-label="Cerrar sesión"
+              onClick={cerrarSesion}
+              disabled={saliendo}
             >
               <LogOut aria-hidden="true" />
             </button>
@@ -86,7 +126,8 @@ export default function AppShell({ active, children }) {
       <div className={styles.main}>
         <div className={styles.mobileBar}>
           <span className={styles.mark} aria-hidden="true">
-            UTCH
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.markLogo} src="/referencias/logo.jpeg" alt="" />
           </span>
           <span className={styles.product}>
             <strong>Asistencia</strong>
@@ -102,7 +143,7 @@ export default function AppShell({ active, children }) {
               <i className={styles.alert} aria-hidden="true" />
             </button>
             <span className={styles.avatar} aria-hidden="true">
-              {representative.initials}
+              {usuario ? iniciales : ""}
             </span>
           </span>
         </div>

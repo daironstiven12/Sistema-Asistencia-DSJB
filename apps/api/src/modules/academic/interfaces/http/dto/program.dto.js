@@ -19,6 +19,8 @@ Min(1)(CreateProgramDto.prototype, "durationSemesters");
 
 class UpdateProgramDto {}
 
+IsString()(UpdateProgramDto.prototype, "facultyId");
+IsOptional()(UpdateProgramDto.prototype, "facultyId");
 IsString()(UpdateProgramDto.prototype, "name");
 IsOptional()(UpdateProgramDto.prototype, "name");
 MaxLength(200)(UpdateProgramDto.prototype, "name");

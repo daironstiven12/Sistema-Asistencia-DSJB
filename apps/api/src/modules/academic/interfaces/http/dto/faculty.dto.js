@@ -13,6 +13,8 @@ MaxLength(30)(CreateFacultyDto.prototype, "code");
 
 class UpdateFacultyDto {}
 
+IsString()(UpdateFacultyDto.prototype, "institutionId");
+IsOptional()(UpdateFacultyDto.prototype, "institutionId");
 IsString()(UpdateFacultyDto.prototype, "name");
 IsOptional()(UpdateFacultyDto.prototype, "name");
 MaxLength(200)(UpdateFacultyDto.prototype, "name");

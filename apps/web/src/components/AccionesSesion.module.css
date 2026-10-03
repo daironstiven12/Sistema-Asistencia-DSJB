@@ -1,0 +1,265 @@
+/* Acciones del encabezado: campana + avatar con paneles flotantes. */
+
+.acciones {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.iconBtn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  box-shadow: var(--sh);
+}
+
+.iconBtn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-3);
+}
+
+.iconBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.iconBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--danger-fg);
+  border: 2px solid var(--surface);
+}
+
+.perfilBtn {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.perfilBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--accent-50);
+  color: var(--accent-800);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(340px, calc(100vw - 32px));
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-3);
+  padding: 8px;
+  z-index: 70;
+  animation: rise 160ms ease;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  font-size: 14px;
+}
+
+.x {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.x:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.x svg {
+  width: 15px;
+  height: 15px;
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lista li {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  align-items: flex-start;
+}
+
+.itemIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.itemIcon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 13px;
+}
+
+.itemText small {
+  color: var(--text-3);
+  font-size: 12px;
+}
+
+.panelFoot {
+  padding: 10px 12px 8px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-4);
+  text-align: center;
+  margin: 0;
+}
+
+.perfilHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.avatarGrande {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-50);
+  color: var(--accent-800);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.perfilText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.perfilText strong {
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perfilText small {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: none;
+  border-radius: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  text-decoration: none;
+  text-align: left;
+  font-family: inherit;
+}
+
+.menuItem:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.menuItem:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.menuItem svg {
+  width: 16px;
+  height: 16px;
+}
+
+.menuItem:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.salir {
+  color: var(--danger-fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

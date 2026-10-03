@@ -3,6 +3,10 @@ class UserReaderPort {
     throw new Error("no implementado");
   }
 
+  async findByEmail() {
+    throw new Error("no implementado");
+  }
+
   async findById() {
     throw new Error("no implementado");
   }

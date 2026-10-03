@@ -14,8 +14,16 @@ function fakePrisma() {
           username: "jp Delegate",
           password_hash: "hash",
           status: "ACTIVE",
+          persons: { email: null },
           user_roles: [{ roles: { name: "DOCENTE" } }],
         };
+      },
+    },
+    persons: {
+      findUnique: async (args) => {
+        calls.persons = args;
+        if (args?.where?.email === "jp.delegate@utch.edu.co") return { id: BigInt(44) };
+        return null;
       },
     },
     auth_sessions: {
@@ -53,11 +61,22 @@ describe("prisma adapters (prisma simulado)", () => {
     expect(user).toEqual({
       id: "7",
       username: "jp Delegate",
+      email: null,
       passwordHash: "hash",
       status: "ACTIVE",
       roles: ["DOCENTE"],
     });
     expect(prisma.calls.users.where).toEqual({ username: "jp Delegate" });
+  });
+
+  test("findByEmail normaliza y resuelve vía persons", async () => {
+    const prisma = fakePrisma();
+    const reader = new PrismaUserReader(prisma);
+    const found = await reader.findByEmail("  JP.Delegate@UTCH.edu.co ");
+    expect(prisma.calls.persons.where).toEqual({ email: "jp.delegate@utch.edu.co" });
+    expect(found?.id).toBe("7");
+    expect(await reader.findByEmail("nadie@utch.edu.co")).toBeNull();
+    expect(await reader.findByEmail("   ")).toBeNull();
   });
 
   test("session-store crea y revoca con BigInt", async () => {

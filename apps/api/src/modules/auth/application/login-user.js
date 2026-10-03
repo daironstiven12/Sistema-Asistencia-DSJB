@@ -26,10 +26,16 @@ async function fail(audit, meta, reason) {
   throw new InvalidCredentialsError();
 }
 
-async function loginUser({ username, password, ip, userAgent }, deps) {
+async function loginUser({ email, password, ip, userAgent }, deps) {
   const { users, passwords, tokens, sessions, audit, config } = deps;
   const meta = { ip, userAgent };
-  const record = await users.findByUsername(username);
+  const identifier = String(email ?? "").trim();
+  let record = await users.findByEmail(identifier.toLowerCase());
+  if (!record && !identifier.includes("@")) {
+    // Compatibilidad: usuarios históricos sin correo (p. ej. admin) aún
+    // pueden acceder con su username. Todo correo válido va por email.
+    record = await users.findByUsername(identifier);
+  }
   const policy = validatePassword(password);
   const ok =
     policy.ok &&
@@ -68,6 +74,7 @@ async function loginUser({ username, password, ip, userAgent }, deps) {
     user: {
       id: record.id,
       username: record.username,
+      email: record.email ?? null,
       roles: record.roles,
       status: record.status,
     },

@@ -1,4 +1,8 @@
 class AcademicStorePort {
+  async institutionList() {
+    throw new Error("no implementado");
+  }
+
   async institutionGet() {
     throw new Error("no implementado");
   }

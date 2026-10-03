@@ -21,6 +21,9 @@ IsOptional()(CreateSubjectDto.prototype, "hoursIndependent");
 
 class UpdateSubjectDto {}
 
+IsString()(UpdateSubjectDto.prototype, "code");
+IsOptional()(UpdateSubjectDto.prototype, "code");
+MaxLength(50)(UpdateSubjectDto.prototype, "code");
 IsString()(UpdateSubjectDto.prototype, "name");
 IsOptional()(UpdateSubjectDto.prototype, "name");
 MaxLength(200)(UpdateSubjectDto.prototype, "name");

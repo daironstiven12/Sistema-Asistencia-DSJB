@@ -7,10 +7,12 @@ const { RolesGuard } = require("./interfaces/http/guards/roles.guard");
 const { loginUser } = require("./application/login-user");
 const { refreshSession } = require("./application/refresh-session");
 const { logout } = require("./application/logout");
+const { registerStudent } = require("./application/register-student");
 const { revokeUserSessions } = require("./application/revoke-user-sessions");
 const { Argon2PasswordHasher } = require("./infrastructure/argon2-password-hasher");
 const { JwtTokenIssuer } = require("./infrastructure/jwt-token-issuer");
 const { PrismaUserReader } = require("./infrastructure/prisma-user-reader");
+const { PrismaStudentDirectory } = require("./infrastructure/prisma-student-directory");
 const { PrismaSessionStore } = require("./infrastructure/prisma-session-store");
 const { PrismaAuthAudit } = require("./infrastructure/prisma-auth-audit");
 const { refreshExpiresIn } = require("./infrastructure/auth-config");
@@ -49,11 +51,22 @@ function bind(useCase) {
       inject: [PrismaService],
     },
     {
+      provide: "STUDENT_DIRECTORY",
+      useFactory: (prisma) => new PrismaStudentDirectory(prisma),
+      inject: [PrismaService],
+    },
+    {
       provide: "AUTH_AUDIT",
       useFactory: (prisma) => new PrismaAuthAudit(prisma),
       inject: [PrismaService],
     },
     { provide: "LOGIN_USER", useFactory: bind(loginUser), inject: STORE_DEPS },
+    {
+      provide: "REGISTER_STUDENT",
+      useFactory: (directory, passwords, audit) => (input) =>
+        registerStudent(input, { directory, passwords, audit }),
+      inject: ["STUDENT_DIRECTORY", "PASSWORD_HASHER", "AUTH_AUDIT"],
+    },
     {
       provide: "REFRESH_SESSION",
       useFactory: bind(refreshSession),

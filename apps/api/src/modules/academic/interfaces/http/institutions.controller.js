@@ -63,6 +63,11 @@ class InstitutionsController {
     this.institutions = institutions;
   }
 
+  @Get()
+  async list(query, req) {
+    return this.institutions.list({ q: query?.q });
+  }
+
   @Get(":id")
   async getById(id, req) {
     try {
@@ -106,6 +111,8 @@ class InstitutionsController {
 module.exports = { InstitutionsController, mapError };
 
 // Babel no admite decoradores en parámetros: se aplican como funciones.
+Query()(InstitutionsController.prototype, "list", 0);
+Req()(InstitutionsController.prototype, "list", 1);
 Param("id")(InstitutionsController.prototype, "getById", 0);
 Req()(InstitutionsController.prototype, "getById", 1);
 Body()(InstitutionsController.prototype, "create", 0);
@@ -119,6 +126,7 @@ Req()(InstitutionsController.prototype, "setStatus", 2);
 
 // Sin TS no hay design:paramtypes: se declaran para que ValidationPipe valide.
 const { exposeParams } = require("../../../auth/interfaces/http/param-metadata");
+exposeParams(InstitutionsController, "list", [Object, Object]);
 exposeParams(InstitutionsController, "getById", [Object, Object]);
 exposeParams(InstitutionsController, "create", [CreateInstitutionDto, Object]);
 exposeParams(InstitutionsController, "update", [Object, UpdateInstitutionDto, Object]);

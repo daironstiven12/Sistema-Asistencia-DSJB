@@ -67,6 +67,7 @@ class CurriculumSubjectsController {
     return this.curriculumSubjects.list({
       curriculumId: query?.curriculumId,
       levelId: query?.levelId,
+      subjectId: query?.subjectId,
     });
   }
 

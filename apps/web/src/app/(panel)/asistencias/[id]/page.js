@@ -1,12 +1,8 @@
-import AttendanceDetail from "@/components/AttendanceDetail";
-import { attendances } from "@/data/asistencias";
+import DetalleSesion from "./DetalleSesion";
 
-export function generateStaticParams() {
-  return attendances.map((item) => ({ id: item.id }));
-}
-
-/* Página de detalle mock: el contenido lee el estado del prototipo. */
+/* Detalle conectado a la API real. Sin generateStaticParams: los ids
+   provienen del backend, no del mock. */
 export default async function AsistenciaDetailPage({ params }) {
   const { id } = await params;
-  return <AttendanceDetail id={id} />;
+  return <DetalleSesion id={id} />;
 }

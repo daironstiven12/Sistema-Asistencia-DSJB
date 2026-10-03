@@ -1,51 +1,128 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Download, FileText, Printer } from "lucide-react";
-import { downloadActaPdf } from "@/lib/actaPdf";
-import { useAttendance } from "@/prototype/AttendanceContext";
+import { ArrowLeft, CheckCircle2, Download, FileText, Printer, XCircle } from "lucide-react";
+import { ResultModal } from "@/components/SessionModal";
+import { downloadActaPdf, resolverProgramaNivel } from "@/lib/actaPdf";
+import { mensajeAmigable } from "@/lib/errorAmigable";
+import { attendanceApi, valorActa } from "@/services/api/attendance";
+import { useSessionDetail } from "../../useSessionsApi";
 import styles from "./page.module.css";
 
-function SignatureArea({ signature, pendingLabel }) {
-  if (!signature) {
-    return <span className={styles.signPending}>{pendingLabel}</span>;
-  }
-  if (signature.kind === "typed") {
-    return <span className={styles.sigTyped}>{signature.data}</span>;
-  }
-  return (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img src={signature.data} alt="Firma registrada" className={styles.sigImg} />
-  );
-}
+/* Acta F-GCA-24 con datos reales: sesión + registros + ofertas del representante.
+   Sin mock: facultad/CDS/docente/firmas quedan vacíos porque el backend actual
+   (GET /attendance/sessions/:id, /records, /offerings) no los expone. */
 
-/* Documento oficial de asistencia con datos del prototipo. */
 export default function ActaContent({ id }) {
-  const { getRecord } = useAttendance();
-  const record = getRecord(id);
+  const { sesion, registros, cargando, error, recargar } = useSessionDetail(id);
+  const [ofertas, setOfertas] = useState([]);
+  const [exportando, setExportando] = useState(false);
+  const [modal, setModal] = useState(null);
 
-  if (!record) {
+  useEffect(() => {
+    let viva = true;
+    attendanceApi
+      .listOfferings()
+      .then((rows) => {
+        if (viva) setOfertas(Array.isArray(rows) ? rows : []);
+      })
+      .catch(() => {
+        if (viva) setOfertas([]);
+      });
+    return () => {
+      viva = false;
+    };
+  }, []);
+
+  const { programa, nivel } = resolverProgramaNivel(sesion ?? {}, ofertas);
+
+  async function exportar() {
+    if (exportando || !sesion) return;
+    setExportando(true);
+    try {
+      let representanteFirma = null;
+      let representanteNombre = "";
+      try {
+        const firmas = await attendanceApi.sessionSignatures(id);
+        const lista = Array.isArray(firmas) ? firmas : [];
+        const rep = lista.find((f) => f.role === "REPRESENTANTE") ?? lista[lista.length - 1];
+        if (rep) {
+          representanteFirma = rep.snapshot ?? null;
+          representanteNombre = rep.signerName ?? "";
+        }
+      } catch {
+        /* sin firmas accesibles: el espacio se conserva vacío */
+      }
+      await downloadActaPdf({
+        sesion,
+        registros,
+        programa,
+        nivel,
+        facultad: valorActa(sesion?.facultad),
+        cds: "",
+        docente: valorActa(sesion?.docente),
+        docenteFirma: null,
+        representanteFirma,
+        representanteNombre,
+      });
+      setModal({ kind: "exito", mensaje: "Acta PDF generada correctamente." });
+    } catch (e) {
+      setModal({
+        kind: "error",
+        mensaje: mensajeAmigable(e, "No se pudo generar el PDF. Inténtalo nuevamente."),
+      });
+    } finally {
+      setExportando(false);
+    }
+  }
+
+  if (cargando || !sesion) {
     return (
       <div className={styles.screen}>
-        <p>La asistencia no existe en esta sesión.</p>
+        <p role="status">Cargando acta…</p>
+        {error ? (
+          <p role="alert">
+            {error}{" "}
+            <button type="button" className={styles.pdfBtn} onClick={recargar}>
+              Reintentar
+            </button>
+          </p>
+        ) : null}
+        <Link href={`/asistencias/${id}`}>Volver al detalle</Link>
+      </div>
+    );
+  }
+
+  if (error && !sesion) {
+    return (
+      <div className={styles.screen}>
+        <p role="alert">{error}</p>
+        <button type="button" className={styles.pdfBtn} onClick={recargar}>
+          Reintentar
+        </button>{" "}
         <Link href="/asistencias">Volver a asistencias</Link>
       </div>
     );
   }
 
-  const complete = record.status === "Firmada";
-  const fields = [
-    ["FACULTAD", record.faculty],
-    ["PROGRAMA", record.program],
-    ["NIVEL", record.level],
-    ["ASIGNATURA", record.subject],
-    ["CÓDIGO DE ASIGNATURA", record.subjectCode],
-    ["PERIODO ACADÉMICO", record.period],
-    ["CDS", record.cds],
-    ["FECHA", record.date],
-    ["NOMBRE Y APELLIDOS DEL DOCENTE", record.teacher],
-    ["TEMAS TRATADOS", record.topic],
+  const campos = [
+    ["FACULTAD", ""],
+    ["PROGRAMA", programa],
+    ["NIVEL", nivel],
+    ["ASIGNATURA", sesion.subject],
+    ["CÓDIGO DE ASIGNATURA", sesion.subjectCode],
+    ["PERIODO ACADÉMICO", sesion.period],
+    ["CDS", ""],
+    ["FECHA", sesion.date],
+    ["NOMBRE Y APELLIDOS DEL DOCENTE", ""],
+    ["TEMAS TRATADOS", sesion.topics || "—"],
   ];
+
+  const filas = registros.map((r) => ({ nombre: r.nombre, identificacion: r.identificacion, firma: r.firma ?? null, tipoFirma: r.tipoFirma ?? null }));
+  while (filas.length < 36) filas.push({ nombre: "", identificacion: "" });
+  const pagina1 = filas.slice(0, 24);
+  const pagina2 = filas.slice(24, 36);
 
   return (
     <div className={styles.screen}>
@@ -57,17 +134,16 @@ export default function ActaContent({ id }) {
         <div className={styles.toolbarRight}>
           <span className={styles.stateNote}>
             <FileText aria-hidden="true" />
-            {complete
-              ? "Acta lista para imprimir."
-              : "Vista previa: faltan firmas para el acta definitiva."}
+            Acta F-GCA-24 con datos reales ({registros.length} registrados).
           </span>
           <button
             type="button"
             className={styles.pdfBtn}
-            onClick={() => downloadActaPdf(record)}
+            onClick={exportar}
+            disabled={exportando}
           >
             <Download aria-hidden="true" />
-            Descargar PDF
+            {exportando ? "Generando…" : "Descargar PDF"}
           </button>
           <button
             type="button"
@@ -80,28 +156,49 @@ export default function ActaContent({ id }) {
         </div>
       </div>
 
-      <article className={styles.sheet} aria-label="Acta de asistencia">
+      {modal?.kind === "error" ? (
+        <ResultModal
+          open
+          onClose={() => setModal(null)}
+          tone="error"
+          title="No fue posible completar la acción"
+          message={modal.mensaje}
+          actionLabel="Entendido"
+          icon={XCircle}
+        />
+      ) : null}
+      {modal?.kind === "exito" ? (
+        <ResultModal
+          open
+          onClose={() => setModal(null)}
+          tone="success"
+          title="Acción completada"
+          message={modal.mensaje}
+          icon={CheckCircle2}
+        />
+      ) : null}
+
+      <article className={styles.sheet} aria-label="Acta de asistencia F-GCA-24">
         <header className={styles.docHead}>
           <p className={styles.uni}>UNIVERSIDAD TECNOLOGICA DEL CHOCÓ</p>
           <p className={styles.uniSub}>Diego Luis Córdoba</p>
           <p className={styles.process}>PROCESO GESTIÓN CURRICULAR Y ACADÉMICA</p>
-          <p className={styles.docMeta}>
-            Código: F-GCA-24 · Versión: 1 · Fecha: 14-01-2023
-          </p>
-          <h1 className={styles.docTitle}>
-            FORMATO DE REGISTRO DE ASISTENCIA A CLASES
-          </h1>
+          <p className={styles.docMeta}>Código: F-GCA-24 · Versión: 1 · Fecha: 14-01-2023</p>
+          <h1 className={styles.docTitle}>FORMATO DE REGISTRO DE ASISTENCIA A CLASES</h1>
         </header>
 
         <dl className={styles.fields}>
-          {fields.map(([label, value]) => (
+          {campos.map(([label, value]) => (
             <div key={label} className={styles.field}>
               <dt>{label}</dt>
-              <dd>{value}</dd>
+              <dd>{value || "—"}</dd>
             </div>
           ))}
         </dl>
 
+        <p style={{ fontSize: 12, margin: "14px 0 6px" }}>
+          Página 1 — Estudiantes 1–24
+        </p>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -112,67 +209,73 @@ export default function ActaContent({ id }) {
             </tr>
           </thead>
           <tbody>
-            {record.students.map((row, index) => (
-              <tr key={row.key}>
+            {pagina1.map((row, index) => (
+              <tr key={`p1-${index}`}>
                 <td>{index + 1}</td>
-                <td>{row.name}</td>
-                <td>{row.idNumber}</td>
-                <td>
-                  {row.status === "Presente" ? (
-                    row.sig && row.sig.kind !== "typed" ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={row.sig.data}
-                        alt={`Firma de ${row.name}`}
-                        className={styles.studentSigImg}
-                      />
-                    ) : (
-                      <span className={styles.studentSig}>
-                        {row.name}
-                        {row.manual && (
-                          <sup className={styles.manualMark}> 1</sup>
-                        )}
-                      </span>
-                    )
-                  ) : (
-                    <span className={styles.absentMark}>
-                      {row.status === "Ausente" ? "Ausente" : "—"}
-                    </span>
-                  )}
-                </td>
+                <td>{row.nombre}</td>
+                <td>{row.identificacion}</td>
+                <td />
               </tr>
             ))}
           </tbody>
         </table>
 
-        {record.students.some((s) => s.manual) && (
-          <p className={styles.footnote}>
-            1 Registro manual con justificación autorizada por el representante.
-          </p>
-        )}
+        <p style={{ fontSize: 12, margin: "18px 0 6px", breakBefore: "page" }}>
+          Página 2 — Estudiantes 25–36
+        </p>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">NOMBRES Y APELLIDOS DEL ESTUDIANTE</th>
+              <th scope="col">NUMERO DE IDENTIFICACIÓN</th>
+              <th scope="col">FIRMA</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pagina2.map((row, index) => (
+              <tr key={`p2-${index}`}>
+                <td>{index + 25}</td>
+                <td>{row.nombre}</td>
+                <td>{row.identificacion}</td>
+                <td />
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <div className={styles.signatures}>
           <div className={styles.signBox}>
             <div className={styles.signSpace}>
-              <SignatureArea
-                signature={record.teacherSignature}
-                pendingLabel="PENDIENTE DE FIRMA"
-              />
+              <span className={styles.signPending}>ESPACIO PARA FIRMA</span>
             </div>
             <p className={styles.signLabel}>FIRMA DEL DOCENTE</p>
-            <p className={styles.signName}>{record.teacher}</p>
           </div>
           <div className={styles.signBox}>
             <div className={styles.signSpace}>
-              <SignatureArea
-                signature={record.repSignature}
-                pendingLabel="PENDIENTE DE FIRMA"
-              />
+              <span className={styles.signPending}>ESPACIO PARA FIRMA</span>
             </div>
             <p className={styles.signLabel}>FIRMA DEL REPRESENTANTE</p>
-            <p className={styles.signName}>Jeanpier Polanco</p>
           </div>
         </div>
+
+        <h2 style={{ fontSize: 13, textAlign: "center", marginTop: 28 }}>CONTROL DE CAMBIOS</h2>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th scope="col">FECHA</th>
+              <th scope="col">CAMBIO</th>
+              <th scope="col">VERSIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>14-01-2023</td>
+              <td>Lanzamiento del formato</td>
+              <td>01</td>
+            </tr>
+          </tbody>
+        </table>
       </article>
     </div>
   );

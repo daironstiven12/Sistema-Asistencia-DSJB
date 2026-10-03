@@ -1,0 +1,617 @@
+/* Detalle de asistencia — rediseño SaaS institucional.
+   Blanco/grises + azul pizarra para texto; verde solo en acciones
+   primarias y estados positivos. Sin scroll horizontal de página. */
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.migas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-3);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.migas a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-3);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.migas a:hover {
+  color: var(--text);
+  background: var(--surface-3);
+}
+
+.migas a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.migas svg {
+  width: 14px;
+  height: 14px;
+}
+
+.migas .sep {
+  color: var(--text-4);
+  user-select: none;
+}
+
+.migas .actual {
+  color: var(--text-2);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 38ch;
+}
+
+.hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 2px 0 14px;
+}
+
+.heroIcono {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #1f3a5f;
+  color: #fff;
+  box-shadow: var(--sh);
+}
+
+.heroIcono svg {
+  width: 24px;
+  height: 24px;
+}
+
+.hero h1 {
+  font-size: 29px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: #16283f;
+  margin: 0;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.hero p {
+  margin: 5px 0 0;
+  font-size: 14.5px;
+  color: var(--text-3);
+}
+
+.estadoBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--sh);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+}
+
+.estadoBanner .punto {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-4);
+}
+
+.estadoBanner strong {
+  font-weight: 700;
+}
+
+.estadoBanner span {
+  color: var(--text-3);
+}
+
+.estadoBanner.positive {
+  border-color: var(--ok-border);
+  background: var(--ok-bg);
+}
+
+.estadoBanner.positive .punto {
+  background: var(--accent);
+}
+
+.estadoBanner.info {
+  border-color: var(--info-border);
+  background: var(--info-bg);
+}
+
+.estadoBanner.info .punto {
+  background: var(--info-fg);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 16.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #16283f;
+  margin: 0;
+}
+
+.cardTitle svg {
+  width: 18px;
+  height: 18px;
+  color: #3d5a80;
+  flex: none;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 28px;
+  margin: 0;
+}
+
+.campo dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 5px;
+}
+
+.campo dt svg {
+  width: 13px;
+  height: 13px;
+  color: var(--text-4);
+}
+
+.campo dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #16283f;
+  overflow-wrap: anywhere;
+}
+
+.temasBox {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.temasHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.temasHead span {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.temasBox p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.codeCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.codeIcono {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--surface-3);
+  color: #3d5a80;
+}
+
+.codeIcono svg {
+  width: 26px;
+  height: 26px;
+}
+
+.codeInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.codeValue {
+  font-family: var(--font-mono);
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #16283f;
+  margin: 2px 0 6px;
+  overflow-wrap: anywhere;
+}
+
+.codeDesc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.55;
+}
+
+.codeActions {
+  display: flex;
+  gap: 10px;
+  flex: none;
+  flex-wrap: wrap;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.registrosHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.count {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-pill);
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin: 4px -24px -22px;
+  padding: 0 24px 18px;
+}
+
+.tabla {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.tabla thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--surface-2);
+}
+
+.tabla thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.tabla thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.tabla tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--text-2);
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla tbody tr:hover td {
+  background: #f4f7fb;
+}
+
+.num {
+  color: var(--text-4);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.metodo {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #3d5a80;
+  background: #eef3f9;
+  border: 1px solid #d7e2ef;
+  border-radius: var(--r-pill);
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+.firmado {
+  color: var(--ok-fg);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pendiente {
+  color: var(--text-4);
+  white-space: nowrap;
+}
+
+.manual {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--warn-fg);
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: var(--r-pill);
+  padding: 1px 8px;
+  vertical-align: middle;
+}
+
+.vacio {
+  margin: 12px 0 2px;
+  padding: 36px 20px;
+  text-align: center;
+  border: 1.5px dashed var(--border-2);
+  border-radius: var(--r);
+  color: var(--text-3);
+}
+
+.vacioIcono {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-4);
+}
+
+.vacioIcono svg {
+  width: 26px;
+  height: 26px;
+}
+
+.vacio strong {
+  display: block;
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.vacio p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.firmadaBox {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #f2faf5;
+  border: 1px solid var(--ok-border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.firmadaBox > svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--accent);
+  margin-top: 1px;
+}
+
+.firmadaBox strong {
+  display: block;
+  font-size: 14.5px;
+  color: #14532d;
+}
+
+.firmadaBox small {
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.actaEstado {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  color: var(--text-3);
+}
+
+.qrBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.qrCode {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.qrMeta {
+  font-size: 13px;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.botonera {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.editorAviso {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-2);
+  background: var(--surface-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
+
+.editorSeccion {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: 16px 0 8px;
+}
+
+.editorSeccion:first-child {
+  margin-top: 0;
+}
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.editorCampo dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.editorCampo dd {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.editorRegistros {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-2);
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+@media (max-width: 760px) {
+  .hero h1 {
+    font-size: 23px;
+  }
+
+  .heroIcono {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .card {
+    padding: 18px 16px;
+  }
+
+  .infoGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .codeCard {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .codeActions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .tableWrap {
+    margin: 4px -16px -18px;
+    padding: 0 16px 16px;
+  }
+
+  .botonera > * {
+    flex: 1 1 100%;
+  }
+
+  .migas .actual {
+    max-width: 20ch;
+  }
+}

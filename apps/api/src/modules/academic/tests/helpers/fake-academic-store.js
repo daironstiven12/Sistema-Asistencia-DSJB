@@ -41,6 +41,7 @@ const CAMEL_TO_SNAKE = {
   levelId: "academic_level_id",
   curriculumSubjectId: "curriculum_subject_id",
   prerequisiteSubjectId: "prerequisite_subject_id",
+  durationSemesters: "duration_semesters",
 };
 
 function normalizeKeys(data = {}) {
@@ -91,9 +92,24 @@ function fakeAcademicStore() {
   }
 
   function update(entity, id, patch) {
-    const row = tables[entity].get(String(id));
+    const table = tables[entity];
+    const row = table.get(String(id));
     if (!row) throw new AcademicNotFoundError();
-    Object.assign(row, patch);
+    const normalized = Object.fromEntries(
+      Object.entries(normalizeKeys(patch)).filter(([, v]) => v !== undefined),
+    );
+    for (const keys of UNIQUES[entity] ?? []) {
+      if (!keys.every((k) => normalized[k] !== undefined && normalized[k] !== null && normalized[k] !== "")) {
+        continue;
+      }
+      const clash = [...table.values()].some(
+        (other) =>
+          String(other.id) !== String(id) &&
+          keys.every((k) => String(other[k] ?? "") !== "" && String(other[k]) === String(normalized[k])),
+      );
+      if (clash) throw new AcademicConflictError();
+    }
+    Object.assign(row, normalized);
     return { ...row };
   }
 
@@ -128,24 +144,75 @@ function fakeAcademicStore() {
   return {
     store,
     seed,
+    institutionList: (criteria = {}) => {
+      let rows = [...tables.institutions.values()];
+      if (criteria?.query) {
+        const q = String(criteria.query).toLowerCase();
+        rows = rows.filter(
+          (r) =>
+            String(r.name).toLowerCase().includes(q) ||
+            String(r.code ?? "").toLowerCase().includes(q),
+        );
+      }
+      return rows.map((r) => ({ ...r }));
+    },
     institutionGet: (id) => get("institutions", id),
     institutionCreate: (data) => create("institutions", data),
     institutionUpdate: (id, patch) => update("institutions", id, patch),
     institutionSetStatus: (id, status) => update("institutions", id, { status }),
-    facultyList: (criteria) =>
-      list("faculties")({ institution_id: criteria?.institutionId }),
+    facultyList: (criteria = {}) => {
+      let rows = [...tables.faculties.values()];
+      if (criteria?.institutionId !== undefined && criteria?.institutionId !== "") {
+        rows = rows.filter((r) => String(r.institution_id) === String(criteria.institutionId));
+      }
+      if (criteria?.query) {
+        const q = String(criteria.query).toLowerCase();
+        rows = rows.filter(
+          (r) =>
+            String(r.name).toLowerCase().includes(q) ||
+            String(r.code ?? "").toLowerCase().includes(q),
+        );
+      }
+      return rows.map((r) => ({ ...r }));
+    },
     facultyGet: (id) => get("faculties", id),
     facultyCreate: (data) => create("faculties", data),
     facultyUpdate: (id, patch) => update("faculties", id, patch),
     facultySetStatus: (id, status) => update("faculties", id, { status }),
-    programList: (criteria) =>
-      list("programs")({ faculty_id: criteria?.facultyId }),
+    programList: (criteria = {}) => {
+      let rows = [...tables.programs.values()];
+      if (criteria?.facultyId !== undefined && criteria?.facultyId !== "") {
+        rows = rows.filter((r) => String(r.faculty_id) === String(criteria.facultyId));
+      }
+      if (criteria?.query) {
+        const q = String(criteria.query).toLowerCase();
+        rows = rows.filter(
+          (r) =>
+            String(r.name).toLowerCase().includes(q) ||
+            String(r.code ?? "").toLowerCase().includes(q),
+        );
+      }
+      return rows.map((r) => ({ ...r }));
+    },
     programGet: (id) => get("programs", id),
     programCreate: (data) => create("programs", data),
     programUpdate: (id, patch) => update("programs", id, patch),
     programSetStatus: (id, status) => update("programs", id, { status }),
-    curriculumList: (criteria) =>
-      list("curricula")({ program_id: criteria?.programId }),
+    curriculumList: (criteria = {}) => {
+      let rows = [...tables.curricula.values()];
+      if (criteria?.programId !== undefined && criteria?.programId !== "") {
+        rows = rows.filter((r) => String(r.program_id) === String(criteria.programId));
+      }
+      if (criteria?.query) {
+        const q = String(criteria.query).toLowerCase();
+        rows = rows.filter(
+          (r) =>
+            String(r.name).toLowerCase().includes(q) ||
+            String(r.code ?? "").toLowerCase().includes(q),
+        );
+      }
+      return rows.map((r) => ({ ...r }));
+    },
     curriculumGet: (id) => get("curricula", id),
     curriculumCreate: (data) => create("curricula", data),
     curriculumUpdate: (id, patch) => update("curricula", id, patch),
@@ -172,6 +239,7 @@ function fakeAcademicStore() {
       list("curriculumSubjects")({
         curriculum_id: criteria?.curriculumId,
         academic_level_id: criteria?.levelId,
+        subject_id: criteria?.subjectId,
       }),
     curriculumSubjectGet: (id) => get("curriculumSubjects", id),
     curriculumSubjectCreate: (data) =>

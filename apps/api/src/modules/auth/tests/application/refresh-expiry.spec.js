@@ -8,13 +8,17 @@ describe("expiración configurable del refresh", () => {
     const user = {
       id: "7",
       username: "u",
+      email: "u@utch.edu.co",
       passwordHash: await passwords.hash("Clave-Segura-123"),
       status: "ACTIVE",
       roles: [],
     };
     const created = [];
     const deps = {
-      users: { findByUsername: async () => user },
+      users: {
+        findByUsername: async () => user,
+        findByEmail: async () => user,
+      },
       passwords,
       tokens: new JwtTokenIssuer({ secret: "s".repeat(32) }),
       sessions: {
@@ -27,7 +31,7 @@ describe("expiración configurable del refresh", () => {
       config: { refreshExpiresIn: "1h" },
     };
     const before = Date.now();
-    await loginUser({ username: "u", password: "Clave-Segura-123" }, deps);
+    await loginUser({ email: "u@utch.edu.co", password: "Clave-Segura-123" }, deps);
     const diff = created[0].expiresAt.getTime() - before;
     expect(diff).toBeGreaterThan(3590000);
     expect(diff).toBeLessThan(3610000);

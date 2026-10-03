@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { AcademicModule } from './modules/academic/academic.module';
+import { AttendanceModule } from './modules/attendance/attendance.module';
+import { HttpLoggerMiddleware } from './common/logging/http-logger.middleware';
 import { getThrottleConfig, getObserveConfig } from './config/app-config';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
@@ -34,9 +36,14 @@ function observeOptions() {
     AuthModule,
     UsersModule,
     AcademicModule,
+    AttendanceModule,
     ObserveModule.forRoot(observeOptions()),
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer) {
+    consumer.apply(HttpLoggerMiddleware).forRoutes("*");
+  }
+}
